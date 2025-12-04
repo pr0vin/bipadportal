@@ -1,0 +1,16 @@
+@import url("https://fonts.googleapis.com/css2?family=Noto+Serif+Devanagari:wght@100..900&display=swap");
+
+body {
+    box-sizing: border-box;
+    margin: 0 auto;
+    /* font-family: "Noto Serif Devanagari", serif; */
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+    font-variation-settings: "wdth" 100;
+    background-color: #f2f7fb;
+}
+
+.card-shadow {
+    box-shadow: 0 0 2px #c4d6f5 !important;
+}
