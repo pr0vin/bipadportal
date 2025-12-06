@@ -6,6 +6,7 @@ use App\ApplicationType;
 use App\Renew;
 use App\Disease;
 use App\Patient;
+use App\PatientApplicationDisease;
 use App\Hospital;
 use Carbon\Carbon;
 use App\FiscalYear;
@@ -30,13 +31,13 @@ class OrganizationReportController extends Controller
 
     public function index(Request $request)
     {
-        $permissions = [
-            '1' => 'dirgha.report',
-            '2' => 'bipanna.report',
-            '3' => 'samajik.report',
-            '4' => 'nagarpalika.report',
-        ];
-        $diseaseTypeId = checkPermission($permissions, request('diseaseType'));
+        // $permissions = [
+        //     '1' => 'dirgha.report',
+        //     '2' => 'bipanna.report',
+        //     '3' => 'samajik.report',
+        //     '4' => 'nagarpalika.report',
+        // ];
+        // $diseaseTypeId = checkPermission($permissions, request('diseaseType'));
         if (!municipalityId()) {
             return redirect()->back()->with('error', 'कृपया पालिका छान्नुहोस्');
         }
@@ -58,12 +59,18 @@ class OrganizationReportController extends Controller
             $period = 1;
         }
 
+
         $diseases = Disease::whereHas('application_types', function ($query) {
             $query->where('application_types.id', 1);
         })->get();
+
         $patients = Renew::with('patient')->whereHas('patient', function ($query) {
             $query->where('address_id', municipalityId());
         });
+
+
+
+
         if ($request->isPaid == 'paid') {
             $patients = $patients->where('isPaid', 1);
         } else {
@@ -134,13 +141,13 @@ class OrganizationReportController extends Controller
 
     public function dirghaReport(Request $request)
     {
-        $permissions = [
-            '1' => 'dirgha.report',
-            '2' => 'bipanna.report',
-            '3' => 'samajik.report',
-            '4' => 'nagarpalika.report',
-        ];
-        // $diseaseTypeId = checkPermission($permissions, request('diseaseType'));
+        // $permissions = [
+        //     '1' => 'dirgha.report',
+        //     '2' => 'bipanna.report',
+        //     '3' => 'samajik.report',
+        //     '4' => 'nagarpalika.report',
+        // ];
+        //  $diseaseTypeId = checkPermission($permissions, request('diseaseType'));
         if (!municipalityId()) {
             return redirect()->back()->with('error', 'कृपया पालिका छान्नुहोस्');
         }
@@ -219,32 +226,18 @@ class OrganizationReportController extends Controller
             }
         }
 
-        $applicationTypeCounts = ApplicationType::with('diseases')->get();
 
-
-        $applicationTypes = ApplicationType::with('diseases')->get();
-
-        foreach ($applicationTypes as $type) {
-            foreach ($type->diseases as $disease) {
-                // Count patients matching both application_type_id and disease_id, verified_date not null
-                $disease->patient_count = Patient::where('application_type_id', $type->id)
-                    ->where('disease_id', $disease->id)
-                    ->whereNotNull('verified_date')
-                    ->count();
-            }
-
-            // Total patients for the application type
-            $type->total_patients = $type->diseases->sum('patient_count');
-        }
-
+        $applicationTypeId = $request->diseaseType ?? 1;
 
         $title = 'रिपोर्ट';
         return view('organization.report.index', [
             'title' => $title,
             'message' => $message,
-            'applicationTypeCounts' => $applicationTypeCounts,
+            // 'diseaseCounts' => $diseaseCounts,
+            'applicationTypeId' => $applicationTypeId,
         ]);
     }
+
 
     public function periodSession(Request $request)
     {

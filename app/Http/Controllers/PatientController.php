@@ -116,6 +116,10 @@ class PatientController extends Controller
 
     public function store(Request $request, OnlineApplicationService $onlineApplicationService)
     {
+
+        // return $request->all();
+
+
         $fiscalYear = currentFiscalYear();
         if (!$fiscalYear) {
             return redirect()->back()->with('error', "कृपया आर्थिकबर्ष छान्नुहोस्");
@@ -130,7 +134,8 @@ class PatientController extends Controller
         }
 
         $data = $request->validate([
-            'disease_id' => 'required',
+            'disease_id' => 'required|array',
+            'disease_id.*' => 'exists:diseases,id',
             'name' => 'required',
             'name_en' => 'required',
             'citizenship_number' => 'required',
@@ -149,6 +154,8 @@ class PatientController extends Controller
             'relation_with_patients' => 'nullable',
             'applied_date' => 'nullable',
         ]);
+
+
 
         $data['fiscal_year_id'] = $fiscalYear->id;
         $data['address_id'] = $address->id;
@@ -194,7 +201,7 @@ class PatientController extends Controller
         }
 
 
-
+        $data['disease_id'] = $request->disease_id[0];
         $patient = Patient::create($data);
 
         $patientApplication = $patient->patientApplication()->create([
@@ -202,9 +209,15 @@ class PatientController extends Controller
             'registration_date' => now()->format('Y/m/d'),
         ]);
 
-        $patientApplication->patientApplicationDisease()->create([
-            'disease_id' => $request->disease_id,
-        ]);
+        // $patientApplication->patientApplicationDisease()->create([
+        //     'disease_id' => $request->disease_id,
+        // ]);
+
+        foreach ($request->disease_id as $diseaseId) {
+            $patientApplication->patientApplicationDisease()->create([
+                'disease_id' => $diseaseId,
+            ]);
+        }
 
 
 
@@ -444,20 +457,20 @@ class PatientController extends Controller
 
 
 
-        if ($request->application_type_id == 1) {
-            Renew::create([
-                'patient_id' => $patient->id,
-                'renew_date' => $request->date_from,
-                'next_renew_date' => $renewDate,
-                'price_rate' => $request->yearly_payment,
-                'month' => totalMonth($date1, $date2),
-                'fiscal_year_id' => $fiscalYear->id,
-                'remarks' => 'नयाँ',
+        // if ($request->application_type_id == 1) {
+        //     Renew::create([
+        //         'patient_id' => $patient->id,
+        //         'renew_date' => $request->date_from,
+        //         'next_renew_date' => $renewDate,
+        //         'price_rate' => $request->yearly_payment,
+        //         'month' => totalMonth($date1, $date2),
+        //         'fiscal_year_id' => $fiscalYear->id,
+        //         'remarks' => 'नयाँ',
 
-            ]);
-            return redirect()->route('patient.show', $patient)->with('success', 'बिरामी विवरण सफलतापुर्वक दर्ता भयो');
-        }
-        return redirect()->route('patient.show', $patient)->with('success', 'बिरामी विवरण सफलतापुर्वक सिफारिस भयो');
+        //     ]);
+        return redirect()->route('patient.show', $patient)->with('success', 'बिरामी विवरण सफलतापुर्वक दर्ता भयो');
+        // }
+        // return redirect()->route('patient.show', $patient)->with('success', 'बिरामी विवरण सफलतापुर्वक सिफारिस भयो');
     }
 
     public function checkDocument($patient)
@@ -502,11 +515,10 @@ class PatientController extends Controller
     }
     public function update(Request $request, $patient)
     {
-
-
-
         $data = $request->validate([
-            'disease_id' => 'required',
+
+            'disease_id' => 'required|array',
+            'disease_id.*' => 'exists:diseases,id',
             'name' => 'required',
             'name_en' => 'required',
             'citizenship_number' => 'required',
@@ -591,10 +603,46 @@ class PatientController extends Controller
                 'next_renew_date' => $nextRenewDate,
             ]);
         }
+
+
+        $data['disease_id'] = $request->disease_id[0];
         $patient->update($data);
+
+        // Update patient application
+        $patientApplication = $patient->patientApplication()->latest()->first();
+        if ($patientApplication) {
+            $patientApplication->update([
+                'application_type_id' => $request->application_type_id,
+            ]);
+
+            // Sync pivot table
+            $patientApplication->patientApplicationDisease()->delete(); // remove old
+            foreach ($request->disease_id as $diseaseId) {
+                $patientApplication->patientApplicationDisease()->create([
+                    'disease_id' => $diseaseId,
+                ]);
+            }
+        }
 
         return redirect()->route('patient.show', $patient)->with('success', "बिरामी विवरण सफलतापुर्वक परिवर्तन भयो");
     }
+
+    public function updatePayment(Request $request, Patient $patient)
+    {
+        
+        $request->validate([
+            'paid_amount' => 'required|string|min:0',
+            'paid_date' => 'required|date',
+        ]);
+
+        $patient->update([
+            'paid_amount' => $request->paid_amount,
+            'paid_date' => $request->paid_date,
+        ]);
+
+        return redirect()->back()->with('success', 'भुक्तानी विवरण सफलतापूर्वक अपडेट भयो।');
+    }
+
 
     private function getRenewDates(Carbon $registeredDate)
     {

@@ -202,6 +202,9 @@ Route::prefix('patient')->group(function () {
         Route::post('/{patient}/kshati/add', [PatientController::class, 'addKshatiPhoto'])
     ->name('kshati.add');
 
+    Route::put('/{patient}/payment', [PatientController::class, 'updatePayment'])->name('patients.updatePayment');
+
+
 });
 
 Route::get('application-submitted/{patient}', [FrontendController::class, 'applicationSubmited'])->name('applicationSubmited');

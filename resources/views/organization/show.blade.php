@@ -124,10 +124,23 @@
                                         <td class="kalimati-font">{{ $patient->kshati_date }}</td>
                                     </tr>
 
+                                    
+
                                     <tr>
                                         <td class="font-weight-bold">आनुमानित क्षति रकम</td>
                                         <td class="kalimati-font">{{ $patient->estimated_amount }}</td>
                                     </tr>
+
+                                    <tr>
+                                        <td class="font-weight-bold">भुक्तानी मिति</td>
+                                        <td class="kalimati-font">{{ $patient->paid_date }}</td>
+                                    </tr>
+
+                                    <tr>
+                                        <td class="font-weight-bold">भुक्तानी रकम</td>
+                                        <td class="kalimati-font">{{ $patient->paid_amount }}</td>
+                                    </tr>
+
 
                                     <tr>
                                         <td class="font-weight-bold">कैफियत</td>
@@ -162,11 +175,20 @@
                                         <td class="font-weight-bold">नागरिकता नं.</td>
                                         <td class="kalimati-font">{{ $patient->citizenship_number }}</td>
                                     </tr>
+
+
                                     <tr>
                                         <td class="font-weight-bold">प्रकोप</td>
-                                        <td>{{ $patient->disease->name }}</td>
+                                        <td>
+                                            @php
+                                                $diseases = $patient->patientApplication
+                                                    ->flatMap(fn($app) => $app->patientApplicationDisease->pluck('disease.name'));
+                                            @endphp
 
+                                            {{ $diseases->join(', ') }}
+                                        </td>
                                     </tr>
+
 
                                     <tr>
                                         <td class="font-weight-bold">आवेदन मिति</td>
@@ -756,7 +778,8 @@
                                     <form action="{{ route('kshati.add', $patient->id) }}" method="POST"
                                         enctype="multipart/form-data" class="mt-2">
                                         @csrf
-                                        <input type="file" name="new_photo" class="form-control form-control-sm w-50 mb-2" required>
+                                        <input type="file" name="new_photo" class="form-control form-control-sm w-50 mb-2"
+                                            required>
                                         <button class="btn btn-sm btn-success">फोटो थप्नुहोस्</button>
                                     </form>
                                 @endif

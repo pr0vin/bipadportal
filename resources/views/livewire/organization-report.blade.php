@@ -55,17 +55,12 @@
                             <tr class="text-center">
                                 <td>{{ $index + 1 }}</td>
                                 <td>{{ $row->name }}</td>
+                                @foreach(range(1, 8) as $diseaseId)
+                                    <td>{{ $row->diseases->where('disease_id', $diseaseId)->sum('patient_count') }}</td>
+                                @endforeach
 
-                                <td>{{ $row->diseases->where('id', 1)->sum('patient_count') }}</td>
-                                <td>{{ $row->diseases->where('id', 2)->sum('patient_count') }}</td>
-                                <td>{{ $row->diseases->where('id', 3)->sum('patient_count') }}</td>
-                                <td>{{ $row->diseases->where('id', 4)->sum('patient_count') }}</td>
-                                <td>{{ $row->diseases->where('id', 5)->sum('patient_count') }}</td>
-                                <td>{{ $row->diseases->where('id', 6)->sum('patient_count') }}</td>
-                                <td>{{ $row->diseases->where('id', 7)->sum('patient_count') }}</td>
-                                <td>{{ $row->diseases->where('id', 8)->sum('patient_count') }}</td>
+                                <td>{{ $row->estimated_loss ?? 0 }}</td>
 
-                                <td>{{ $row->amount ?? 0 }}</td>
                             </tr>
                         @endforeach
 

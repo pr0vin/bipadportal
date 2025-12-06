@@ -35,31 +35,80 @@
                             दिने व्यक्तिको विवरण :</h5>
                         <section class="mt-3">
                             <div class="row">
-                                <div class="col-md-4 mb-2">
-                                    <label for="" class="required">आवेदनको प्रकार <span
-                                            class="text-danger">*</span></label>
-                                    <select name="application_type_id" id="application_types" class="form-control" required>
-                                        <option value="">आवेदनको प्रकार छान्नुहोस्</option>
+                               <div class="col-md-4 col-sm-6 mb-2">
+    <label for="" class="required"> घटनाको प्रकार <span class="text-danger">*</span></label>
+    <select name="application_type_id" class="form-control" required>
+        <option value="">छान्नुहोस्</option>
+        @foreach ($applicationTypes as $applicationType)
+            <option value="{{ $applicationType->id }}"
+                {{ isset($patientApplication) && $patientApplication->application_type_id == $applicationType->id ? 'selected' : '' }}>
+                {{ $applicationType->name }}
+            </option>
+        @endforeach
+    </select>
+</div>
 
-                                        @foreach ($applicationTypes as $applicationType)
-                                            <option value="{{ $applicationType->id }}"
-                                                {{ $patient->disease->id == $applicationType->id ? 'selected' : '' }}>
-                                                {{ $applicationType->name }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="col-md-4 mb-2">
-                                    <label for="disease_id" class="required">प्रकोप <span class="text-danger">*</span></label>
-                                    <select name="disease_id" id="disease_id" class="form-control" required>
-                                        <option value="">प्रकोपको प्रकार छान्नुहोस्</option>
-                                        @foreach ($diseases as $disease)
-                                            <option value="{{ $disease->id }}"
-                                                {{ $patient->disease_id == $disease->id ? 'selected' : '' }}>
-                                                {{ $disease->name }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                </div>
+<div class="col-md-4 col-sm-6 mb-2" style="position: relative;">
+    <label class="required">प्रकोप <span class="text-danger">*</span></label>
+
+    <input type="text" id="disease_selector" class="form-control"
+           placeholder="प्रकोप छनौट गर्नुहोस्" readonly style="cursor: pointer;">
+
+    <div id="disease_dropdown"
+         class="border p-2 rounded mt-1 bg-white shadow"
+         style="display: none; max-height: 200px; overflow-y: auto; position: absolute; width: 100%; z-index: 9999;">
+
+        @foreach ($diseases as $disease)
+            <div class="form-check">
+                <input class="form-check-input disease-checkbox"
+                       type="checkbox"
+                       name="disease_id[]"
+                       value="{{ $disease->id }}"
+                       id="disease_{{ $disease->id }}"
+                       {{ in_array($disease->id, $selectedDiseaseIds ?? []) ? 'checked' : '' }}>
+
+                <label class="form-check-label" for="disease_{{ $disease->id }}">
+                    {{ $disease->name }}
+                </label>
+            </div>
+        @endforeach
+    </div>
+</div>
+
+<script>
+const selector = document.getElementById('disease_selector');
+const dropdown = document.getElementById('disease_dropdown');
+const checkboxes = document.querySelectorAll('.disease-checkbox');
+
+// Open/Close dropdown
+selector.addEventListener('click', () => {
+    dropdown.style.display = dropdown.style.display === 'none' ? 'block' : 'none';
+});
+
+// Update selected names
+function updateSelected() {
+    let selected = Array.from(document.querySelectorAll('.disease-checkbox:checked'))
+        .map(c => c.nextElementSibling.innerText.trim()) // trim spaces
+        .join(', ');
+
+    selector.value = selected;
+}
+
+
+// Initialize selected values on page load
+updateSelected();
+
+// Update on change
+checkboxes.forEach(cb => cb.addEventListener('change', updateSelected));
+
+// Click outside close
+document.addEventListener('click', function(e) {
+    if (!selector.contains(e.target) && !dropdown.contains(e.target)) {
+        dropdown.style.display = 'none';
+    }
+});
+</script>
+
 
                                 {{-- <div class="col-md-4 mb-2">
                                 <label for="" class="required"> आवेदनको प्रकार <span class="text-danger">*</span></label>
@@ -318,7 +367,7 @@
 
                       
                         <div class=" col-md-4">
-                            <label>आवेदन दर्ता मिति</label>
+                            <label>क्षति मिति</label>
                             <input type="text" class="form-control date-picker kalimati-font" readonly
                                 value="{{ formatDate(($patient->kshati_date)) }}" name="kshati_date"
                                 data-single="true">

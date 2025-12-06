@@ -72,146 +72,152 @@
         <div class="d-flex">
             {{-- ==================================== --}}
             {{-- @if ($patient->disease->id == 1)
-                @can('dirgha.edit') --}}
-                    <a href="{{ route('patient.edit', $patient) }}" class="btn my-btn">
-                        <i class="fas fa-edit pr-3"></i>
-                        सम्पादन</a>
-                {{-- @endcan
+            @can('dirgha.edit') --}}
+            <a href="{{ route('patient.edit', $patient) }}" class="btn my-btn">
+                <i class="fas fa-edit pr-3"></i>
+                सम्पादन</a>
+            {{-- @endcan
             @endif --}}
 
             {{-- @if ($patient->disease->id == 2)
-                @can('bipanna.edit')
-                    <a href="{{ route('patient.edit', $patient) }}" class="btn my-btn">
-                        <i class="fas fa-edit pr-3"></i>
-                        सम्पादन</a>
-                @endcan
+            @can('bipanna.edit')
+            <a href="{{ route('patient.edit', $patient) }}" class="btn my-btn">
+                <i class="fas fa-edit pr-3"></i>
+                सम्पादन</a>
+            @endcan
             @endif
 
             @if ($patient->disease->id == 3)
-                @can('samajik.edit')
-                    <a href="{{ route('patient.edit', $patient) }}" class="btn my-btn">
-                        <i class="fas fa-edit pr-3"></i>
-                        सम्पादन</a>
-                @endcan
+            @can('samajik.edit')
+            <a href="{{ route('patient.edit', $patient) }}" class="btn my-btn">
+                <i class="fas fa-edit pr-3"></i>
+                सम्पादन</a>
+            @endcan
             @endif
 
             @if ($patient->disease->id == 4)
-                @can('nagarpalika.edit')
-                    <a href="{{ route('patient.edit', $patient) }}" class="btn my-btn">
-                        <i class="fas fa-edit pr-3"></i>
-                        सम्पादन</a>
-                @endcan
+            @can('nagarpalika.edit')
+            <a href="{{ route('patient.edit', $patient) }}" class="btn my-btn">
+                <i class="fas fa-edit pr-3"></i>
+                सम्पादन</a>
+            @endcan
             @endif --}}
             {{-- ======================================= --}}
             @if (!$patient->isRecommended)
                 {{-- @if ($patient->disease->id == 1) --}}
-                    {{-- @canany(['dirgha.register', 'hospital_document', 'disease_proved_document', 'citizenship_card',
-                        'application', 'doctor_recomandation', 'bank_cheque', 'decision_document']) --}}
-                        <button type="button" class="btn my-btn" id="registerModal" data-toggle="modal"
-                            data-target="#exampleModalCenter">
-                            <i class="fas fa-plus pr-3"></i>
-                            दर्ता गर्नुहोस
-                        </button>
-                    {{-- @endcanany --}}
+                {{-- @canany(['dirgha.register', 'hospital_document', 'disease_proved_document', 'citizenship_card',
+                'application', 'doctor_recomandation', 'bank_cheque', 'decision_document']) --}}
+                <button type="button" class="btn my-btn" id="registerModal" data-toggle="modal"
+                    data-target="#exampleModalCenter">
+                    <i class="fas fa-plus pr-3"></i>
+                    दर्ता गर्नुहोस
+                </button>
+                {{-- @endcanany --}}
                 {{-- @endif --}}
 
 
 
                 {{-- @if ($patient->disease->id == 2)
-                    @can('bipanna.register')
-                        <button type="button" class="btn my-btn" id="registerModal" data-toggle="modal"
-                            data-target="#exampleModalCenter">
-                            <i class="fas fa-plus pr-3"></i>
-                            सिफारिस गर्नुहोस / कागजात थप्नुहोस
-                        </button>
-                    @endcan
+                @can('bipanna.register')
+                <button type="button" class="btn my-btn" id="registerModal" data-toggle="modal"
+                    data-target="#exampleModalCenter">
+                    <i class="fas fa-plus pr-3"></i>
+                    सिफारिस गर्नुहोस / कागजात थप्नुहोस
+                </button>
+                @endcan
                 @endif
                 @if ($patient->disease->id == 3)
-                    @can('samajik.register')
-                        <button type="button" class="btn my-btn" id="registerModal" data-toggle="modal"
-                            data-target="#exampleModalCenter">
-                            <i class="fas fa-plus pr-3"></i>
-                            सिफारिस गर्नुहोस / कागजात थप्नुहोस
-                        </button>
-                    @endcan
+                @can('samajik.register')
+                <button type="button" class="btn my-btn" id="registerModal" data-toggle="modal"
+                    data-target="#exampleModalCenter">
+                    <i class="fas fa-plus pr-3"></i>
+                    सिफारिस गर्नुहोस / कागजात थप्नुहोस
+                </button>
+                @endcan
                 @endif
                 @if ($patient->disease->id == 4)
-                    @can('nagarpalika.register')
-                        <button type="button" class="btn my-btn" id="registerModal" data-toggle="modal"
-                            data-target="#exampleModalCenter">
-                            <i class="fas fa-plus pr-3"></i>
-                            सिफारिस गर्नुहोस / कागजात थप्नुहोस
-                        </button>
-                    @endcan
+                @can('nagarpalika.register')
+                <button type="button" class="btn my-btn" id="registerModal" data-toggle="modal"
+                    data-target="#exampleModalCenter">
+                    <i class="fas fa-plus pr-3"></i>
+                    सिफारिस गर्नुहोस / कागजात थप्नुहोस
+                </button>
+                @endcan
                 @endif --}}
 
             @endif
+
             @if ($patient->registered_date)
                 <button type="button" class="btn my-btn" data-toggle="modal" data-target="#reApply">
-                   <i class="fas fa-retweet pr-3"></i> पुनः आबेदन गर्नुहोस
+                    <i class="fas fa-retweet pr-3"></i> पुनः आबेदन गर्नुहोस
                 </button>
                 {{-- @if ($patient->disease->id == 1)
-                    @can('dirgha.renew')
-                        <button type="button" class="btn my-btn" data-toggle="modal" data-target="#nabikaran">
-                            <i class="fas fa-retweet pr-3"></i> नवीकरण गर्नुहोस
-                        </button>
-                    @endcan
+                @can('dirgha.renew')
+                <button type="button" class="btn my-btn" data-toggle="modal" data-target="#nabikaran">
+                    <i class="fas fa-retweet pr-3"></i> नवीकरण गर्नुहोस
+                </button>
+                @endcan
 
-                    @can('dirgha.close')
-                        <button type="button" class="btn my-btn" data-toggle="modal" data-target="#closed">
-                            <i class="far fa-times-circle pr-3"></i> लागतकट्टा गर्नुहोस
-                        </button>
-                    @endcan
+                @can('dirgha.close')
+                <button type="button" class="btn my-btn" data-toggle="modal" data-target="#closed">
+                    <i class="far fa-times-circle pr-3"></i> लागतकट्टा गर्नुहोस
+                </button>
+                @endcan
                 @endif --}}
             @endif
             {{-- @if ($patient->disease->id == 1) --}}
-                <button type="button border" class="btn {{ $patient->doctor ? 'my-btn' : 'bg-danger text-white' }}"
-                    id="" data-toggle="modal" data-target="#doctorModal">
-                    <i class="fas fa-plus pr-3"></i>
-                    अधकारीको विवरण
-                </button>
+            <button type="button border" class="btn {{ $patient->doctor ? 'my-btn' : 'bg-danger text-white' }}" id=""
+                data-toggle="modal" data-target="#doctorModal">
+                <i class="fas fa-plus pr-3"></i>
+                अधकारीको विवरण
+            </button>
+              @if ($patient->registered_date)
+            <button type="button" class="btn bg-info text-white"
+                 data-toggle="modal" data-target="#paymentModal-{{ $patient->id }}">
+                <i class="fas fa-plus pr-3"></i>
+                भुक्तानी विवरण
+            </button>
+            @endif
+           
+
             {{-- @endif --}}
         </div>
     </div>
     <div class="tab-pane fade px-3" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
         <div class="d-flex">
             {{-- @if ($patient->disease->id == 1) --}}
-                {{-- @can('dirgha.tokenletter') --}}
-                    <a href="{{ route('suchi-print-application', $patient) }}" class="btn my-btn" type="button"
-                        id="">
-                        <i class="fas fa-print pr-3"></i>Print token letter
-                    </a>
-                {{-- @endcan --}}
-                <a href="{{ route('schedule.one', $patient) }}" class="btn my-btn" type="button" id="">
-                    <i class="fas fa-file pr-3"></i>अनुसूची १
-                </a>
-                <a href="{{ route('schedule.two', $patient) }}" class="btn my-btn" type="button" id="">
-                    <i class="fas fa-file pr-3"></i>अनुसूची २
-                </a>
+            {{-- @can('dirgha.tokenletter') --}}
+            <a href="{{ route('suchi-print-application', $patient) }}" class="btn my-btn" type="button" id="">
+                <i class="fas fa-print pr-3"></i>Print token letter
+            </a>
+            {{-- @endcan --}}
+            <a href="{{ route('schedule.one', $patient) }}" class="btn my-btn" type="button" id="">
+                <i class="fas fa-file pr-3"></i>अनुसूची १
+            </a>
+            <a href="{{ route('schedule.two', $patient) }}" class="btn my-btn" type="button" id="">
+                <i class="fas fa-file pr-3"></i>अनुसूची २
+            </a>
             {{-- @endif --}}
             {{-- @if ($patient->disease->id == 2)
-                @can('bipanna.TokenLetter')
-                    <a href="{{ route('suchi-print-application', $patient) }}" class="btn my-btn" type="button"
-                        id="">
-                        <i class="fas fa-print pr-3"></i>Print token letter
-                    </a>
-                @endcan
+            @can('bipanna.TokenLetter')
+            <a href="{{ route('suchi-print-application', $patient) }}" class="btn my-btn" type="button" id="">
+                <i class="fas fa-print pr-3"></i>Print token letter
+            </a>
+            @endcan
             @endif
             @if ($patient->disease->id == 3)
-                @can('samajik.TokenLetter')
-                    <a href="{{ route('suchi-print-application', $patient) }}" class="btn my-btn" type="button"
-                        id="">
-                        <i class="fas fa-print pr-3"></i>Print token letter
-                    </a>
-                @endcan
+            @can('samajik.TokenLetter')
+            <a href="{{ route('suchi-print-application', $patient) }}" class="btn my-btn" type="button" id="">
+                <i class="fas fa-print pr-3"></i>Print token letter
+            </a>
+            @endcan
             @endif
             @if ($patient->disease->id == 4)
-                @can('nagarpalika.TokenLetter')
-                    <a href="{{ route('suchi-print-application', $patient) }}" class="btn my-btn" type="button"
-                        id="">
-                        <i class="fas fa-print pr-3"></i>Print token letter
-                    </a>
-                @endcan
+            @can('nagarpalika.TokenLetter')
+            <a href="{{ route('suchi-print-application', $patient) }}" class="btn my-btn" type="button" id="">
+                <i class="fas fa-print pr-3"></i>Print token letter
+            </a>
+            @endcan
             @endif --}}
 
             @can('bipanna.DecisionPrint')
@@ -237,8 +243,7 @@
                     {{-- दिर्घ --}}
                 @elseif($patient->disease->id == 2)
                     {{-- बिपन्न --}}
-                    {{-- <a href="{{ route('hospitalSifaris', $patient) }}" class="btn btn-info" type="button"
-                        id="">
+                    {{-- <a href="{{ route('hospitalSifaris', $patient) }}" class="btn btn-info" type="button" id="">
                         सिफारिस पत्र (अस्पताल)
                     </a> --}}
                     @can('bipanna.SifarisPrint')
@@ -280,12 +285,12 @@
                             </div>
                         </div>
                     </div>
-                {{-- @elseif($patient->disease->id == 3) --}}
+                    {{-- @elseif($patient->disease->id == 3) --}}
                     {{-- सामाजिक --}}
                     <a href="{{ route('SocialRecommandation', $patient) }}" class="btn my-btn">
                         <i class="fas fa-print pr-3"></i>सिफारिस पत्र प्रिन्ट गर्नुहोस
                     </a>
-                {{-- @else --}}
+                    {{-- @else --}}
                     {{-- नगरपालिका --}}
                 @endif
             @endif
@@ -303,7 +308,8 @@
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLongTitle">
                         {{ $patient->disease->id == 1 ? 'दर्ता ' : 'सिफारिस ' }} गर्नुहोस /
-                        कागजात थप्नुहोस</h5>
+                        कागजात थप्नुहोस
+                    </h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -311,8 +317,7 @@
                 <form enctype="multipart/form-data" method="POST" id="RegForm">
                     @csrf
                     <div class="modal-body">
-                        <input type="hidden" value="{{ $patient->disease->id }}"
-                            name="application_type_id">
+                        <input type="hidden" value="{{ $patient->disease->id }}" name="application_type_id">
                         <input type="hidden" name="patient_id" value="{{ $patient->id }}">
                         <div class="row">
                             @can('dirgha.register')
@@ -320,9 +325,10 @@
                                     <div class="form-group mx-0 px-0 col-12">
                                         <label for="">क)
                                             {{-- {{ $patient->disease->id == 1 ? 'दर्ता ' : 'सिफारिस ' }} --}}
-                                          दर्ता   मिति</label>
+                                            दर्ता मिति</label>
                                         <input type="text" name="date_from" id="input-date-from" data-single="true"
-                                            class="form-control nepali-date rounded-0 kalimati-font" value="{{$patient->date_from ? ad_to_bs($patient->date_from) : ''}}">
+                                            class="form-control nepali-date rounded-0 kalimati-font"
+                                            value="{{$patient->date_from ? ad_to_bs($patient->date_from) : ''}}">
                                         @error('registered_date')
                                             <label class="text-danger">{{ $message }}</label>
                                         @enderror
@@ -332,12 +338,13 @@
                                     <div class="form-group mx-0 px-0 col-12">
                                         <label for="">ख)
                                             {{-- {{ $patient->disease->id == 1 ? 'दर्ता ' : 'सिफारिस ' }} --}}
-                                          दर्ता  नम्बर</label>
+                                            दर्ता नम्बर</label>
                                         <div class="d-flex">
                                             <input type="text" name="registration_number"
                                                 class="form-control rounded-0 kalimati-font" style="width: 100px"
                                                 value="{{ $registrationNumber }}" readonly>
-                                            <input type="text" name="reg_number" class="form-control rounded-0 kalimati-font"
+                                            <input type="text" name="reg_number"
+                                                class="form-control rounded-0 kalimati-font"
                                                 value="{{$patient->reg_number ?? ''}}">
                                         </div>
                                         @error('registration_number')
@@ -373,97 +380,98 @@
                                 </div>
                             @endcan
                             @can('application')
-                                {{-- @if ($applicationType == 1 || $applicationType == 2 || $applicationType == 3 || $applicationType == 4) --}}
-                                    @if (!$patient->application)
-                                        <div class="col-md-6 mb-2">
-                                            <label>अनुसूची २ बमोजिमको निबेदन</label>
-                                            <input type="file" name="application" class="form-control dirgha"
-                                                id="" onchange="applicationChange(event)">
-                                            @error('application')
-                                                <label class="text-danger">{{ $message }}</label>
-                                            @enderror
-                                        </div>
-                                    @endif
+                                {{-- @if ($applicationType == 1 || $applicationType == 2 || $applicationType == 3 ||
+                                $applicationType == 4) --}}
+                                @if (!$patient->application)
+                                    <div class="col-md-6 mb-2">
+                                        <label>अनुसूची २ बमोजिमको निबेदन</label>
+                                        <input type="file" name="application" class="form-control dirgha" id=""
+                                            onchange="applicationChange(event)">
+                                        @error('application')
+                                            <label class="text-danger">{{ $message }}</label>
+                                        @enderror
+                                    </div>
+                                @endif
                                 {{-- @endif --}}
                             @endcan
 
                             {{-- @if ($applicationType == 1) --}}
-                                @can('doctor_recomandation')
-                                    @if (!$patient->doctor_recomandation)
-                                        <div class="col-md-6 mb-2">
-                                            <label>अनुसूची १ अधिकृतको सिफारिस</label>
-                                            <input type="file" name="doctor_recomandation" class="form-control dirgha"
-                                                id="" onchange="doctorRecomandationChange(event)">
-                                            @error('doctor_recomandation')
-                                                <label class="text-danger">{{ $message }}</label>
-                                            @enderror
-                                        </div>
-                                    @endif
-                                {{-- @endcan --}}
-                                @can('bank_cheque')
-                                    @if (!$patient->bank_cheque)
-                                        <div class="col-md-6 mb-2">
-                                            <label>बैंक चेक बुक</label>
-                                            <input type="file" name="bank_cheque" class="form-control dirgha"
-                                                id="" onchange="bankchequeChange(event)">
-                                            @error('bank_cheque')
-                                                <label class="text-danger">{{ $message }}</label>
-                                            @enderror
-                                        </div>
-                                    @endif
-                                @endcan
+                            @can('doctor_recomandation')
+                            @if (!$patient->doctor_recomandation)
+                                <div class="col-md-6 mb-2">
+                                    <label>अनुसूची १ अधिकृतको सिफारिस</label>
+                                    <input type="file" name="doctor_recomandation" class="form-control dirgha" id=""
+                                        onchange="doctorRecomandationChange(event)">
+                                    @error('doctor_recomandation')
+                                        <label class="text-danger">{{ $message }}</label>
+                                    @enderror
+                                </div>
+                            @endif
+                            {{-- @endcan --}}
+                            @can('bank_cheque')
+                                @if (!$patient->bank_cheque)
+                                    <div class="col-md-6 mb-2">
+                                        <label>बैंक चेक बुक</label>
+                                        <input type="file" name="bank_cheque" class="form-control dirgha" id=""
+                                            onchange="bankchequeChange(event)">
+                                        @error('bank_cheque')
+                                            <label class="text-danger">{{ $message }}</label>
+                                        @enderror
+                                    </div>
+                                @endif
+                            @endcan
                             @endif
 
                             {{-- @can('decision_document')
 
-                                @if ($applicationType != 1)
-                                    @if (!$patient->decision_document)
-                                        <div class="col-md-6 mb-2">
-                                            <label>निर्णय</label>
-                                            <input type="file" name="decision_document" class="form-control dirgha"
-                                                id="" onchange="decisionDocumentChange(event)">
-                                            @error('decision_document')
-                                                <label class="text-danger">{{ $message }}</label>
-                                            @enderror
-                                        </div>
-                                    @endif
-                                @endif
+                            @if ($applicationType != 1)
+                            @if (!$patient->decision_document)
+                            <div class="col-md-6 mb-2">
+                                <label>निर्णय</label>
+                                <input type="file" name="decision_document" class="form-control dirgha" id=""
+                                    onchange="decisionDocumentChange(event)">
+                                @error('decision_document')
+                                <label class="text-danger">{{ $message }}</label>
+                                @enderror
+                            </div>
+                            @endif
+                            @endif
                             @endcan --}}
                             {{-- @can('hospital_document')
 
-                                @if (!$patient->hospital_document)
-                                    <div class="col-md-6 mb-2">
-                                        <label>अस्पतालको पुर्जाको फोटोकपी</label>
-                                        <input type="file" name="hospital_document" class="form-control"
-                                            id="" onchange="hospitalDocument(event)">
-                                        @error('hospital_document')
-                                            <label class="text-danger">{{ $message }}</label>
-                                        @enderror
-                                    </div>
-                                @endif
+                            @if (!$patient->hospital_document)
+                            <div class="col-md-6 mb-2">
+                                <label>अस्पतालको पुर्जाको फोटोकपी</label>
+                                <input type="file" name="hospital_document" class="form-control" id=""
+                                    onchange="hospitalDocument(event)">
+                                @error('hospital_document')
+                                <label class="text-danger">{{ $message }}</label>
+                                @enderror
+                            </div>
+                            @endif
                             @endcan --}}
 
                             {{-- @can('disease_proved_document')
 
-                                @if (!$patient->disease_proved_document)
-                                    <div class="col-md-12 mb-2">
-                                        <label>पिडित प्रमाणित कागजात</label>
-                                        <input type="file" name="disease_proved_document" class="form-control"
-                                            id="" onchange="diseaseProvedDocumentChange(event)">
-                                        @error('disease_proved_document')
-                                            <label class="text-danger">{{ $message }}</label>
-                                        @enderror
-                                    </div>
-                                @endif
+                            @if (!$patient->disease_proved_document)
+                            <div class="col-md-12 mb-2">
+                                <label>पिडित प्रमाणित कागजात</label>
+                                <input type="file" name="disease_proved_document" class="form-control" id=""
+                                    onchange="diseaseProvedDocumentChange(event)">
+                                @error('disease_proved_document')
+                                <label class="text-danger">{{ $message }}</label>
+                                @enderror
+                            </div>
+                            @endif
                             @endcan --}}
-                            
+
                             @can('citizenship_card')
 
                                 @if (!$patient->citizenship_card)
                                     <div class="col-md-12 mb-2">
                                         <label>नागरिकता/ जन्मदर्ता / बसाइसराई कागजात / राष्ट्रिय परिचय पत्र</label>
-                                        <input type="file" name="citizenship_card" class="form-control"
-                                            id="" onchange="citizenshipCardChange(event)">
+                                        <input type="file" name="citizenship_card" class="form-control" id=""
+                                            onchange="citizenshipCardChange(event)">
                                         @error('citizenship_card')
                                             <label class="text-danger">{{ $message }}</label>
                                         @enderror
@@ -480,17 +488,17 @@
                             @endphp
                         @endif
                         {{-- @can('dirgha.register') --}}
-                            <button type="button" onclick="registerDoc({{ $patient->id }})"
-                                class="btn btn-primary btnRegister" id="btnRegister" style="width: 200px">
-                                {{-- {{ $patient->disease->id == 1 ? 'दर्ता' : 'सिफारिस' }} --}}
-                                 {{ 'दर्ता'}}
-                                गर्नुहोस</button>
+                        <button type="button" onclick="registerDoc({{ $patient->id }})"
+                            class="btn btn-primary btnRegister" id="btnRegister" style="width: 200px">
+                            {{-- {{ $patient->disease->id == 1 ? 'दर्ता' : 'सिफारिस' }} --}}
+                            {{ 'दर्ता'}}
+                            गर्नुहोस</button>
                         {{-- @endcan --}}
 
                         {{-- @canany(['hospital_document', 'disease_proved_document', 'citizenship_card', 'application',
-                            'doctor_recomandation', 'bank_cheque', 'decision_document']) --}}
-                            <button type="button" style="width: 100px" onclick="docUpload({{ $patient->id }})"
-                                class="btn btn-primary">ड्राफ्ट</button>
+                        'doctor_recomandation', 'bank_cheque', 'decision_document']) --}}
+                        <button type="button" style="width: 100px" onclick="docUpload({{ $patient->id }})"
+                            class="btn btn-primary">ड्राफ्ट</button>
                         {{-- @endcanany --}}
                     </div>
                 </form>
@@ -557,12 +565,12 @@
                                 ->first();
                         @endphp
                         {{-- @if ($oldRenew)
-                            <div class="form-group">
-                                <label for="">नवीकरण मिति</label>
-                                <input type="text" name="renew_date" onchange="test()"
-                                    class="form-control date-picker  rounded-0 kalimati-font" placeholder="yyyy-mm-dd"
-                                    data-single="true" value="" id="renew_date" required>
-                            </div>
+                        <div class="form-group">
+                            <label for="">नवीकरण मिति</label>
+                            <input type="text" name="renew_date" onchange="test()"
+                                class="form-control date-picker  rounded-0 kalimati-font" placeholder="yyyy-mm-dd"
+                                data-single="true" value="" id="renew_date" required>
+                        </div>
                         @endif --}}
                         <div class="form-group">
                             <label for="">नवीकरण</label>
@@ -576,21 +584,30 @@
                             @endphp
                             <select name="quarter" id="" class="form-control">
                                 <option value="">नवीकरण त्रैमासिक छान्नुहोस्</option>
-                                <option value="1" {{-- {{ renewquarter(collect($patient->renews)->max('next_renew_date')) == 1 ? 'selected' : '' }} --}}
+                                <option value="1" {{-- {{ renewquarter(collect($patient->
+                                    renews)->max('next_renew_date')) == 1 ? 'selected' : '' }} --}}
                                     {{ $quarterOne > $currentDate ? 'disabled' : '' }}>
-                                    प्रथम त्रैमासिक</option>
-                                <option value="2" {{-- {{ renewquarter(collect($patient->renews)->max('next_renew_date')) == 2 ? 'selected' : '' }} --}}
+                                    प्रथम त्रैमासिक
+                                </option>
+                                <option value="2" {{-- {{ renewquarter(collect($patient->
+                                    renews)->max('next_renew_date')) == 2 ? 'selected' : '' }} --}}
                                     {{ $quarterTwo > $currentDate ? 'disabled' : '' }}>
-                                    द्वितीय त्रैमासिक</option>
-                                <option value="3" {{-- {{ renewquarter(collect($patient->renews)->max('next_renew_date')) == 3 ? 'selected' : '' }} --}}
+                                    द्वितीय त्रैमासिक
+                                </option>
+                                <option value="3" {{-- {{ renewquarter(collect($patient->
+                                    renews)->max('next_renew_date')) == 3 ? 'selected' : '' }} --}}
                                     {{ $quarterThree > $currentDate ? 'disabled' : '' }}>
-                                    तृतीय त्रैमासिक</option>
-                                <option value="4" {{-- {{ renewquarter(collect($patient->renews)->max('next_renew_date')) == 4 ? 'selected' : '' }} --}}
+                                    तृतीय त्रैमासिक
+                                </option>
+                                <option value="4" {{-- {{ renewquarter(collect($patient->
+                                    renews)->max('next_renew_date')) == 4 ? 'selected' : '' }} --}}
                                     {{ $quarterFour > $currentDate ? 'disabled' : '' }}>
-                                    चतुर्थ त्रैमासिक</option>
+                                    चतुर्थ त्रैमासिक
+                                </option>
                             </select>
-                            {{-- <input type="text" name="renewed_date" class="form-control  rounded-0 date-picker kalimati-font"
-                                placeholder="yyyy-mm-dd" readonly
+                            {{-- <input type="text" name="renewed_date"
+                                class="form-control  rounded-0 date-picker kalimati-font" placeholder="yyyy-mm-dd"
+                                readonly
                                 value="{{ $patient->renews()->latest('created_at')->value('next_renew_date') }}"
                                 required> --}}
                         </div>
@@ -631,10 +648,10 @@
                                 value="{{ formatDate(ad_to_bs(now()->format('Y-m-d'))) }}" name="applied_date"
                                 id="applied_date" data-single="true">
                         </div>
+                        
                         <div class="col-sm-12 mb-2 p-0">
                             <input type="hidden" value="{{$patient->id}}" name="patient_id">
-                            <label for="" class="required"> आवेदनको प्रकार <span
-                                    class="text-danger">*</span></label>
+                            <label for="" class="required"> आवेदनको प्रकार <span class="text-danger">*</span></label>
 
                             <select name="application_type_id" id="application_types" class="form-control" required>
                                 <option value="">आवेदनको प्रकार छान्नुहोस्</option>
@@ -671,8 +688,7 @@
                         </div>
 
                         <div class="col-sm-12 mb-2 p-0">
-                            <label for="" class="required"> घटनाको प्रकार <span
-                                    class="text-danger">*</span></label>
+                            <label for="" class="required"> घटनाको प्रकार <span class="text-danger">*</span></label>
                             <select name="disease_id" id="disease_id" class="form-control" required>
                                 <option value="">घटनाको प्रकार छान्नुहोस्</option>
 
@@ -728,10 +744,10 @@
         </div>
     </div>
 
-    
+
     <!----Doctor----->
-    <div class="modal fade" id="doctorModal" tabindex="-1" role="dialog"
-        aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal fade" id="doctorModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+        aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -772,10 +788,88 @@
             </div>
         </div>
     </div>
+
+    <div class="modal fade" id="paymentModal-{{ $patient->id }}" tabindex="-1" role="dialog"
+        aria-labelledby="paymentModalTitle-{{ $patient->id }}" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <form action="{{ route('patients.updatePayment', $patient->id) }}" method="POST">
+                    @csrf
+                    @method('PUT')
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="paymentModalTitle-{{ $patient->id }}" style="font-weight:bold">
+                            भुक्तानी विवरण
+                        </h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+
+                        <div class="form-group">
+                            <label for="paid_amount-{{ $patient->id }}">भुक्तानी रकम :</label>
+                            <input type="text" name="paid_amount" id="paid_amount-{{ $patient->id }}"
+                                class="form-control kalimati-font" step="0.01" value="{{ $patient->paid_amount ?? '' }}" required>
+                        </div>
+                       
+                        {{-- <div class="form-group">
+                            <label for="paid_date-{{ $patient->id }}">भुक्तानी मिति :</label>
+                            <input type="date" name="paid_date" id="paid_date-{{ $patient->id }}" class="form-control"
+                                value="{{ $patient->paid_date ?? date('Y-m-d') }}" required>   
+                        </div> --}}
+
+                        {{-- <div class="form-group">
+                                <label for="paid_date-{{ $patient->id }}">भुक्तानी मिति :</label>
+                                <input type="text" name="paid_date" id="paid_date-{{ $patient->id }}"
+                                       class="form-control date-picker kalimati-font"
+                                       data-single="true" readonly required>
+                                       <script>
+                                $(document).ready(function () {
+                                    let paidDateInput = $('#paid_date-{{ $patient->id }}');
+                                    
+                                    // AD date from DB or today
+                                    let initialADDate = "{{ $patient->paid_date ?? now()->format('Y-m-d') }}";
+                                    
+                                    // Convert AD to BS for display
+                                    let initialBSDate = ad_to_bs(initialADDate);
+                                    
+                                    // Initialize Nepali date picker with default date
+                                    paidDateInput.nepaliDatePicker({
+                                        npdMonth: true,
+                                        npdYear: true,
+                                        npdYearCount: 10,
+                                        ndpDefaultDate: initialBSDate, // <-- Use ndpDefaultDate instead of val()
+                                        onChange: function() {
+                                            // Optional: you can handle changes here
+                                        }
+                                    });
+                                });
+                            </script>
+
+                            </div> --}}
+
+                    <div class="form-group">
+                        <label for="paid_date-{{ $patient->id }}">भुक्तानी मिति :</label>
+                        <input type="text" name="paid_date" id="paid_date-{{ $patient->id }}"
+                               class="form-control date-picker kalimati-font"
+                               value="{{ formatDate(ad_to_bs(now()->format('Y-m-d'))) }}"
+                               data-single="true" readonly required>
+                    </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">रद्द गर्नुहोस्</button>
+                        <button type="submit" class="btn btn-primary" style="width: 150px">सेभ गर्नुहोस्</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
 </div>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous">
-</script>
+    </script>
 <script src="https://cdn-script.com/ajax/libs/jquery/3.7.1/jquery.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.7.3/axios.min.js"></script>
 <script>
@@ -795,246 +889,247 @@
     })
 </script>
 @push('myScript')
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.7.7/axios.min.js"></script>
-    <script>
-        function registerDoc(id) {
-            let action = "{{ route('patient.recommendation') }}";
-            const form = document.getElementById('RegForm');
-            form.action = action;
-            form.submit();
-            // alert(id);
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.7.7/axios.min.js"></script>
+<script>
+    function registerDoc(id) {
+        let action = "{{ route('patient.recommendation') }}";
+        const form = document.getElementById('RegForm');
+        form.action = action;
+        form.submit();
+        // alert(id);
+    }
+
+    function docUpload(id) {
+        let action = "{{ route('documentUpload', ':id') }}".replace(':id', id);
+        const form = document.getElementById('RegForm');
+        form.action = action;
+        form.submit();
+    }
+
+    let data = [];
+    fetchPatientData()
+
+    function fetchPatientData() {
+        let patient = @json($patient);
+        // if (patient.disease.application_types[0].id == 1) {
+        if (patient.bank_account_number) {
+            data['bank_account_number'] = patient.bank_account_number;
         }
-
-        function docUpload(id) {
-            let action = "{{ route('documentUpload', ':id') }}".replace(':id', id);
-            const form = document.getElementById('RegForm');
-            form.action = action;
-            form.submit();
+        if (patient.application) {
+            data['application'] = patient.application;
         }
-
-        let data = [];
-        fetchPatientData()
-
-        function fetchPatientData() {
-            let patient = @json($patient);
-            // if (patient.disease.application_types[0].id == 1) {
-            if (patient.bank_account_number) {
-                data['bank_account_number'] = patient.bank_account_number;
-            }
-            if (patient.application) {
-                data['application'] = patient.application;
-            }
-            if (patient.doctor_recomandation) {
-                data['doctor_recomandation'] = patient.doctor_recomandation;
-            }
-            if (patient.bank_cheque) {
-                data['bank_cheque'] = patient.bank_cheque;
-            }
-            if (patient.hospital_document) {
-                data['hospital_document'] = patient.hospital_document;
-            }
-            if (patient.disease_proved_document) {
-                data['disease_proved_document'] = patient.disease_proved_document;
-            }
-            if (patient.citizenship_card) {
-                data['citizenship_card'] = patient.citizenship_card;
-            }
-            if (patient.decision_document) {
-                data['decision_document'] = patient.decision_document;
-            }
-            // }
+        if (patient.doctor_recomandation) {
+            data['doctor_recomandation'] = patient.doctor_recomandation;
         }
-        fetchPatientData();
-
-        function bankAccountNumberChange() {
-            // alert("Hello");
-            let accountNum = $("#bank_account_number").val();
-            if (accountNum.length > 0) {
-                data['bank_account_number'] = "patient.bank_account_number";
-            } else {
-                data['bank_account_number'] = null;
-            }
-            disableButton();
+        if (patient.bank_cheque) {
+            data['bank_cheque'] = patient.bank_cheque;
         }
-
-        function applicationChange(event) {
-            const file = event.target.files[0];
-            if (file) {
-                data['application'] = "patient.application";
-            } else {
-                data['application'] = null;
-            }
-            disableButton();
+        if (patient.hospital_document) {
+            data['hospital_document'] = patient.hospital_document;
         }
-
-        function doctorRecomandationChange(event) {
-            const file = event.target.files[0];
-            if (file) {
-                data['doctor_recomandation'] = "patient.doctor_recomandation";
-            } else {
-                data['doctor_recomandation'] = null;
-            }
-            disableButton();
+        if (patient.disease_proved_document) {
+            data['disease_proved_document'] = patient.disease_proved_document;
         }
-
-        function bankchequeChange(event) {
-            const file = event.target.files[0];
-            if (file) {
-                data['bank_cheque'] = "patient.bank_cheque";
-
-            } else {
-                data['bank_cheque'] = null;
-            }
-            disableButton();
+        if (patient.citizenship_card) {
+            data['citizenship_card'] = patient.citizenship_card;
         }
-
-        function decisionDocumentChange(event) {
-            // alert('sdf')
-            const file = event.target.files[0];
-            if (file) {
-                data['decision_document'] = "patient.decision_document";
-            } else {
-                data['decision_document'] = null;
-            }
-            disableButton();
+        if (patient.decision_document) {
+            data['decision_document'] = patient.decision_document;
         }
+        // }
+    }
+    fetchPatientData();
 
-        function hospitalDocument(event) {
-            const file = event.target.files[0];
-            if (file) {
-                data['hospital_document'] = "patient.hospital_document";
-            } else {
-                data['hospital_document'] = null;
-            }
-            disableButton();
-        }
-
-        function diseaseProvedDocumentChange(event) {
-            const file = event.target.files[0];
-            if (file) {
-                data['disease_proved_document'] = "patient.disease_proved_document";
-            } else {
-                data['disease_proved_document'] = null;
-            }
-            disableButton();
-        }
-
-        function citizenshipCardChange(event) {
-            const file = event.target.files[0];
-            if (file) {
-
-                data['citizenship_card'] = "patient.citizenship_card";
-            } else {
-                data['citizenship_card'] = null;
-
-            }
-            disableButton();
+    function bankAccountNumberChange() {
+        // alert("Hello");
+        let accountNum = $("#bank_account_number").val();
+        if (accountNum.length > 0) {
+            data['bank_account_number'] = "patient.bank_account_number";
+        } else {
+            data['bank_account_number'] = null;
         }
         disableButton();
+    }
 
-
-        function disableButton(){
-            return ;
+    function applicationChange(event) {
+        const file = event.target.files[0];
+        if (file) {
+            data['application'] = "patient.application";
+        } else {
+            data['application'] = null;
         }
+        disableButton();
+    }
 
-        // function disableButton() {
-        //     let patient = @json($patient);
-        //     if (patient.disease.application_types[0].id == 1) {
-        //         if (data.bank_account_number && data.application && data.doctor_recomandation && data.bank_cheque && data
-        //             .hospital_document && data.disease_proved_document && data.citizenship_card) {
-        //             $("#btnRegister").addClass('active');
-        //         } else {
-        //             $("#btnRegister").removeClass('active');
-        //         }
-        //     }
+    function doctorRecomandationChange(event) {
+        const file = event.target.files[0];
+        if (file) {
+            data['doctor_recomandation'] = "patient.doctor_recomandation";
+        } else {
+            data['doctor_recomandation'] = null;
+        }
+        disableButton();
+    }
 
-        //     if (patient.disease.application_types[0].id == 2) {
-        //         // alert('sd')
-        //         if (data.application && data.decision_document && data.hospital_document && data.disease_proved_document &&
-        //             data.citizenship_card) {
-        //             $("#btnRegister").addClass('active');
-        //         } else {
-        //             $("#btnRegister").removeClass('active');
-        //         }
-        //     }
+    function bankchequeChange(event) {
+        const file = event.target.files[0];
+        if (file) {
+            data['bank_cheque'] = "patient.bank_cheque";
 
-        //     if (patient.disease.application_types[0].id == 3) {
-        //         if (data.application && data.decision_document && data.hospital_document && data.disease_proved_document &&
-        //             data.citizenship_card) {
-        //             $("#btnRegister").addClass('active');
-        //         } else {
-        //             $("#btnRegister").removeClass('active');
-        //         }
-        //     }
-        //     if (patient.disease.application_types[0].id == 4) {
-        //         if (data.application && data.decision_document && data.hospital_document && data.disease_proved_document &&
-        //             data.citizenship_card) {
-        //             $("#btnRegister").addClass('active');
-        //         } else {
-        //             $("#btnRegister").removeClass('active');
-        //         }
-        //     }
+        } else {
+            data['bank_cheque'] = null;
+        }
+        disableButton();
+    }
 
-        // }
+    function decisionDocumentChange(event) {
+        // alert('sdf')
+        const file = event.target.files[0];
+        if (file) {
+            data['decision_document'] = "patient.decision_document";
+        } else {
+            data['decision_document'] = null;
+        }
+        disableButton();
+    }
 
-        $("#registerModal").click(() => {
-            let patient = @json($patient);
-            if (patient.disease.application_types[0].id == 1) {
+    function hospitalDocument(event) {
+        const file = event.target.files[0];
+        if (file) {
+            data['hospital_document'] = "patient.hospital_document";
+        } else {
+            data['hospital_document'] = null;
+        }
+        disableButton();
+    }
 
-                bankAccountNumberChange();
-                applicationChange();
-                doctorRecomandationChange();
-                bankchequeChange(event);
-                decisionDocumentChange();
-                hospitalDocument();
-                diseaseProvedDocumentChange();
-                citizenshipCardChange();
+    function diseaseProvedDocumentChange(event) {
+        const file = event.target.files[0];
+        if (file) {
+            data['disease_proved_document'] = "patient.disease_proved_document";
+        } else {
+            data['disease_proved_document'] = null;
+        }
+        disableButton();
+    }
+
+    function citizenshipCardChange(event) {
+        const file = event.target.files[0];
+        if (file) {
+
+            data['citizenship_card'] = "patient.citizenship_card";
+        } else {
+            data['citizenship_card'] = null;
+
+        }
+        disableButton();
+    }
+    disableButton();
+
+
+    function disableButton() {
+        return;
+    }
+
+    // function disableButton() {
+    //     let patient = @json($patient);
+    //     if (patient.disease.application_types[0].id == 1) {
+    //         if (data.bank_account_number && data.application && data.doctor_recomandation && data.bank_cheque && data
+    //             .hospital_document && data.disease_proved_document && data.citizenship_card) {
+    //             $("#btnRegister").addClass('active');
+    //         } else {
+    //             $("#btnRegister").removeClass('active');
+    //         }
+    //     }
+
+    //     if (patient.disease.application_types[0].id == 2) {
+    //         // alert('sd')
+    //         if (data.application && data.decision_document && data.hospital_document && data.disease_proved_document &&
+    //             data.citizenship_card) {
+    //             $("#btnRegister").addClass('active');
+    //         } else {
+    //             $("#btnRegister").removeClass('active');
+    //         }
+    //     }
+
+    //     if (patient.disease.application_types[0].id == 3) {
+    //         if (data.application && data.decision_document && data.hospital_document && data.disease_proved_document &&
+    //             data.citizenship_card) {
+    //             $("#btnRegister").addClass('active');
+    //         } else {
+    //             $("#btnRegister").removeClass('active');
+    //         }
+    //     }
+    //     if (patient.disease.application_types[0].id == 4) {
+    //         if (data.application && data.decision_document && data.hospital_document && data.disease_proved_document &&
+    //             data.citizenship_card) {
+    //             $("#btnRegister").addClass('active');
+    //         } else {
+    //             $("#btnRegister").removeClass('active');
+    //         }
+    //     }
+
+    // }
+
+    $("#registerModal").click(() => {
+        let patient = @json($patient);
+        if (patient.disease.application_types[0].id == 1) {
+
+            bankAccountNumberChange();
+            applicationChange();
+            doctorRecomandationChange();
+            bankchequeChange(event);
+            decisionDocumentChange();
+            hospitalDocument();
+            diseaseProvedDocumentChange();
+            citizenshipCardChange();
+        } else {
+            applicationChange();
+            alert('sad')
+            decisionDocumentChange();
+            hospitalDocument();
+            diseaseProvedDocumentChange();
+            citizenshipCardChange();
+        }
+        disableButton();
+    });
+
+    $("#nmc_number").on('input', function () {
+        let id = $("#nmc_number").val();
+        let url = `{{ route('getDoctor', ':id') }}`.replace(':id', id);
+        axios.get(url).then((response) => {
+            if (response.data.status) {
+                $("#post").val(response.data.data.post);
+                $("#name").val(response.data.data.user.name)
             } else {
-                applicationChange();
-                alert('sad')
-                decisionDocumentChange();
-                hospitalDocument();
-                diseaseProvedDocumentChange();
-                citizenshipCardChange();
+                $("#post").val("");
+                $("#name").val("")
             }
-            disableButton();
-        });
-
-        $("#nmc_number").on('input', function() {
-            let id = $("#nmc_number").val();
-            let url = `{{ route('getDoctor', ':id') }}`.replace(':id', id);
-            axios.get(url).then((response) => {
-                if (response.data.status) {
-                    $("#post").val(response.data.data.post);
-                    $("#name").val(response.data.data.user.name)
-                } else {
-                    $("#post").val("");
-                    $("#name").val("")
-                }
-            })
         })
-    </script>
+    })
+</script>
 
-    {{-- <script>
-        $("#renew_date").change(() => {
-            alert('Hello')
-        })
-        const dateInput = document.getElementById('renew_date');
+{{--
+<script>
+    $("#renew_date").change(() => {
+        alert('Hello')
+    })
+    const dateInput = document.getElementById('renew_date');
 
-        // Add event listener for change event
-        dateInput.addEventListener('change', function() {
-            test();
-        });
+    // Add event listener for change event
+    dateInput.addEventListener('change', function () {
+        test();
+    });
 
-        function test() {
-            alert("Hello")
-        }
-    </script> --}}
+    function test() {
+        alert("Hello")
+    }
+</script> --}}
 @endpush
 
 @push('styles')
-    <style>
-        /* .btnRegister {
+<style>
+    /* .btnRegister {
             display: none;
             width: 200px;
         }
@@ -1042,44 +1137,44 @@
         .btnRegister.active {
             display: block !important;
         } */
-    </style>
+</style>
 @endpush
 
 @push('scripts')
-    <script>
-        $("#application_types").on('change', function() {
-            let id = $(this).val();
-            var url = "{{ route('disease.getAll', ':id') }}";
-            url = url.replace(':id', id);
+<script>
+    $("#application_types").on('change', function () {
+        let id = $(this).val();
+        var url = "{{ route('disease.getAll', ':id') }}";
+        url = url.replace(':id', id);
 
-            $.ajax({
-                url: url,
-                type: "GET",
-                data: {
-                    _token: '{{ csrf_token() }}'
-                },
-                cache: false,
-                dataType: 'json',
-                success: function(dataResult) {
-                    const selectElement = $(
-                        '#disease_id');
-                    selectElement.empty();
+        $.ajax({
+            url: url,
+            type: "GET",
+            data: {
+                _token: '{{ csrf_token() }}'
+            },
+            cache: false,
+            dataType: 'json',
+            success: function (dataResult) {
+                const selectElement = $(
+                    '#disease_id');
+                selectElement.empty();
+                selectElement.append($('<option>', {
+                    value: "",
+                    text: "रोग छान्नुहोस्"
+
+                }));
+                $.each(dataResult.diseases, function (index, item) {
+                    console.log()
                     selectElement.append($('<option>', {
-                        value: "",
-                        text: "रोग छान्नुहोस्"
+                        value: item.id,
+                        text: item.name
 
                     }));
-                    $.each(dataResult.diseases, function(index, item) {
-                        console.log()
-                        selectElement.append($('<option>', {
-                            value: item.id,
-                            text: item.name
 
-                        }));
-
-                    });
-                }
-            });
-        })
-    </script>
+                });
+            }
+        });
+    })
+</script>
 @endpush

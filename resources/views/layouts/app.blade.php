@@ -10,7 +10,7 @@
         @isset($title)
             {{ $title }} |
         @endisset
-        {{ settings()->get('app_name', $default = 'बिरामी दर्ता प्रणाली') }}
+        {{ settings()->get('app_name', $default = 'विपद दर्ता प्रणाली') }}
 
         {{-- {{ settings()->get("app_name", $default = "बिरामी दर्ता प्रणाली") }} --}}
         {{-- {{ config('app.name') }} --}}

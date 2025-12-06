@@ -180,7 +180,7 @@ class OrganizationController extends Controller
     public function show(Patient $patient, Request $request)
 {
     // Load relations like disease, address, doctor, onlineApplication
-    $patient = $patient->load(['disease', 'address', 'doctor', 'onlineApplication', 'renews']);
+     $patient = $patient->load(['patientApplication.patientApplicationDisease.disease', 'address', 'doctor', 'onlineApplication', 'renews']);
 
     // Optional: if you are generating registration numbers, you can still do it without application_type_id
     $prefixIncrement = settings('registration_auto_increment_prefix');
@@ -240,16 +240,21 @@ public function edit(Patient $patient)
 {
     $relations = Relation::latest()->get();
     $applicationTypes = ApplicationType::latest()->get();
-
     $diseases = Disease::latest()->get();
+
+    // Load selected application
+    $patientApplication = $patient->patientApplication()->latest()->first();
+
+    // Load selected diseases from pivot table
+    $selectedDiseaseIds = $patientApplication
+        ? $patientApplication->patientApplicationDisease()->pluck('disease_id')->toArray()
+        : [];
 
     $provinces = Address::select('province')->distinct()->get();
     $districts = Address::select('district')->where('province', $patient->address->province)->distinct()->get();
     $municipalities = Address::select('municipality')->where('district', $patient->address->district)->get();
-
-    return view('organization.edit', compact('patient','diseases','provinces','districts','municipalities','applicationTypes','relations'));
+    return view('organization.edit', compact('patient','diseases','provinces','districts','municipalities','applicationTypes','relations','patientApplication','selectedDiseaseIds'));
 }
-
 
     /**
      * Update the specified resource in storage.
@@ -260,6 +265,7 @@ public function edit(Patient $patient)
      */
     public function update(OrganizationRequest $request, Organization $organization, DocumentService $documentService)
     {
+       
         $this->checkAuthorization($organization);
         $this->organizationService->update($organization, $request->except('id'));
 

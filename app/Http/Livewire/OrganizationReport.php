@@ -5,6 +5,7 @@ namespace App\Http\Livewire;
 use App\ApplicationType;
 use App\Renew;
 use App\Patient;
+use App\PatientApplicationDisease;
 use Carbon\Carbon;
 use App\Organization;
 use Livewire\Component;
@@ -31,10 +32,10 @@ class OrganizationReport extends Component
     public $applicationTypeCounts = [];
 
     private $message;
+    public $applicationTypeId;
 
     public $rate = 5000;
-    // public function render(){
-    // }
+   
     public function mount($message)
     {
 
@@ -42,20 +43,34 @@ class OrganizationReport extends Component
         $rate = ApplicationType::where('id', 1)->first();
         $this->rate = $rate->amount;
         $this->message = $message;
-        Paginator::useBootstrap();
-        $this->applicationTypeCounts = ApplicationType::with([
-            'diseases' => function ($q) {
-                $q->withCount([
-                    'patients as patient_count' => function ($p) {
-                        $p->whereNotNull('registered_date');
-                    }
-                ]);
-            }
-        ])->get()->map(function ($type) {
-            // Sum of patients of all diseases under this application type
-            $type->total_patients = $type->diseases->sum('patient_count');
-            return $type;
-        });
+
+     $this->applicationTypeCounts = PatientApplicationDisease::with([
+        'disease',
+        'patientApplication.application_type',
+        'patientApplication.patient'
+    ])
+    ->whereHas('patientApplication.patient', function($query) {
+        $query->whereNotNull('verified_date');
+    })
+    ->get()
+    ->groupBy(fn($item) => $item->patientApplication->application_type->name ?? 'Unknown')
+    ->map(function($diseases, $typeName) {
+        $totalLoss = $diseases->sum(fn($d) => $d->patientApplication->patient->estimated_amount ?? 0);
+
+        return (object)[
+            'name' => $typeName,
+            'diseases' => $diseases->map(function($d) {
+                return (object)[
+                    'disease_id' => $d->disease_id,
+                    'disease_name' => $d->disease->name ?? 'Unknown',
+                    'patient_count' => 1
+                ];
+            }),
+            'estimated_loss' => $totalLoss
+        ];
+    })
+    ->values();
+
 
 
         if (request('date_from')) {

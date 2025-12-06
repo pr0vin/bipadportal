@@ -37,20 +37,66 @@
                                             </option>
                                         @endforeach
                                     </select>
-                                </div>
+                            </div>
 
-                                <div class="col-md-4 col-sm-6 mb-2">
-                                        <label for="" class="required"> प्रकोप <span
-                                                class="text-danger">*</span></label>
-                                        <select name="disease_id" id="disease_id" class="form-control" required>
-                                        <option value="">प्रकोप छान्नुहोस्</option>
+                           <div class="col-md-4 col-sm-6 mb-2" style="position: relative;">
+                                    <label class="required">प्रकोप <span class="text-danger">*</span></label>
+                                    <input type="text" id="disease_selector" class="form-control" placeholder="प्रकोप छनौट गर्नुहोस्" readonly style="cursor: pointer;">
+                                    <!-- Floating dropdown -->
+                                    <div id="disease_dropdown" class="border p-2 rounded mt-1 bg-white shadow"
+                                         style=" display: none; max-height: 200px; overflow-y: auto; position: absolute; width: 100%; z-index: 9999;">
                                         @foreach ($diseases as $disease)
-                                            <option value="{{ $disease->id }}">{{ $disease->name }}</option>
+                                        <div class="form-check">
+                                            <input class="form-check-input disease-checkbox" type="checkbox"
+                                                   name="disease_id[]"
+                                                   value="{{ $disease->id }}"
+                                                   id="disease_{{ $disease->id }}"
+                                                   {{ $loop->first ? 'required' : '' }}>
+                                        
+                                            <label class="form-check-label" for="disease_{{ $disease->id }}">
+                                                {{ $disease->name }}
+                                            </label>
+                                        </div>
                                         @endforeach
-                                    </select>
-                                </div>
+                                    </div>
+                                
+                                    <script>
+                                    const selector = document.getElementById('disease_selector');
+                                    const dropdown = document.getElementById('disease_dropdown');
+                                    const checkboxes = document.querySelectorAll('.disease-checkbox');
+                                    
+                                    // Toggle dropdown
+                                    selector.addEventListener('click', function () {
+                                        dropdown.style.display = dropdown.style.display === 'none' ? 'block' : 'none';
+                                    });
+                                
+                                    // Update input text + handle required
+                                    checkboxes.forEach(cb => {
+                                        cb.addEventListener('change', function () {
+                                        
+                                            let selected = Array.from(document.querySelectorAll('.disease-checkbox:checked'))
+                                                .map(c => c.nextElementSibling.innerText)
+                                                .join(', ');
+                                        
+                                            selector.value = selected;
+                                        
+                                            if (document.querySelectorAll('.disease-checkbox:checked').length > 0) {
+                                                checkboxes.forEach(c => c.required = false);
+                                            } else {
+                                                checkboxes[0].required = true;
+                                            }
+                                        });
+                                    });
+                                
+                                    // Close dropdown when clicking outside
+                                    document.addEventListener('click', function(e) {
+                                        if (!selector.contains(e.target) && !dropdown.contains(e.target)) {
+                                            dropdown.style.display = 'none';
+                                        }
+                                    });
+                                </script>
 
-                               
+                                </div>
 
                                 <div class="col-md-4 col-sm-6 mb-2">
                                     <label for="" class="required"> पीडितको नाम (देवनागिरिमा) <span
@@ -215,6 +261,11 @@
                             <div class="col-md-4 mb-3">
                                 <label class="kalimati-font">आवेदन मिति</label>
                                 <input type="text" class="form-control date-picker kalimati-font" readonly name="applied_date" id="applied_date" value="{{ formatDate(ad_to_bs(now()->format('Y-m-d'))) }}" data-single="true">
+                            </div>
+
+                            <div class="col-md-4 mb-3">
+                                <label class="kalimati-font">क्षति मिति</label>
+                                <input type="text" class="form-control date-picker kalimati-font" readonly name="kshati_date" id="kshati_date" value="{{ formatDate(ad_to_bs(now()->format('Y-m-d'))) }}" data-single="true">
                             </div>
                     
                             <div class="col-md-4 mb-3">

@@ -188,8 +188,8 @@
             </li>
         {{-- @endcanany --}}
 
-        @canany(['dirgha.report', 'bipanna.report', 'samajik.report', 'nagarpalika.report', 'closed.report',
-            'renewed.report', 'notRenewed.report'])
+        {{-- @canany(['dirgha.report', 'bipanna.report', 'samajik.report', 'nagarpalika.report', 'closed.report',
+            'renewed.report', 'notRenewed.report']) --}}
 
             <li class=" mt-1" id="sidebarCollapse">
                 <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle text-dark">
@@ -202,13 +202,12 @@
                             </svg>
                         </i> </span>@lang('navigation.report')</a>
                 <ul class="collapse list-unstyled" id="homeSubmenu">
-                    @can('dirgha.report')
+                    {{-- @can('dirgha.report') --}}
                         <li>
                             <a class="nav-link text-dark"
-                                href="{{ route('organization.report.dirghaReport') }}?diseaseType=1&ward={{ session()->get('ward_number') }}">दीर्घरोगी
-                                मासिक उपचार खर्च</a>
+                                href="{{ route('organization.report.dirghaReport') }}?diseaseType=1&ward={{ session()->get('ward_number') }}">प्रकोपको सङख्या र क्षतिको विवरण</a>
                         </li>
-                    @endcan
+                    {{-- @endcan --}}
                     @can('bipanna.report')
                         <li>
                             <a class="nav-link text-dark" href="{{ route('organization.bipanna-final-report') }}">बिपन्न
@@ -252,7 +251,7 @@
                     @endcan
                 </ul>
             </li>
-        @endcanany
+        {{-- @endcanany --}}
         @canany(['user.store', 'user.edit', 'user.delete', 'user.password'])
             <li id="sidebarCollapse " class="{{ setActive('user.index') }} mb-1">
                 <a class="nav-link text-dark" href="{{ route('user.index') }}">

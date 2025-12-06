@@ -85,7 +85,7 @@ class SettingsSeeder extends Seeder
             ]);
         }
         settings()->set([
-            'app_name' => 'बिरामी दर्ता प्रणाली',
+            'app_name' => 'विपद दर्ता प्रणाली',
             'app_name_en' => 'Patient Registration System',
             'registration_auto_increment_prefix' => '1',
             'registration_number_digits' => '4',
