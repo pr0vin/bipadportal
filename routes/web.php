@@ -412,6 +412,8 @@ Route::get('social-development-ministry/report', 'OrganizationReportController@s
 Route::get('social-development-ministry', 'OrganizationReportController@socialDevelopmentMinistryReport')->name('socialDevelopmentMinistryReport');
 Route::get('municipality-health-relief-fund', 'OrganizationReportController@municipalityHealthRelifFund')->name('municipalityReport');
 Route::get('registered-patient-report', 'OrganizationReportController@registeredPatientReport')->name('organization.registeredPatientReport');
+Route::get('relief-report', 'OrganizationReportController@reliefReport')->name('organization.relief-report');
+
 // Route::get('user-role', 'UserController@userRole');
 
 Route::get('/faqs', [FaqsController::class, 'faqs'])->name('frontent.faqs');

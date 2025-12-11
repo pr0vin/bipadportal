@@ -20,6 +20,7 @@ use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Session;
 use App\Exports\BipannaDiseseWiseExport;
 use App\Exports\BipannaHospitalWiseExport;
+use App\Exports\ReliefDistributionExport;
 use App\Exports\SamajikExport;
 
 class OrganizationReportController extends Controller
@@ -236,6 +237,25 @@ class OrganizationReportController extends Controller
             // 'diseaseCounts' => $diseaseCounts,
             'applicationTypeId' => $applicationTypeId,
         ]);
+    }
+
+    public function reliefReport(Request $request)
+    {
+        if (!municipalityId()) {
+            return redirect()->back()->with('error', 'कृपया पालिका छान्नुहोस्');
+        }
+        if ($request->excel) {
+
+            $fileName = 'relief_distribution_report.xlsx';
+
+            return Excel::download(
+                new ReliefDistributionExport(municipalityId()),
+                $fileName
+            );
+        }
+        $reliefDetails = Patient::whereNotNull('verified_date')->get();
+
+        return view('livewire.ReliefDistributionReport', compact('reliefDetails'));
     }
 
 

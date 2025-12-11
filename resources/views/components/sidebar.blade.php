@@ -207,6 +207,12 @@
                             <a class="nav-link text-dark"
                                 href="{{ route('organization.report.dirghaReport') }}?diseaseType=1&ward={{ session()->get('ward_number') }}">प्रकोपको सङख्या र क्षतिको विवरण</a>
                         </li>
+
+                        <li>
+                <a class="nav-link text-dark" href="{{ route('organization.relief-report') }}">
+                    वितरण गरिएका राहतको विवरण
+                </a>
+            </li>
                     {{-- @endcan --}}
                     @can('bipanna.report')
                         <li>

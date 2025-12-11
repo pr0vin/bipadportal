@@ -1,7 +1,7 @@
 {{-- @if (request('diseaseType') == '2')
 @include('partials.bipanna-tab')
 @endif --}}
-<div class="card z-depth-0 printableCard">
+<div class="card  z-depth-0 printableCard">
     <div class="card-body">
         {{-- <div class="blue lighten-5 p-3 notPrintable">
             @php

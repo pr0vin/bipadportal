@@ -38,8 +38,6 @@ class OrganizationReport extends Component
    
     public function mount($message)
     {
-
-
         $rate = ApplicationType::where('id', 1)->first();
         $this->rate = $rate->amount;
         $this->message = $message;
@@ -48,8 +46,7 @@ class OrganizationReport extends Component
         'disease',
         'patientApplication.application_type',
         'patientApplication.patient'
-    ])
-    ->whereHas('patientApplication.patient', function($query) {
+    ])->whereHas('patientApplication.patient', function($query) {
         $query->whereNotNull('verified_date');
     })
     ->get()
