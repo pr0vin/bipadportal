@@ -32,8 +32,13 @@ use App\Http\Controllers\DoctorProfileController;
 use App\Http\Controllers\PatientDoctorController;
 use App\Http\Controllers\OnesignaltokenController;
 use App\Http\Controllers\ApplicationTypeController;
+use App\Http\Controllers\ApplicationTypesController;
+use App\Http\Controllers\ResourcesController;
+use App\Http\Controllers\UnitsController;
+use App\Http\Controllers\DistributionController;
 use App\Http\Controllers\Admin\ApplicationController;
 use App\Http\Controllers\CommitteePositionController;
+use App\Http\Controllers\DiseasesController;
 
 Auth::routes(['register' => false]);
 Route::get('/registration', 'FrontendController@index')->name('organization.new');
@@ -161,6 +166,55 @@ Route::group(
         Route::get('admin/logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index')->name('admin.logs');
     }
 );
+
+Route::prefix('diseases')->group(function () {
+    Route::get('/', [DiseasesController::class, 'index'])->name('diseases.index');
+    Route::post('/', [DiseasesController::class, 'store'])->name('diseases.store');
+    Route::get('/{id}/edit', [DiseasesController::class, 'edit'])->name('diseases.edit');
+    Route::put('/{id}', [DiseasesController::class, 'update'])->name('diseases.update');
+    Route::delete('/{id}', [DiseasesController::class, 'destroy'])->name('diseases.destroy');
+});
+
+Route::prefix('application-types')->group(function () {
+    Route::get('/', [ApplicationTypesController::class, 'index'])->name('application-types.index');
+    Route::get('/create', [ApplicationTypesController::class, 'create'])->name('application-types.create');
+    Route::post('/store', [ApplicationTypesController::class, 'store'])->name('application-types.store');
+    Route::get('/{id}/edit', [ApplicationTypesController::class, 'edit'])->name('application-types.edit');
+    Route::put('/{id}', [ApplicationTypesController::class, 'update'])->name('application-types.update');
+    Route::delete('/{id}', [ApplicationTypesController::class, 'destroy'])->name('application-types.destroy');
+});
+
+Route::prefix('resources')->group(function () {
+    Route::get('/', [ResourcesController::class, 'index'])->name('resources.index');
+    Route::get('/create', [ResourcesController::class, 'create'])->name('resources.create');
+    Route::post('/store', [ResourcesController::class, 'store'])->name('resources.store');
+    Route::get('/{resource}/edit', [ResourcesController::class, 'edit'])->name('resources.edit');
+    Route::put('/{resource}', [ResourcesController::class, 'update'])->name('resources.update');
+    Route::delete('/{resource}', [ResourcesController::class, 'destroy'])->name('resources.destroy');
+});
+
+
+
+Route::prefix('units')->group(function () {
+    Route::get('/', [UnitsController::class, 'index'])->name('units.index');
+    Route::get('/create', [UnitsController::class, 'create'])->name('units.create');
+    Route::post('/store', [UnitsController::class, 'store'])->name('units.store');
+    Route::get('/{id}/edit', [UnitsController::class, 'edit'])->name('units.edit');
+    Route::put('/{id}', [UnitsController::class, 'update'])->name('units.update');
+    Route::delete('/{id}', [UnitsController::class, 'destroy'])->name('units.destroy');
+});
+
+Route::prefix('distributions')->group(function () {
+    Route::get('/', [DistributionController::class, 'index'])->name('distributions.index');
+    Route::get('/create', [DistributionController::class, 'create'])->name('distributions.create');
+    Route::post('/', [DistributionController::class, 'store'])->name('distributions.store');
+    Route::get('/{distribution}/edit', [DistributionController::class, 'edit'])->name('distributions.edit');
+    Route::put('/{distribution}', [DistributionController::class, 'update'])->name('distributions.update');
+    Route::delete('/{distribution}', [DistributionController::class, 'destroy'])->name('distributions.destroy');
+    Route::resource('distributions', DistributionController::class)->except('show');
+});
+
+
 Route::prefix('disease')->group(function () {
     Route::get('/', [DiseaseController::class, 'index'])->name('disease.index');
     Route::post('/', [DiseaseController::class, 'store'])->name('disease.store');
@@ -199,12 +253,12 @@ Route::prefix('patient')->group(function () {
 
     Route::delete('/{patient}/kshati/{index}', [PatientController::class, 'deleteKshatiPhoto'])
         ->name('kshati.delete.single');
-        Route::post('/{patient}/kshati/add', [PatientController::class, 'addKshatiPhoto'])
-    ->name('kshati.add');
+    Route::post('/{patient}/kshati/add', [PatientController::class, 'addKshatiPhoto'])
+        ->name('kshati.add');
 
     Route::put('/{patient}/payment', [PatientController::class, 'updatePayment'])->name('patients.updatePayment');
 
-
+    Route::get('/distribution/form', [PatientController::class, 'distributionForm'])->name('distributions.distribution.form');
 });
 
 Route::get('application-submitted/{patient}', [FrontendController::class, 'applicationSubmited'])->name('applicationSubmited');
@@ -413,6 +467,8 @@ Route::get('social-development-ministry', 'OrganizationReportController@socialDe
 Route::get('municipality-health-relief-fund', 'OrganizationReportController@municipalityHealthRelifFund')->name('municipalityReport');
 Route::get('registered-patient-report', 'OrganizationReportController@registeredPatientReport')->name('organization.registeredPatientReport');
 Route::get('relief-report', 'OrganizationReportController@reliefReport')->name('organization.relief-report');
+Route::get('resource-distribution-report', 'OrganizationReportController@resourceDistributionReport')->name('organization.resource-distribution-report');
+
 
 // Route::get('user-role', 'UserController@userRole');
 

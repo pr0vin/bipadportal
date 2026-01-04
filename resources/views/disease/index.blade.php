@@ -19,7 +19,7 @@
                                 @endif
                                 {{-- {{}} --}}
                                 <div class="form-group">
-                                    <label for="input-name">क्षतिको स्तर अनुसार</label>
+                                    <label for="input-name">घटना </label>
                                     @if ($disease->id)
                                         <select name="application_type_id[]" id="" class="form-control">
                                             @foreach ($applicationTypes as $applicationType)
@@ -40,7 +40,7 @@
                                     @endif
                                 </div>
                                 <div class="form-group">
-                                    <label for="input-name">विपद्‌को प्रकार</label>
+                                    <label for="input-name">प्रकोप</label>
                                     <input type="text" id="input-name" name="name" class="form-control" autocomplete="off"
                                         value="{{ old('name', $disease->name) }}">
                                 </div>

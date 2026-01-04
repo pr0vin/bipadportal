@@ -179,10 +179,8 @@ class OrganizationController extends Controller
 
     public function show(Patient $patient, Request $request)
 {
-    // Load relations like disease, address, doctor, onlineApplication
      $patient = $patient->load(['patientApplication.patientApplicationDisease.disease', 'address', 'doctor', 'onlineApplication', 'renews']);
-
-    // Optional: if you are generating registration numbers, you can still do it without application_type_id
+  
     $prefixIncrement = settings('registration_auto_increment_prefix');
 
     $patientRegNumber = Patient::where('address_id', municipalityId())

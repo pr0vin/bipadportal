@@ -20,30 +20,26 @@ class ApplicationController extends Controller
     }
     public function newApplication(Request $request)
     {
-        $permissions = [
-            '1' => 'dirgha.application',
-            '2' => 'bipanna.application',
-            '3' => 'samajik.application',
-            '4' => 'nagarpalika.application',
-        ];
-        // $diseaseTypeId = checkPermission($permissions, request('diseaseType'));
+
         $title = "दीर्घरोगी मासिक उपचार खर्च";
         $municipality_id = municipalityId();
         if (!$municipality_id) {
             return redirect()->back()->with('error', "कृपया पालिका छान्नुहोस्");
         }
-        $patients = Patient::with('disease')->where('address_id', $municipality_id)->whereNull('verified_date')->whereNull('registered_date')->whereNull('closed_date');
-        // $patients = $patients->whereHas('disease.application_types', function ($query) use ($request) {
-        //     $query->where('application_types.id', $request->diseaseType);
-        // });
 
-        $patients = $patients->whereHas('patientApplication', function ($query) use ($request) {
-            $query->where('application_type_id', $request->diseaseType);
-        });
 
-        // $patients = Patient::with('disease.application_types')->where('address_id', $municipality_id);
+
+        $patients = Patient::with(['patientApplication.patientApplicationDisease.disease'])->where('address_id', $municipality_id)->whereNull('verified_date')->whereNull('registered_date')->whereNull('closed_date');
+
+
+        if ($request->filled('diseaseType')) {
+            $patients = $patients->whereHas('patientApplication', function ($query) use ($request) {
+                $query->where('application_type_id', $request->diseaseType);
+            });
+        }
 
         // return $patients->get();
+
 
 
         if ($request->token_number) {
@@ -68,6 +64,14 @@ class ApplicationController extends Controller
         if ($request->ward) {
             $patients = $patients->where('ward_number', $request->ward);
         }
+
+        if ($request->filled('application_type_id')) {
+            $patients->whereHas('patientApplication', function ($query) use ($request) {
+                $query->where('application_type_id', $request->application_type_id);
+            });
+        }
+
+
         if ($request->gender) {
             $patients = $patients->where('gender', $request->gender);
         }
@@ -78,15 +82,15 @@ class ApplicationController extends Controller
             $patients = $patients->where('mobile_number', 'like', '%' . $request->mobile . '%');
         }
 
-        if ($request->diseaseType == 1) {
-            $fileName = "दीर्घरोगी मासिक उपचार खर्च.xlsx";
-        } elseif ($request->diseaseType == 2) {
-            $fileName = "बिपन्न सहयोगको सिफारिस.xlsx";
-        } elseif ($request->diseaseType == 3) {
-            $fileName = "सामाजिक विकास मन्त्रालय.xlsx";
-        } elseif ($request->diseaseType == 4) {
-            $fileName = "नगरपालिका.xlsx";
-        }
+        // if ($request->diseaseType == 1) {
+        //     $fileName = "दीर्घरोगी मासिक उपचार खर्च.xlsx";
+        // } elseif ($request->diseaseType == 2) {
+        //     $fileName = "बिपन्न सहयोगको सिफारिस.xlsx";
+        // } elseif ($request->diseaseType == 3) {
+        //     $fileName = "सामाजिक विकास मन्त्रालय.xlsx";
+        // } elseif ($request->diseaseType == 4) {
+        //     $fileName = "नगरपालिका.xlsx";
+        // }
         if ($request->export) {
             $applicationType = ApplicationType::find(request('diseaseType'))->name;
             $patients = $patients->orderBy('created_at', $request->order ?? 'desc')->get();
@@ -98,6 +102,7 @@ class ApplicationController extends Controller
         $isrecommended = false;
         $isRegistered = false;
         $deasiseTypes = ApplicationType::latest()->get();
+        // return $deasiseTypes;
         return view('organization.index', compact(['patients', 'isrecommended', 'isRegistered', 'deasiseTypes']));
     }
 
@@ -118,10 +123,17 @@ class ApplicationController extends Controller
         //     })->orderBy('updated_at', 'desc');
 
 
-        $patients = Patient::with('disease')->where('address_id', $municipality_id)->whereNotNull('verified_date')->whereNotNull('registered_date')->whereNull('closed_date');
-        $patients = $patients->whereHas('patientApplication', function ($query) use ($request) {
-            $query->where('application_type_id', $request->diseaseType);
-        });
+        $patients = Patient::with(['patientApplication.patientApplicationDisease.disease'])->where('address_id', $municipality_id)->where('address_id', $municipality_id)->whereNotNull('verified_date')->whereNotNull('registered_date')->whereNull('closed_date');
+
+
+        if ($request->filled('diseaseType')) {
+            $patients = $patients->whereHas('patientApplication', function ($query) use ($request) {
+                $query->where('application_type_id', $request->diseaseType);
+            });
+        }
+
+
+        // return $patients->get();
 
         if ($request->name) {
             $patients = $patients->where(function ($query) use ($request) {
@@ -151,15 +163,26 @@ class ApplicationController extends Controller
             $patients = $patients->where('gender', $request->gender);
         }
 
-        if ($request->diseaseType == 1) {
-            $fileName = "दीर्घरोगी मासिक उपचार खर्च.xlsx";
-        } elseif ($request->diseaseType == 2) {
-            $fileName = "बिपन्न सहयोगको सिफारिस.xlsx";
-        } elseif ($request->diseaseType == 3) {
-            $fileName = "सामाजिक विकास मन्त्रालय.xlsx";
-        } elseif ($request->diseaseType == 4) {
-            $fileName = "नगरपालिका.xlsx";
+         if ($request->filled('application_type_id')) {
+            $patients->whereHas('patientApplication', function ($query) use ($request) {
+                $query->where('application_type_id', $request->application_type_id);
+            });
         }
+
+      
+
+        
+
+        // if ($request->diseaseType == 1) {
+        //     $fileName = "दीर्घरोगी मासिक उपचार खर्च.xlsx";
+        // } elseif ($request->diseaseType == 2) {
+        //     $fileName = "बिपन्न सहयोगको सिफारिस.xlsx";
+        // } elseif ($request->diseaseType == 3) {
+        //     $fileName = "सामाजिक विकास मन्त्रालय.xlsx";
+        // } elseif ($request->diseaseType == 4) {
+        //     $fileName = "नगरपालिका.xlsx";
+        // }
+
         if ($request->export) {
             $applicationType = ApplicationType::find(request('diseaseType'))->name;
             $patients = $patients->get();
@@ -168,10 +191,12 @@ class ApplicationController extends Controller
         } else {
             $patients = $patients->paginate($request->per_page ?? 20);
         }
-        // $patients = $patients->paginate($request->per_page ?? 20);
+
         $isrecommended = false;
         $isRegistered = false;
         $deasiseTypes = ApplicationType::latest()->get();
+
+    
 
         return view('organization.index', compact(['patients', 'isrecommended', 'isRegistered', 'deasiseTypes']));
     }

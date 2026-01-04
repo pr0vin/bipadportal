@@ -15,6 +15,7 @@
             </div>
         </div>
     </a>
+    
     <ul class="list-unstyled components font-nep">
         <li id="sidebarCollapse " class="{{ setActive('home') }} mb-1">
             <a class="nav-link text-dark" href="{{ route('home') }}">
@@ -27,6 +28,7 @@
                     </i></span>@lang('navigation.dashboard')
             </a>
         </li>
+
         <li id="sidebarCollapse " class="{{ setActive('online-application.index') }} mb-1">
             <a class="nav-link text-dark" href="{{ route('online-application.index') }}">
                 <span class=" pr-3"><i><svg class="w-5 h-5 text-gray-800 dark:text-white" aria-hidden="true"
@@ -38,226 +40,103 @@
                     </i> </span>नयाँ आबेदन
             </a>
         </li>
-        {{-- @canany(['dirgha.application', 'bipanna.application', 'samajik.application', 'nagarpalika.application']) --}}
-            <li class="{{ setActive('newApplication') }} mt-1" id="sidebarCollapse">
-
-                <a href="#newAppSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle text-dark"> <span
-                        class=" pr-3"><i><svg class="w-5 h-5 text-gray-800 dark:text-white" aria-hidden="true"
-                                xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none"
-                                viewBox="0 0 24 24">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M15 4h3a1 1 0 0 1 1 1v15a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1h3m0 3h6m-3 5h3m-6 0h.01M12 16h3m-6 0h.01M10 3v4h4V3h-4Z" />
-                            </svg>
-
-                        </i> </span>@lang('navigation.online_forms')</a>
-                <ul class="collapse list-unstyled {{ setShow('newApplication') }}" id="newAppSubmenu">
-                    {{-- @can('dirgha.application') --}}
-                        <li>
-                            <a class="nav-link text-dark"
-                                href="{{ route('newApplication') }}?diseaseType=1&fiscal_year={{ $runningFiscalYear->id }}&ward={{ session()->get('ward_number') }}">आगलागी पिडित</a>
-                        </li>
-                    {{-- @endcan --}}
-                    {{-- @can('bipanna.application') --}}
-                        <li>
-                            <a class="nav-link text-dark"
-                                href="{{ route('newApplication') }}?diseaseType=2&fiscal_year={{ $runningFiscalYear->id }}&ward={{ session()->get('ward_number') }}">वाढी डुबान पिडित</a>
-                        </li>
-                    {{-- @endcan --}}
-                    {{-- @can('samajik.application') --}}
-                        <li>
-                            <a class="nav-link text-dark"
-                                href="{{ route('newApplication') }}?diseaseType=3&fiscal_year={{ $runningFiscalYear->id }}&ward={{ session()->get('ward_number') }}">चत्याङ पिडित</a>
-                        </li>
-                    {{-- @endcan
-                    @can('nagarpalika.application') --}}
-                        <li>
-                            <a class="nav-link text-dark"
-                                href="{{ route('newApplication') }}?diseaseType=4&fiscal_year={{ $runningFiscalYear->id }}&ward={{ session()->get('ward_number') }}">भुईचालो पिडित</a>
-                        </li>
-                    {{-- @endcan --}}
-
-                    {{-- @can('nagarpalika.application') --}}
-                        <li>
-                            <a class="nav-link text-dark"
-                                href="{{ route('newApplication') }}?diseaseType=5&fiscal_year={{ $runningFiscalYear->id }}&ward={{ session()->get('ward_number') }}">सितलहर पिडित</a>
-                        </li>
-                    {{-- @endcan --}}
-
-                     <li>
-                            <a class="nav-link text-dark"
-                                href="{{ route('newApplication') }}?diseaseType=6&fiscal_year={{ $runningFiscalYear->id }}&ward={{ session()->get('ward_number') }}">हावाहुरी पिडित</a>
-                        </li>
-
-                         <li>
-                            <a class="nav-link text-dark"
-                                href="{{ route('newApplication') }}?diseaseType=7&fiscal_year={{ $runningFiscalYear->id }}&ward={{ session()->get('ward_number') }}">दुर्घटना पिडित</a>
-                        </li>
-
-                         <li>
-                            <a class="nav-link text-dark"
-                                href="{{ route('newApplication') }}?diseaseType=8&fiscal_year={{ $runningFiscalYear->id }}&ward={{ session()->get('ward_number') }}">धानबाली दुवेको पिडित</a>
-                        </li>
-
-                </ul>
-            </li>
-        {{-- @endcanany --}}
-        {{-- @canany(['dirgha.registered', 'bipanna.registered', 'samajik.registered', 'nagarpalika.registered']) --}}
-            <li class="{{ setActive('regLocation') }} mt-1" id="sidebarCollapse">
-                <a href="#registeredSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle text-dark"><span
-                        class=" pr-3"><i><svg class="w-5 h-5 text-gray-800 dark:text-white" aria-hidden="true"
-                                xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none"
-                                viewBox="0 0 24 24">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M10 3v4a1 1 0 0 1-1 1H5m4 6 2 2 4-4m4-8v16a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V7.914a1 1 0 0 1 .293-.707l3.914-3.914A1 1 0 0 1 9.914 3H18a1 1 0 0 1 1 1Z" />
-                            </svg>
 
 
-                        </i> </span>दर्ता/सिफारिस भएका</a>
-                <ul class="collapse list-unstyled {{ setShow('regLocation') }}" id="registeredSubmenu">
+        <li id="sidebarCollapse " class="{{ setActive('newApplication') }} mb-1">
+            <a class="nav-link text-dark"
+                href="{{ route('newApplication') }}?fiscal_year={{ $runningFiscalYear->id }}&ward={{ session()->get('ward_number') }}">
+                <span class=" pr-3">
+                    <i>
+                        <svg class="w-5 h-5 text-gray-800 dark:text-white" aria-hidden="true"
+                            xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none"
+                            viewBox="0 0 24 24">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M15 4h3a1 1 0 0 1 1 1v15a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1h3m0 3h6m-3 5h3m-6 0h.01M12 16h3m-6 0h.01M10 3v4h4V3h-4Z" />
+                        </svg>
+                    </i>
+                </span>@lang('navigation.online_forms')
+            </a>
+        </li>
 
-                    {{-- @can('dirgha.registered') --}}
-                        {{-- <li class="sidebarCollapse">
-                            <a href="#dirghaMenu" data-toggle="collapse" aria-expanded="false" class=""><span
-                                    class=""></span>दीर्घरोगी
-                                मासिक उपचार खर्च</a>
+        <li id="sidebarCollapse " class="{{ setActive('regLocation') }} mb-1">
+            <a class="nav-link text-dark"
+                href="{{ route('regLocation') }}?fiscal_year={{ $runningFiscalYear->id }}&ward={{ session()->get('ward_number') }}">
+                <span class=" pr-3">
+                    <i><svg class="w-5 h-5 text-gray-800 dark:text-white" aria-hidden="true"
+                            xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none"
+                            viewBox="0 0 24 24">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M10 3v4a1 1 0 0 1-1 1H5m4 6 2 2 4-4m4-8v16a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V7.914a1 1 0 0 1 .293-.707l3.914-3.914A1 1 0 0 1 9.914 3H18a1 1 0 0 1 1 1Z" />
+                        </svg>
+                    </i>
+                </span>दर्ता/सिफारिस भएका
+            </a>
+        </li>
 
-                            <ul class="collapse list-unstyled" id="dirghaMenu">
-                                <li>
-                                    <a class="nav-link pl-5" href="{{ route('payment.procedure') }}">विवरण</a>
-                                </li>
-                                <li>
-                                    <a class="nav-link pl-5" href="{{ route('payment.procedure') }}">भुक्तानी सिफारिस</a>
-                                </li>
-                            </ul>
-                        </li> --}}
-                        {{-- <li class="sidebarCollapse">
-                            <a class="nav-link text-dark"
-                                href="{{ route('regLocation') }}?diseaseType=1&fiscal_year={{ $runningFiscalYear->id }}&ward={{ session()->get('ward_number') }}">दीर्घरोगी
-                                मासिक उपचार खर्च</a>
-                        </li> --}}
-                            <li class="sidebarCollapse">
-                            <a class="nav-link text-dark"
-                                href="{{ route('regLocation') }}?diseaseType=1&fiscal_year={{ $runningFiscalYear->id }}&ward={{ session()->get('ward_number') }}">आगलागी पिडित</a>
-                        </li>
-                        {{-- <li>
-                            <a class="nav-link" href="{{ route('payment.procedure') }}"><i class="fa fa-caret-right pr-2"></i>भुक्तानी सिफारिस</a>
-                        </li> --}}
-                    {{-- @endcan --}}
-                    {{-- <li>
-                        <a class="nav-link" href="{{ route('payment.procedure') }}">भुक्तानी सिफारिस</a>
-                    </li> --}}
-                    {{-- @can('bipanna.registered') --}}
-                        <li>
-                            <a class="nav-link text-dark"
-                                href="{{ route('regLocation') }}?diseaseType=2&fiscal_year={{ $runningFiscalYear->id }}&ward={{ session()->get('ward_number') }}">वाढी डुबान पिडित</a>
-                        </li>
-                    {{-- @endcan --}}
-                    {{-- @can('samajik.registered') --}}
-                        <li>
-                            <a class="nav-link text-dark"
-                                href="{{ route('regLocation') }}?diseaseType=3&fiscal_year={{ $runningFiscalYear->id }}&ward={{ session()->get('ward_number') }}">चत्याङ पिडित</a>
-                        </li>
-                    {{-- @endcan --}}
-                    {{-- @can('nagarpalika.registered') --}}
-                        <li>
-                            <a class="nav-link text-dark"
-                                href="{{ route('regLocation') }}?diseaseType=4&fiscal_year={{ $runningFiscalYear->id }}&ward={{ session()->get('ward_number') }}">भुईचालो पिडित</a>
-                        </li>
-                    {{-- @endcan --}}
 
-                     <li>
-                            <a class="nav-link text-dark"
-                                href="{{ route('regLocation') }}?diseaseType=5&fiscal_year={{ $runningFiscalYear->id }}&ward={{ session()->get('ward_number') }}">सितलहर पिडित</a>
-                        </li>
+        <li id="sidebarCollapse " class="{{ setActive('distributions') }} mb-1">
+            <a class="nav-link text-dark" href="{{ route('distributions.distribution.form') }}">
+                <span class=" pr-3">
+                    <i><svg class="w-5 h-5 text-gray-800 dark:text-white" aria-hidden="true"
+                            xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none"
+                            viewBox="0 0 24 24">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M11 5H6a2 2 0 0 0-2 2v11a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2v-5m-1.414-9.414a2 2 0 1 1 2.828 2.828L11.828 15H9v-2.828l8.586-8.586Z" />
+                        </svg>
+                    </i>
+                </span> राहत भुक्तानी
+            </a>
+        </li>
 
-                         <li>
-                            <a class="nav-link text-dark"
-                                href="{{ route('regLocation') }}?diseaseType=6&fiscal_year={{ $runningFiscalYear->id }}&ward={{ session()->get('ward_number') }}">हावाहुरी पिडित</a>
-                        </li>
 
-                         <li>
-                            <a class="nav-link text-dark"
-                                href="{{ route('regLocation') }}?diseaseType=7&fiscal_year={{ $runningFiscalYear->id }}&ward={{ session()->get('ward_number') }}">दुर्घटना पिडित</a>
-                        </li>
+        <li id="sidebarCollapse " class="{{ setActive('distributions') }} mb-1">
+            <a class="nav-link text-dark" href="{{ route('distributions.index') }}">
+                <span class=" pr-3">
+                    <i><svg class="w-5 h-5 text-gray-800 dark:text-white" aria-hidden="true"
+                            xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none"
+                            viewBox="0 0 24 24">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M11 5H6a2 2 0 0 0-2 2v11a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2v-5m-1.414-9.414a2 2 0 1 1 2.828 2.828L11.828 15H9v-2.828l8.586-8.586Z" />
+                        </svg>
+                    </i>
+                </span>राहत सामाग्री वितरण
+            </a>
+        </li>
 
-                        <li>
-                            <a class="nav-link text-dark"
-                                href="{{ route('regLocation') }}?diseaseType=8&fiscal_year={{ $runningFiscalYear->id }}&ward={{ session()->get('ward_number') }}">धानबाली दुवेको पिडित</a>
-                        </li>
-                </ul>
-            </li>
-        {{-- @endcanany --}}
 
-        {{-- @canany(['dirgha.report', 'bipanna.report', 'samajik.report', 'nagarpalika.report', 'closed.report',
-            'renewed.report', 'notRenewed.report']) --}}
+        <li class=" mt-1" id="sidebarCollapse">
+            <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle text-dark">
+                <span class=" pr-3"><i><svg class="w-5 h-5 text-gray-800 dark:text-white" aria-hidden="true"
+                            xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none"
+                            viewBox="0 0 24 24">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M4 4.5V19a1 1 0 0 0 1 1h15M7 14l4-4 4 4 5-5m0 0h-3.207M20 9v3.207" />
+                        </svg>
+                    </i> </span>@lang('navigation.report')</a>
+            <ul class="collapse list-unstyled" id="homeSubmenu">
 
-            <li class=" mt-1" id="sidebarCollapse">
-                <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle text-dark">
-                    <span class=" pr-3"><i><svg class="w-5 h-5 text-gray-800 dark:text-white" aria-hidden="true"
-                                xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none"
-                                viewBox="0 0 24 24">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                    stroke-width="2"
-                                    d="M4 4.5V19a1 1 0 0 0 1 1h15M7 14l4-4 4 4 5-5m0 0h-3.207M20 9v3.207" />
-                            </svg>
-                        </i> </span>@lang('navigation.report')</a>
-                <ul class="collapse list-unstyled" id="homeSubmenu">
-                    {{-- @can('dirgha.report') --}}
-                        <li>
-                            <a class="nav-link text-dark"
-                                href="{{ route('organization.report.dirghaReport') }}?diseaseType=1&ward={{ session()->get('ward_number') }}">प्रकोपको सङख्या र क्षतिको विवरण</a>
-                        </li>
+                <li>
+                    <a class="nav-link text-dark"
+                        href="{{ route('organization.report.dirghaReport') }}?diseaseType=1&ward={{ session()->get('ward_number') }}">प्रकोपको
+                        सङख्या र क्षतिको विवरण</a>
+                </li>
+                <li>
+                    <a class="nav-link text-dark" href="{{ route('organization.relief-report') }}">
+                        वितरण गरिएका राहतको विवरण
+                    </a>
+                </li>
 
-                        <li>
-                <a class="nav-link text-dark" href="{{ route('organization.relief-report') }}">
-                    वितरण गरिएका राहतको विवरण
-                </a>
-            </li>
-                    {{-- @endcan --}}
-                    @can('bipanna.report')
-                        <li>
-                            <a class="nav-link text-dark" href="{{ route('organization.bipanna-final-report') }}">बिपन्न
-                                सहयोगको सिफारिस</a>
-                        </li>
-                    @endcan
-                    @can('samajik.report')
-                        <li>
-                            <a class="nav-link text-dark"
-                                href="{{ route('social-development.report') }}?ward_number={{ session()->get('ward_number') }}">सामाजिक
-                                विकास मन्त्रालय</a>
-                        </li>
-                    @endcan
-                    @can('nagarpalika.report')
-                        <li>
-                            <a class="nav-link text-dark"
-                                href="{{ route('municipalityReport') }}?ward_number={{ session()->get('ward_number') }}">पालिकाको
-                                स्वास्थ्य राहत कोष</a>
-                        </li>
-                    @endcan
-                    @can('closed.report')
-                        <li>
-                            <a class="nav-link text-dark"
-                                href="{{ route('closedPatient') }}?fiscal_year={{ $runningFiscalYear->id }}&ward={{ session()->get('ward_number') }}">लागतकट्टा
-                                भएका</a>
-                        </li>
-                    @endcan
-                    @can('renewed.report')
-                        <li>
-                            <a class="nav-link text-dark"
-                                href="{{ route('renewedPatient') }}?fiscal_year={{ $runningFiscalYear->id }}&ward={{ session()->get('ward_number') }}">नाविकरण
-                                भएका</a>
-                        </li>
-                    @endcan
-                    @can('notRenewed.report')
-                        <li>
-                            <a class="nav-link text-dark"
-                                href="{{ route('dateExpiredPatient') }}?fiscal_year={{ $runningFiscalYear->id }}&ward={{ session()->get('ward_number') }}">नाविकरण
-                                नभएका</a>
-                        </li>
-                    @endcan
-                </ul>
-            </li>
-        {{-- @endcanany --}}
+                <li>
+                    <a class="nav-link text-dark" href="{{ route('organization.resource-distribution-report') }}">
+                        राहत उद्धार सामग्रीहरुको विवरण
+                    </a>
+                </li>
+
+            </ul>
+        </li>
+
         @canany(['user.store', 'user.edit', 'user.delete', 'user.password'])
             <li id="sidebarCollapse " class="{{ setActive('user.index') }} mb-1">
                 <a class="nav-link text-dark" href="{{ route('user.index') }}">
@@ -267,14 +146,11 @@
                                 <path stroke="currentColor" stroke-linecap="round" stroke-width="2"
                                     d="M16 19h4a1 1 0 0 0 1-1v-1a3 3 0 0 0-3-3h-2m-2.236-4a3 3 0 1 0 0-4M3 18v-1a3 3 0 0 1 3-3h4a3 3 0 0 1 3 3v1a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1Zm8-10a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
                             </svg>
-
-
-
-
                         </i> </span>@lang('navigation.users')
                 </a>
             </li>
         @endcanany
+
         @canany(['application.setting', 'downloadDocument.setting', 'colsedReason.setting', 'position.setting',
             'committeePosition.setting'])
             <li id="sidebarCollapse " class="{{ setActive('settings.system') }} mb-1">
@@ -306,16 +182,34 @@
                             <a class="nav-link text-dark" href="{{ route('fiscal-year.index') }}">@lang('navigation.fiscal_year')</a>
                         </li>
                     @endcanany
+                    {{-- @canany(['disease.store', 'disease.edit', 'disease.delete'])
+                        <li>
+                            <a class="nav-link text-dark" href="{{ route('disease.index') }}">प्रकोप सूची</a>
+                        </li>
+                    @endcanany --}}
+
+                    <li>
+                        <a class="nav-link text-dark" href="{{ route('application-types.index') }}">घटना सूची</a>
+                    </li>
+
+                    <li>
+                        <a class="nav-link text-dark" href="{{ route('resources.index') }}">सामाग्री</a>
+                    </li>
+
+                    <li>
+                        <a class="nav-link text-dark" href="{{ route('units.index') }}">ईकाई</a>
+                    </li>
+
+                    <li>
+                        <a class="nav-link text-dark" href="{{ route('distributions.index') }}">वितरण</a>
+                    </li>
+
                     @canany(['disease.store', 'disease.edit', 'disease.delete'])
                         <li>
-                            <a class="nav-link text-dark" href="{{ route('disease.index') }}">राेग</a>
+                            <a class="nav-link text-dark" href="{{ route('diseases.index') }}">प्रभाव सूची</a>
                         </li>
                     @endcanany
-                    @canany(['hospital.store', 'hospital.edit', 'hospital.delete'])
-                        <li>
-                            <a class="nav-link text-dark" href="{{ route('hospital.index') }}">अस्पताल</a>
-                        </li>
-                    @endcanany
+
                     @canany(['committee.store', 'committee.edit', 'committee.delete', 'member.store', 'member.edit',
                         'member.delete'])
                         <li>
@@ -331,13 +225,7 @@
                         <li>
                             <a class="nav-link text-dark" href="{{ route('relation.index') }}">बिरामीसंगको नाता</a>
                         </li>
-                        {{-- @endrole --}}
-                        {{-- <li>
-                        <a class="nav-link" href="{{ route('member.index') }}">सदस्य</a>
-                    </li> --}}
-
                         <li>
-                            {{-- @role('super-admin') --}}
                             <a class="nav-link text-dark" href="{{ route('admin.logs') }}" target="_blank">
                                 @lang('System Logs')
                             </a>
@@ -347,23 +235,18 @@
                 </ul>
             </li>
         @endcanany
-        {{-- @endhasanyrole --}}
+
 
     </ul>
 </nav>
 
 
 <style>
-    /*
-    DEMO STYLE
-*/
-
     /* @import "https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700"; */
     /* color: #fff; */
     @import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@400..800&family=Noto+Serif+Devanagari:wght@100..900&family=Tiro+Devanagari+Marathi:ital@0;1&display=swap');
 
     body {
-        /* font-family: 'Poppins', sans-serif; */
         font-family: "Tiro Devanagari Marathi", system-ui;
         font-weight: bold;
         background: #fafafa;

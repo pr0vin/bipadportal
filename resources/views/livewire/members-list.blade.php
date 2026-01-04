@@ -1,7 +1,7 @@
 <div>
     <div id="options-bar" class="card grey lighten-5 border my-4 noprint" style="z-index: 1">
         <div class="card-body d-flex justify-content-between">
-            <a href="{{ route('newApplication') }}?diseaseType=2"
+            <a href="{{ route('regLocation') }}"
                 class="btn btn-danger btn-md z-depth-0 btn-font-size">Cancel</a>
             <div class="d-flex">
                 <button wire:click="exportData" class="btn btn-info btn-md z-depth-0 btn-font-size">Export word
@@ -59,12 +59,11 @@
         <span class="kalimati-font">{{ englishToNepaliLetters(date('h:i')) }}</span> बजे यस
         {{ $address->municipality }} का
 
-        {{-- {{ $firstMember['name'] }} --}}
         @if ($newMember)
             {{ $newMember->position->name }}
         @endif
-        जारी गरिएको "बिपन्न नागरिक औषधि उपचारकोष निर्देशिका <span class="kalimati-font">२०८०</span>" बमोजिम
-        बिपन्न नागरिकहरु लाई औषधि उपचार सहुलियत उपलब्ध गराउने प्रयोजनको लागि सिफारिस समितिका
+        जारी गरिएको " प्रभावित नागरिक विपद् राहत कोष निर्देशिका <span class="kalimati-font">२०८०</span>" बमोजिम
+        प्रभावित नागरिकहरुलाई विपद् राहत सहुलियत उपलब्ध गराउने प्रयोजनको लागि सिफारिस समितिका
         @if ($newMember)
             {{ $newMember->committeePosition->name }}
         @endif
@@ -74,6 +73,7 @@
         @endif
         ज्युको अध्यक्ष्यतामा बसेको बैठकले तपसिल बमोजिम प्रस्ताबहरु माथि छलफल गरि तपसिल बमोजिम निर्णयहरु पारित गरियो
     </div>
+
 
 
     <div contenteditable="true">

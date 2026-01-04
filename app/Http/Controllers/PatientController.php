@@ -236,7 +236,7 @@ class PatientController extends Controller
 
 
         // OneSignal::sendNotificationToUser(
-        //     "नयाँ बिरामी विवरण प्राप्त भयो",
+        //     "नयाँ पिडित विवरण प्राप्त भयो",
         //     $ids,
         //     $url = null,
         //     $data = null,
@@ -281,8 +281,6 @@ class PatientController extends Controller
     public function recommendation(Request $request)
     {
 
-
-        // return $request;
         $fiscalYear = currentFiscalYear();
         if (!$fiscalYear) {
             return redirect()->back()->with('error', "कृपया आर्थिकबर्ष छान्नुहोस्");
@@ -313,81 +311,31 @@ class PatientController extends Controller
         $patient->update([
             'reg_number' => $request->reg_number,
         ]);
-        // return $request->date_from;
-        // $registerDate = new DateTime($request->date_from);
-        // $applicationDate = new DateTime($patient->applied_date);
 
-        // if ($registerDate < $applicationDate) {
-        //     return redirect()->back()->with('error', 'दर्ता मिति आवेदन मिति पछि हुनुपर्छ');
-        // }
-        // return "Hello";
-        // if (!$patient->bank_account_number && $request->bank_account_number == null && $patient->disease->application_types[0]->id == 1) {
-        //     throw ValidationException::withMessages([
-        //         'bank_account_number' => ['The bank account number field is required.'],
-        //     ]);
-        // }
-        // if (!$patient->doctor_recomandation && $request->doctor_recomandation == null && $patient->disease->application_types[0]->id == 1) {
-        //     throw ValidationException::withMessages([
-        //         'doctor_recomandation' => ['The doctor recomandation field is required.'],
-        //     ]);
-        // }
-        // if (!$patient->decision_document && $request->decision_document == null && $patient->disease->application_types[0]->id != 1) {
-        //     throw ValidationException::withMessages([
-        //         'decision_document' => ['The decision document field is required.'],
-        //     ]);
-        // }
-        // if (!$patient->hospital_document && $request->hospital_document == null) {
-        //     throw ValidationException::withMessages([
-        //         'hospital_document' => ['The hospital document is required.'],
-        //     ]);
-        // }
-        // if (!$patient->disease_proved_document && $request->disease_proved_document == null) {
-        //     throw ValidationException::withMessages([
-        //         'disease_proved_document' => ['The disease proved document field is required.'],
-        //     ]);
-        // }
-        // if (!$patient->citizenship_card && $request->citizenship_card == null) {
-        //     throw ValidationException::withMessages([
-        //         'citizenship_card' => ['The citizenship card field is required.'],
-        //     ]);
-        // }
-
-        // if (!$patient->application && $request->application == null) {
-        //     throw ValidationException::withMessages([
-        //         'application' => ['This field is required.'],
-        //     ]);
-        // }
-        //
-        // return $request->application_type_id;
-        PatientApplication::create([
-            'patient_id' => $request->patient_id,
-            'application_type_id' => $request->application_type_id,
-            'registration_date' => now(),
-        ]);
-        // foreach($request->application_type_id as $application_type){
-        // }
-
-        // $patient = Patient::find($request->patient_id);
         if ($request->file('application')) {
             $application = $request->file('application')->store('documents');
         } else {
             $application = $patient->application ?? '';
         }
+
         if ($request->file('doctor_recomandation')) {
             $doctor_recomandation = $request->file('doctor_recomandation')->store('documents');
         } else {
             $doctor_recomandation = $patient->doctor_recomandation ?? "";
         }
+
         if ($request->file('bank_cheque')) {
             $bank_cheque = $request->file('bank_cheque')->store('cheque_book');
         } else {
             $bank_cheque = $patient->bank_cheque ?? "";
         }
+
         if ($request->file('decision_document')) {
             $decision_document = $request->file('decision_document')->store('decision_document');
         } else {
             $decision_document = $patient->decision_document ?? "";
         }
+
         if ($request->file('hospital_document')) {
             $hospital_document = $request->file('hospital_document')->store('hospital_document');
         } else {
@@ -406,6 +354,7 @@ class PatientController extends Controller
             $citizenship_card = $patient->citizenship_card ?? "";
         }
 
+
         $data = [
             'verified_date' => Carbon::parse($request->date_from),
             'application' => $application,
@@ -420,57 +369,17 @@ class PatientController extends Controller
             'citizenship_card' => $citizenship_card,
             'isRecommended' => true,
         ];
+
+      
         if ($request->application_type_id != 1) {
             $data['yearly_payment'] = $request->yearly_payment;
         }
-        // if ($this->checkDocument($patient)) {
-        //     if ($request->date_from[0] == null) {
-        //         throw ValidationException::withMessages([
-        //             'date_from' => ['The registration date field is required.'],
-        //         ]);
-        //     }
-        //     if ($request->registration_number == null) {
-        //         throw ValidationException::withMessages([
-        //             'registration_number' => ['The registered date field is required.'],
-        //         ]);
-        //     }
-
-        //     if ($request->bank_account_number == null && $patient->disease->application_types[0]->id == 1) {
-        //         throw ValidationException::withMessages([
-        //             'bank_account_number' => ['The bank account number field is required.'],
-        //         ]);
-        //     }
-        //     $patient->update([
-        //         'isRecommended' => true,
-        //         'registration_number' => $request->registration_number,
-        //         'registered_date' => Carbon::parse($request->date_from[0]),
-        //     ]);
-        // }
         $patient->update($data);
-        // return $this->checkDocument($patient);
-
+        
         $renewDate = nextRenewDate($request->date_from);
         $date1 = Carbon::parse($request->date_from)->format('m');
         $date2 = Carbon::parse($renewDate)->format('m');
-        // return $diff = $date2 - $date1;
-
-
-
-
-        // if ($request->application_type_id == 1) {
-        //     Renew::create([
-        //         'patient_id' => $patient->id,
-        //         'renew_date' => $request->date_from,
-        //         'next_renew_date' => $renewDate,
-        //         'price_rate' => $request->yearly_payment,
-        //         'month' => totalMonth($date1, $date2),
-        //         'fiscal_year_id' => $fiscalYear->id,
-        //         'remarks' => 'नयाँ',
-
-        //     ]);
-        return redirect()->route('patient.show', $patient)->with('success', 'बिरामी विवरण सफलतापुर्वक दर्ता भयो');
-        // }
-        // return redirect()->route('patient.show', $patient)->with('success', 'बिरामी विवरण सफलतापुर्वक सिफारिस भयो');
+        return redirect()->route('patient.show', $patient)->with('success', 'पिडित विवरण सफलतापुर्वक दर्ता भयो');
     }
 
     public function checkDocument($patient)
@@ -624,12 +533,12 @@ class PatientController extends Controller
             }
         }
 
-        return redirect()->route('patient.show', $patient)->with('success', "बिरामी विवरण सफलतापुर्वक परिवर्तन भयो");
+        return redirect()->route('patient.show', $patient)->with('success', "पिडित विवरण सफलतापुर्वक परिवर्तन भयो");
     }
 
     public function updatePayment(Request $request, Patient $patient)
     {
-        
+
         $request->validate([
             'paid_amount' => 'required|string|min:0',
             'paid_date' => 'required|date',
@@ -731,7 +640,7 @@ class PatientController extends Controller
             ->first();
 
         if ($existingRenewal) {
-            return redirect()->back()->with('error', 'बिरामीको नबिकरण पहिले भइसकेको छ |');
+            return redirect()->back()->with('error', 'पिडितको नबिकरण पहिले भइसकेको छ |');
         }
 
         $documentPath = $request->file('renewing_document')->store('documents');
@@ -751,7 +660,7 @@ class PatientController extends Controller
             'remarks' => 'नविकरण'
         ]);
 
-        return redirect()->back()->with('success', 'बिरामी बिवरण सफलतापुर्वक नवीकरण भयो');
+        return redirect()->back()->with('success', 'पिडित बिवरण सफलतापुर्वक नवीकरण भयो');
     }
 
     private function getRenewDatesByQuarter(int $quarter, int $year): array
@@ -784,7 +693,7 @@ class PatientController extends Controller
         }
         $patient->update($data);
 
-        return redirect()->back()->with('success', 'बिरामी बिवरण सफलतापुर्वक लागतकट्टा भयो');
+        return redirect()->back()->with('success', 'पिडित बिवरण सफलतापुर्वक लागतकट्टा भयो');
     }
 
     public function closedPatient(Request $request)
@@ -899,9 +808,9 @@ class PatientController extends Controller
         $patient->update($data);
 
         if ($isData == false) {
-            return redirect()->back()->with('error', "कृपया बिरामीको विवरण हल्नुहोस");
+            return redirect()->back()->with('error', "कृपया पिडितको विवरण हल्नुहोस");
         }
-        return redirect()->back()->with('success', "बिरामीको विवरण सफलता पुर्वक ड्राफ्ट भयो");
+        return redirect()->back()->with('success', "पिडितको विवरण सफलता पुर्वक ड्राफ्ट भयो");
     }
 
     public function delete(Patient $patient)
@@ -917,7 +826,7 @@ class PatientController extends Controller
 
         $patient->delete();
 
-        return redirect()->back()->with('success', "बिरामीको विवरण सफलतापुर्बक हटाइयो");
+        return redirect()->back()->with('success', "पिडितको विवरण सफलतापुर्बक हटाइयो");
     }
 
     public function wordExport($id)
@@ -1089,7 +998,7 @@ class PatientController extends Controller
         $string = "प्रस्ताव नं 1: औषधि उपचार सहुलियत का लागि सिफारिस सम्बन्ध मा";
         $section->addText($string, $fontStyle);
         $section->addTextBreak(0);
-        $string = "निर्णय नं: 1 प्रस्ताव नं: 1 माथि छलफल गर्दा यस घोडाघोडी नगरपालिका मा स्थायी बसोबास भएका तपसिल बमोजिमका बिपन्न नागरिकहरुले यस पालिकामा दिएको निवेदन उपर छलफल गरि संग्लन कागजातका आधारमा “बिपन्न नागरिक औषधि उपचार कोष निर्देशिका 2080 अनुसार तपसिल बमोजिमका बिरामीहरु लाई देहाय बमोजिम तोकिएका अस्पतालंहरु मा उपचारका लागि सिफारिस गर्ने निर्णय पारित गरियो|";
+        $string = "निर्णय नं: 1 प्रस्ताव नं: 1 माथि छलफल गर्दा यस घोडाघोडी नगरपालिका मा स्थायी बसोबास भएका तपसिल बमोजिमका बिपन्न नागरिकहरुले यस पालिकामा दिएको निवेदन उपर छलफल गरि संग्लन कागजातका आधारमा “बिपन्न नागरिक औषधि उपचार कोष निर्देशिका 2080 अनुसार तपसिल बमोजिमका पिडितहरु लाई देहाय बमोजिम तोकिएका अस्पतालंहरु मा उपचारका लागि सिफारिस गर्ने निर्णय पारित गरियो|";
         $section->addText($string, $fontStyle);
         $section->addTextBreak(0);
 
@@ -1108,7 +1017,7 @@ class PatientController extends Controller
         // Add a row with two columns
         $table->addRow();
         $table->addCell(2000)->addText('क्र. सं.');
-        $table->addCell(2000)->addText('बिरामीको नाम थर');
+        $table->addCell(2000)->addText('पिडितको नाम थर');
         $table->addCell(2000)->addText('उमेर');
         $table->addCell(2000)->addText('ना.प्र.प.नं./ज. .द.प्र.प.नं.');
         $table->addCell(2000)->addText('रोगको किसिम');
@@ -1193,4 +1102,23 @@ class PatientController extends Controller
 
         return back()->with('success', 'फोटो थपियो');
     }
+
+
+    // In PatientController.php, add this method:
+
+public function distributionForm(Request $request)
+{
+    $municipality_id = municipalityId();
+    
+    $patients = Patient::with(['disease', 'onlineApplication', 'province', 'district', 'address'])
+        ->where('address_id', $municipality_id)
+        ->whereNotNull('verified_date')
+        ->whereNull('closed_date') 
+        ->orderBy('created_at', 'desc')
+        ->get();
+    
+    return view('distributions.distribution-form', compact('patients'));
+}
+
+
 }

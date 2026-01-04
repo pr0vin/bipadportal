@@ -6,6 +6,7 @@ use App\ApplicationType;
 use App\Renew;
 use App\Disease;
 use App\Patient;
+use App\Distribution;
 use App\PatientApplicationDisease;
 use App\Hospital;
 use Carbon\Carbon;
@@ -22,6 +23,7 @@ use App\Exports\BipannaDiseseWiseExport;
 use App\Exports\BipannaHospitalWiseExport;
 use App\Exports\ReliefDistributionExport;
 use App\Exports\SamajikExport;
+use App\Exports\ResourceDistributionExport;
 
 class OrganizationReportController extends Controller
 {
@@ -257,6 +259,32 @@ class OrganizationReportController extends Controller
 
         return view('livewire.ReliefDistributionReport', compact('reliefDetails'));
     }
+
+    public function resourceDistributionReport(Request $request)
+{
+    if (!municipalityId()) {
+        return redirect()->back()->with('error', 'कृपया पालिका छान्नुहोस्');
+    }
+
+    if ($request->excel) {
+        $fileName = 'resource_distribution_report.xlsx';
+
+        return Excel::download(
+            new ResourceDistributionExport(municipalityId()),
+            $fileName
+        );
+    }
+
+    $resourceDetails = Distribution::with(['patient', 'resource'])
+        ->whereNull('deleted_at')->where('type',0)
+        ->orderBy('distributed_date', 'desc')
+        ->get();
+
+    return view(
+        'livewire.ResourceDistributionReport',
+        compact('resourceDetails')
+    );
+}
 
 
     public function periodSession(Request $request)

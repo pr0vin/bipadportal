@@ -1,6 +1,7 @@
 @extends('layouts.letter')
-
 @section('content')
+</div>
+
     @push('styles')
         <style>
             .note-air-popover .popover-content button {
@@ -97,8 +98,11 @@
         </style>
     @endpush
 
+     
+
     <div>
         <div class="p-4 resizable-block">
+           
             <section class="">
                 <div class="my-4"></div>
                 @php
@@ -113,144 +117,56 @@
                     $secondMember = '';
                     $thirdMemberPosition = '';
                     $thirdMember = '';
-                    // if ($patient) {
-                    //     $type_id = $patient->disease->application_types[0]->id;
-                    //     $committee = App\Committee::where('application_type_id', $type_id)->first();
-                    //     if ($committee) {
-                    //         $members = App\Member::with('position', 'committeePosition')
-                    //             ->where('committee_id', $committee->id)
-                    //             ->orderBy('order', 'asc')
-                    //             ->get();
-                    //     }
-                    // }
                 @endphp
-                {{-- <div contenteditable="true" class="font-size">आज मिति <span class="kalimati-font">{{ englishToNepaliLetters($today) }} </span> गतेका
-                    दिन
-                    <span class="kalimati-font">{{ englishToNepaliLetters(date('h:i')) }} </span> बजे यस
-                    {{ $address->municipality }}का
-                    {{ $members->where('order', 1)->first()->position->name }}
-                    {{ $members->first() ? $members->where('order', 1)->first()->position->name : '' }}
-                    ले जारी गरिएको "बिपन्न
-                    नागरिक
-                    औषधि उपचारकोष
-                    निर्देशिका
-                    <span class="kalimati-font">२०८० </span>" बमोजिम बिपन्न नागरिकहरु लाई औषधि उपचार सहुलियत उपलब्ध गराउने
-                    प्रयोजनको लागि सिफारिस समितिका
-                    {{ $members->where('order', 1)->first()->committeePosition->name }}
-                    {{ $members->first() ? $members->where('order', 1)->first()->committeePosition->name : '' }}
-                    श्री
-                    {{ $members->where('order', 1)->first()->name }}
-                    {{ $members->first() ? $members->where('order', 1)->first()->name : '' }}
 
-                    ज्युको अध्यक्ष्यतामा बसेको बैठकले तपसिल
-                    बमोजिम प्रस्ताबहरु माथि छलफल गरि तपसिल
-                    बमोजिम
-                    निर्णयहरु पारित गरियो
-                </div> --}}
-
-
-                {{-- <div id="selected-list"></div> --}}
-
-                {{-- {{$patients[0]->disease->application_types[0]->id}} --}}
-                {{-- @php
-                    $members = null;
-                    if ($patients[0]) {
-                        $type_id = $patients[0]->disease->application_types[0]->id;
-                        $committee = App\Committee::where('application_type_id', $type_id)->first();
-                        if ($committee) {
-                            $members = App\Member::with('position', 'committeePosition')
-                                ->where('committee_id', $committee->id)
-                                ->orderBy('order', 'asc')
-                                ->get();
-                        }
-                    }
-                @endphp --}}
                 <livewire:members-list :members="$members" :patients="$patients" />
-
-                {{-- <div class="font-size"><span class="kalimati-font">१.</span>
-                    {{ $members->first() ? $members->where('order', 1)->first()->position->name : '' }} श्री
-                    @if ($committee)
-                        @if ($members->first())
-                            {{ $members->where('order', 1)->first()->name }}
-                            ({{ $members->where('order', 1)->first()->committeePosition->name }})
-                        @else
-                            <span class="underline1 px-3">&nbsp;&nbsp;&nbsp;</span>
-                        @endif
-                    @endif
-                </div>
-
-                <div class="font-size"><span class="kalimati-font">2.</span>
-                    {{ $members->first() ? $members->where('order', 2)->first()->position->name : '' }} श्री
-                    @if ($committee)
-                        @if ($members->first())
-                            {{ $members->where('order', 2)->first()->name }}
-                            ({{ $members->where('order', 2)->first()->committeePosition->name }})
-                        @else
-                            <span class="underline1 px-3">&nbsp;&nbsp;&nbsp;</span>
-                        @endif
-                    @endif
-                </div>
-                <div class="font-size"><span class="kalimati-font">3.</span>
-                    {{ $members->first() ? $members->where('order', 3)->first()->position->name : '' }} श्री
-                    @if ($committee)
-                        @if ($members->first())
-                            {{ $members->where('order', 3)->first()->name }}
-                            ({{ $members->where('order', 3)->first()->committeePosition->name }})
-                        @else
-                            <span class="underline1 px-3">&nbsp;&nbsp;&nbsp;</span>
-                        @endif
-                    @endif
-                </div> --}}
-
                 <div class="m-0 p-0" contenteditable="true">
-
-                    {{-- <div class="mt-4 font-size"><u>अन्य उपस्थिति:</u></div>
-                    <div class="font-size"><span class="kalimati-font">1.</span></div>
-                    <div class="font-size"><span class="kalimati-font">2.</span></div> --}}
-
-                    <div class="mt-4 font-size">प्रस्ताव नं <span class="kalimati-font">1</span>:औषधि उपचार सहुलियत का लागि
-                        सिफारिस सम्बन्ध मा</div>
-                    <div class="mt-4 font-size">निर्णय नं: <span class="kalimati-font">1</span> प्रस्ताव नं: <span
-                            class="kalimati-font">1</span> माथि छलफल गर्दा यस घोडाघोडी नगरपालिका मा स्थायी बसोबास
-                        भएका
-                        तपसिल बमोजिमका बिपन्न नागरिकहरुले
-                        यस पालिकामा दिएको निवेदन उपर छलफल गरि संग्लन कागजातका आधारमा “बिपन्न नागरिक औषधि उपचार कोष
-                        निर्देशिका
-                        <span class="kalimati-font">2080</span>”
-                        अनुसार तपसिल बमोजिमका बिरामीहरु लाई देहाय बमोजिम तोकिएका अस्पतालंहरु मा उपचारका लागि सिफारिस गर्ने
-                        निर्णय पारित
-                        गरियो|
+                    <div class="mt-4 font-size">
+                        प्रस्ताव नं <span class="kalimati-font">1</span> : विपद् राहत सहुलियत का लागि
+                        सिफारिस सम्बन्धमा
                     </div>
 
                     <div class="mt-4 font-size">
-                        <table>
+                        निर्णय नं: <span class="kalimati-font">1</span> प्रस्ताव नं:
+                        <span class="kalimati-font">1</span> माथि छलफल गर्दा यस घोडाघोडी नगरपालिका मा
+                        स्थायी बसोबास भएका तपसिल बमोजिमका प्रभावित नागरिकहरुले यस पालिकामा दिएको निवेदन
+                        उपर छलफल गरी संलग्न कागजातका आधारमा
+                        “प्रभावित नागरिक विपद् राहत कोष निर्देशिका
+                        <span class="kalimati-font">2080</span>”
+                        अनुसार तपसिल बमोजिमका प्रभावित नागरिकहरुलाई देहाय बमोजिम तोकिएका निकायहरु मार्फत
+                        राहत उपलब्ध गराउन सिफारिस गर्ने निर्णय पारित गरियो।
+                    </div>
+
+
+                    <div class="mt-4 font-size">
+                          <table >
                             <tr>
-                                <td>क्र.
-                                    सं.</td>
-                                <td>बिरामीको नाम थर</td>
-                                <td>उमेर</td>
-                                <td>ना.प्र.प.नं./ज.
-                                    .द.प्र.प.नं.</td>
-                                <td>रोगको किसिम</td>
-                                <td>सिफारिसगरिएको
-                                    अस्पताल</td>
-                                <td>सम्पर्क नं:</td>
-                                <td>कैफियत</td>
+                                <td style="width: 5%;">क्र.सं.</td>
+                                <td style="width: 20%;">नाम थर</td>
+                                <td style="width: 15%;">ना.प्र.प.नं./ज.द.प्र.प.नं.</td>
+                                <td style="width: 5%;">वडा न.</td>
+                                <td style="width: 25%;">क्षती भएको कारण</td>
+                                <td style="width: 15%;">आनुमानित क्षति रकम</td>
+                                <td style="width: 15%;">प्रदानरकम</td>
                             </tr>
 
                             @foreach ($patients as $patient)
                                 <tr>
-                                    <td class="kalimati-font">{{ $loop->iteration }}</td>
-                                    <td>{{ $patient->name ?? '' }}</td>
-                                    <td class="kalimati-font">{{ $patient->age ?? '' }}</td>
-                                    <td class="kalimati-font">{{ $patient->citizenship_number ?? '' }}</td>
-                                    <td>{{ $patient->disease ? $patient->disease->name : '' }}</td>
-                                    <td>{{ $patient->hospital ? $patient->hospital->name : '' }}</td>
-                                    <td class="kalimati-font">{{ $patient->mobile_number ?? '' }}</td>
-                                    <td>{{ $patient->description ?? '' }}</td>
+                                    <td style="width: 5%;" class="kalimati-font">{{ $loop->iteration }}</td>
+                                    <td style="width: 20%;" class="kalimati-font">
+                                        {{ $patient->name ?? '' }}<br>
+                                        {{ $patient->mobile_number ?? '' }}
+                                    </td>
+                                    <td style="width: 15%;" class="kalimati-font">{{ $patient->citizenship_number ?? '' }}
+                                    </td>
+                                    <td style="width: 5%;" class="kalimati-font">{{ $patient->ward_number }}</td>
+                                    <td style="width: 25%;">{{ $patient->description ?? '' }}</td>
+                                    <td style="width: 15%;" class="kalimati-font">{{ $patient->estimated_amount }}</td>
+                                    <td style="width: 15%;" class="kalimati-font">d</td>
                                 </tr>
                             @endforeach
                         </table>
+
                     </div>
                 </div>
             </section>
@@ -271,15 +187,15 @@
             <div class="modal-body">
                 <ul>
                     @if ($members)
-                    @foreach ($members as $member)
-                    <li class="d-flex align-items-center">
-                        <input type="checkbox" class="member-checkbox" value="{{ $member }}" name=""
-                            id="checkbox{{ $member->id }}">
-                        <span>{{ $member->name }} ({{ $member->position->name }})</span>
-                        <label class="pt-3 ml-2 font-weight-normal"
-                            for="checkbox{{ $member->id }}">{{ $member->name }}</label>
-                    </li>
-                @endforeach
+                        @foreach ($members as $member)
+                            <li class="d-flex align-items-center">
+                                <input type="checkbox" class="member-checkbox" value="{{ $member }}"
+                                    name="" id="checkbox{{ $member->id }}">
+                                <span>{{ $member->name }} ({{ $member->position->name }})</span>
+                                <label class="pt-3 ml-2 font-weight-normal"
+                                    for="checkbox{{ $member->id }}">{{ $member->name }}</label>
+                            </li>
+                        @endforeach
                     @endif
                 </ul>
             </div>
@@ -290,51 +206,3 @@
         </div>
     </div>
 </div>
-@push('script')
-    {{-- <script>
-        const membersList = document.getElementById('members_list');
-        document.addEventListener('DOMContentLoaded', () => {
-            const checkboxes = document.querySelectorAll('.member-checkbox');
-            const selectedList = document.getElementById('selected-list');
-
-            checkboxes.forEach(checkbox => {
-                checkbox.addEventListener('change', () => {
-                    updateSelectedMembers(membersList);
-                });
-            });
-
-            function updateSelectedMembers(membersLists) {
-                membersLists.innerHTML = 'Hello';
-                alert("Hello")
-                const selectedMembers = [];
-                checkboxes.forEach(checkbox => {
-                    if (checkbox.checked) {
-                        selectedMembers.push(checkbox.value);
-                    }
-                });
-
-                selectedMembers.sort((a, b) => {
-                    if (a.order < b.order) {
-                        return -1; // a comes before b
-                    }
-                    if (a.order > b.order) {
-                        return 1; // b comes before a
-                    }
-                    return 0; // a and b are equal
-                });
-
-                const membersList = document.getElementById('members_list');
-
-                // membersList.innerHTML = 'Hello'; // Optional, clear previous content
-
-                selectedMembers.forEach((member) => {
-                    const newDiv = document.createElement('div'); // Create a new div for each member
-                    newDiv.innerHTML = `<h1>${member.name}</h1>`; // Set content
-                    membersLists.appendChild(newDiv); // Append the new div to the members_list div
-                });
-                console.log(membersLists)
-                selectedList.innerHTML = selectedMembers.length > 0 ? selectedMembers.join(', ') : 'None';
-            }
-        });
-    </script> --}}
-@endpush

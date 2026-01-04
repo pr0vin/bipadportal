@@ -27,11 +27,11 @@
                         <section class="mt-3">
                             <div class="row">
                                 <div class="col-md-4 col-sm-6 mb-2">
-                                    <label for="" class="required"> घटनाको परकर <span
+                                    <label for="" class="required"> घटना <span
                                             class="text-danger">*</span></label>
                                     <select name="application_type_id" id="application_types" class="form-control"
                                         required>
-                                        <option value="">घटनाको परकर  छान्नुहोस्</option>
+                                        <option value="">घटना छान्नुहोस्</option>
                                         @foreach ($applicationTypes as $applicationType)
                                             <option value="{{ $applicationType->id }}">{{ $applicationType->name }}
                                             </option>
@@ -40,8 +40,8 @@
                             </div>
 
                            <div class="col-md-4 col-sm-6 mb-2" style="position: relative;">
-                                    <label class="required">प्रकोप <span class="text-danger">*</span></label>
-                                    <input type="text" id="disease_selector" class="form-control" placeholder="प्रकोप छनौट गर्नुहोस्" readonly style="cursor: pointer;">
+                                    <label class="required">प्रभाव <span class="text-danger">*</span></label>
+                                    <input type="text" id="disease_selector" class="form-control" placeholder="प्रभाव छनौट गर्नुहोस्" readonly style="cursor: pointer;">
                                     <!-- Floating dropdown -->
                                     <div id="disease_dropdown" class="border p-2 rounded mt-1 bg-white shadow"
                                          style=" display: none; max-height: 200px; overflow-y: auto; position: absolute; width: 100%; z-index: 9999;">
@@ -276,7 +276,7 @@
                             </div>
                         
                             <div class="col-md-12 mb-3">
-                                <label class="kalimati-font">क्षती भएको कारण</label>
+                                <label class="kalimati-font">क्षती भएको विवरण</label>
                                 <textarea name="description" class="form-control" id="description" rows="2"></textarea>
                             </div>
                         </div>

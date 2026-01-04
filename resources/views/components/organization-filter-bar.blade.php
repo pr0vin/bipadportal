@@ -85,6 +85,9 @@ $address = App\Address::find(municipalityId());
                     @endif
 
                 </div>
+
+               
+
                 <div class="col-md-2">
                     @if (request('gender'))
                     <select name="gender" class="form-control mb-2" id="">
@@ -299,8 +302,9 @@ $address = App\Address::find(municipalityId());
                     </select>
                 </div>
                 @endif
+
                 @if (!request('all'))
-                <div class="col-md-2 col-sm-6 px-1" style="min-width:140px">
+                {{-- <div class="col-md-2 col-sm-6 px-1" style="min-width:140px">
                     @if (request('disease_id'))
                     <select name="disease_id" id="" class="custom-select rounded-0 mb-2">
                         <option value="">सबै प्रकोपहरु</option>
@@ -320,21 +324,9 @@ $address = App\Address::find(municipalityId());
                     </select>
                     @endif
 
-                </div>
+                </div> --}}
                 @else
-                <div class="col-md-2 col-sm-6 px-1" style="min-width:120px">
-                    <select name="application_type" id="applicationType" class="form-control mb-2">
-                        <option value="">सबै प्रकोपहरु</option>
-                        @foreach (App\ApplicationType::get() as $item)
-                        <option value="{{ $item->id }}">{{ $item->name }}</option>
-                        @endforeach
-                    </select>
-                </div>
-                <div class="col-md-2 col-sm-6 px-1" style="min-width:120px">
-                    <select name="disease_id" id="diseases_id" class="custom-select rounded-0 mb-2">
-                        <option value="">सबै प्रकोपहरु</option>
-                    </select>
-                </div>
+                
                 @endif
                 <div class="col-md-2 col-sm-6 px-1 mb-2" style="min-width:130px">
                     @if (request('ward'))
@@ -357,6 +349,21 @@ $address = App\Address::find(municipalityId());
                     @endif
 
                 </div>
+
+                <div class="col-md-3">
+                    <select name="application_type_id" class="form-control mb-2">
+                        <option value="">
+                           घटना छान्नुहोस्
+                        </option>
+                    
+                        @foreach ($deasiseTypes as $type)
+                            <option value="{{ $type->id }}" {{ request('application_type_id') == $type->id ? 'selected' : '' }}>
+                                {{ $type->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+
                 <div class="col-md-2 col-sm-6 px-1" style="min-width:140px">
                     @if (request('gender'))
                     <select name="gender" class="form-control mb-2" id="">

@@ -79,7 +79,7 @@ class MembersList extends Component
                 $string = $string . " ";
             }
         }
-        $string = $string . " " . 'एवं नेपालसरकार बाट जारी गरिएको "बिपन्न नागरिक औषधि उपचारकोष निर्देशिका २०८०" बमोजिम बिपन्न नागरिकहरु लाई औषधि उपचार सहुलियत उपलब्ध गराउने प्रयोजनको लागि सिफारिस समितिका ';
+        $string = $string . " " . 'एवं नेपालसरकार बाट जारी गरिएको "प्रभावित नागरिक विपद् राहत कोष निर्देशिका २०८०" बमोजिम प्रभावित नागरिकहरुलाई विपद् राहत सहुलियत उपलब्ध गराउने प्रयोजनको लागि सिफारिस समितिका';
         if ($committee) {
 
             if ($this->members) {
@@ -125,53 +125,51 @@ class MembersList extends Component
 
         $section->addText($string, $fontStyle);
         $section->addTextBreak(0);
-        $string = "प्रस्ताव नं 1: औषधि उपचार सहुलियत का लागि सिफारिस सम्बन्ध मा";
+        $string = "प्रस्ताव नं 1 : विपद् राहत सहुलियत का लागि सिफारिस सम्बन्धमा";
         $section->addText($string, $fontStyle);
         $section->addTextBreak(0);
-        $string = "निर्णय नं: 1 प्रस्ताव नं: 1 माथि छलफल गर्दा यस घोडाघोडी नगरपालिका मा स्थायी बसोबास भएका तपसिल बमोजिमका बिपन्न नागरिकहरुले यस पालिकामा दिएको निवेदन उपर छलफल गरि संग्लन कागजातका आधारमा “बिपन्न नागरिक औषधि उपचार कोष निर्देशिका 2080 अनुसार तपसिल बमोजिमका बिरामीहरु लाई देहाय बमोजिम तोकिएका अस्पतालंहरु मा उपचारका लागि सिफारिस गर्ने निर्णय पारित गरियो|";
+        $string = "निर्णय नं: 1 प्रस्ताव नं: 1 माथि छलफल गर्दा यस घोडाघोडी नगरपालिका मा स्थायी बसोबास भएका तपसिल बमोजिमका प्रभावित नागरिकहरुले यस पालिकामा दिएको निवेदन उपर छलफल गरी संलग्न कागजातका आधारमा “प्रभावित नागरिक विपद् राहत कोष निर्देशिका 2080” अनुसार तपसिल बमोजिमका प्रभावित नागरिकहरुलाई देहाय बमोजिम तोकिएका निकायहरु मार्फत राहत उपलब्ध गराउन सिफारिस गर्ने निर्णय पारित गरियो।";
         $section->addText($string, $fontStyle);
         $section->addTextBreak(0);
 
 
         $tableStyle = [
+
             'borderSize' => 6,
             'borderColor' => '000000',
             'cellMargin' => 50,
         ];
+        $fontStyle = ['size' => 8];
 
         $phpWord->addTableStyle('myTable', $tableStyle);
 
         $table = $section->addTable('myTable');
 
         $table->addRow();
-        $table->addCell(2000)->addText('क्र. सं.');
-        $table->addCell(2000)->addText('बिरामीको नाम थर');
-        $table->addCell(2000)->addText('उमेर');
-        $table->addCell(2000)->addText('ना.प्र.प.नं./ज. .द.प्र.प.नं.');
-        $table->addCell(2000)->addText('रोगको किसिम');
-        $table->addCell(2000)->addText('सिफारिसगरिएको अस्पताल');
-        $table->addCell(2000)->addText('सम्पर्क नं:');
-        $table->addCell(2000)->addText('कैफियत');
+        $table->addCell(500)->addText('क्र. सं.', $fontStyle);
+        $table->addCell(2000)->addText('नाम थर', $fontStyle);
+        $table->addCell(2000)->addText('ना.प्र.प.नं./ज. .द.प्र.प.नं.', $fontStyle);
+        $table->addCell(800)->addText('वडा न.', $fontStyle);
+        $table->addCell(3500)->addText('क्षती भएको कारण', $fontStyle);
+        $table->addCell(1200)->addText('क्षति मिति', $fontStyle);
+        $table->addCell(1200)->addText('अनुमानित क्षतिरकम', $fontStyle);
+        $table->addCell(1200)->addText('प्रदानरकम', $fontStyle);
 
         foreach ($this->patients as $index => $patient) {
             if (is_array($patient)) {
                 $patient = json_decode(json_encode($patient));
             }
-
             $table->addRow();
-            $table->addCell(2000)->addText($index + 1);
-            $table->addCell(2000)->addText($patient->name ?? '');
-            $table->addCell(2000)->addText($patient->age ?? '');
-            $table->addCell(2000)->addText($patient->citizenship_number ?? '');
-
-            $diseaseName = isset($patient->disease->name) ? $patient->disease->name : '';
-            $table->addCell(2000)->addText($diseaseName);
-
-            $hospitalName = isset($patient->hospital->name) ? $patient->hospital->name : '';
-            $table->addCell(2000)->addText($hospitalName);
-
-            $table->addCell(2000)->addText($patient->mobile_number ?? '');
-            $table->addCell(2000)->addText($patient->description ?? '');
+            $table->addCell(500)->addText(englishToNepaliLetters($index + 1), $fontStyle);
+            $cell = $table->addCell(2000);
+            $cell->addText(englishToNepaliLetters($patient->name ?? ''), $fontStyle);
+            $cell->addText(englishToNepaliLetters($patient->mobile_number ?? ''), $fontStyle); 
+            $table->addCell(2000)->addText(englishToNepaliLetters($patient->citizenship_number ?? ''), $fontStyle);
+            $table->addCell(800)->addText(englishToNepaliLetters($patient->ward_number  ?? ''), $fontStyle);
+            $table->addCell(3200)->addText(englishToNepaliLetters($patient->description ?? ''), $fontStyle);
+            $table->addCell(1500)->addText(englishToNepaliLetters($patient->kshati_date  ?? ''), $fontStyle);
+            $table->addCell(1200)->addText(englishToNepaliLetters($patient->estimated_amount), $fontStyle);
+            $table->addCell(1200)->addText('');
         }
 
 

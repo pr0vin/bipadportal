@@ -130,9 +130,4 @@ class Patient extends Model
 
         return $date;
     }
-
-    // public function isRecommanded($query)
-    // {
-    //     return $query->whereNotNull();
-    // }
 }
