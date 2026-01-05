@@ -13,10 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('patients', function (Blueprint $table) {
-             Schema::table('patients', function (Blueprint $table) {
-            $table->tinyInteger('status')->nullable()->index()->after('description'); 
-        });
+        Schema::create('sifarish', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('patient_id')->nullable()->constrained('patients')->OnDelete('cascade');
+            $table->string('paid_amount')->nullable();
+            $table->date('sifarish_date')->nullable();
+            $table->timestamps();
         });
     }
 
@@ -27,8 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('patients', function (Blueprint $table) {
-            $table->dropColumn('status');
-        });
+        Schema::dropIfExists('sifarish');
     }
 };

@@ -26,16 +26,9 @@ class DecisionController extends Controller
                 ->orderBy('order', 'asc')
                 ->get();
         }
-        // return $members;
-
-
-        // $application_type_id = $patient->disease->application_types[0]->id;
-        // $permissions = [
-        //     '2' => 'bipanna.DecisionPrint',
-        //     '3' => 'samajik.DecisionPrint',
-        //     '4' => 'nagarpalika.DecisionPrint',
-        // ];
-        // $diseaseTypeId = checkPermission($permissions, $patients);
+       
         return view('frontend.decisionPrint', compact('patients','members'));
     }
+
+    
 }

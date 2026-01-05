@@ -1,6 +1,6 @@
 @extends('layouts.letter')
 @section('content')
-</div>
+    </div>
 
     @push('styles')
         <style>
@@ -95,14 +95,20 @@
                 background-color: #fff !important;
                 color: #000 !important;
             }
+
+            @media print {
+                .noprint {
+                    display: none !important;
+                }
+            }
         </style>
     @endpush
 
-     
+
 
     <div>
         <div class="p-4 resizable-block">
-           
+
             <section class="">
                 <div class="my-4"></div>
                 @php
@@ -139,7 +145,7 @@
 
 
                     <div class="mt-4 font-size">
-                          <table >
+                        <table>
                             <tr>
                                 <td style="width: 5%;">क्र.सं.</td>
                                 <td style="width: 20%;">नाम थर</td>
@@ -149,22 +155,42 @@
                                 <td style="width: 15%;">आनुमानित क्षति रकम</td>
                                 <td style="width: 15%;">प्रदानरकम</td>
                             </tr>
+                            <form id="sifarishForm" action="{{ route('sifarish.store') }}" method="POST">
+                                @csrf
 
-                            @foreach ($patients as $patient)
-                                <tr>
-                                    <td style="width: 5%;" class="kalimati-font">{{ $loop->iteration }}</td>
-                                    <td style="width: 20%;" class="kalimati-font">
-                                        {{ $patient->name ?? '' }}<br>
-                                        {{ $patient->mobile_number ?? '' }}
-                                    </td>
-                                    <td style="width: 15%;" class="kalimati-font">{{ $patient->citizenship_number ?? '' }}
-                                    </td>
-                                    <td style="width: 5%;" class="kalimati-font">{{ $patient->ward_number }}</td>
-                                    <td style="width: 25%;">{{ $patient->description ?? '' }}</td>
-                                    <td style="width: 15%;" class="kalimati-font">{{ $patient->estimated_amount }}</td>
-                                    <td style="width: 15%;" class="kalimati-font">d</td>
-                                </tr>
-                            @endforeach
+                                @foreach ($patients as $patient)
+                                    <tr>
+                                        <td style="width: 5%;" class="kalimati-font">{{ $loop->iteration }}</td>
+
+                                        <td style="width: 20%;" class="kalimati-font">
+                                            {{ $patient->name ?? '' }}<br>
+                                            {{ $patient->mobile_number ?? '' }}
+
+                                            <input type="hidden" name="patient_ids[]" value="{{ $patient->id }}">
+                                        </td>
+
+                                        <td style="width: 15%;" class="kalimati-font">
+                                            {{ $patient->citizenship_number ?? '' }}
+                                        </td>
+
+                                        <td style="width: 5%;" class="kalimati-font">{{ $patient->ward_number }}</td>
+
+                                        <td style="width: 25%;">{{ $patient->description ?? '' }}</td>
+
+                                        <td style="width: 15%;" class="kalimati-font">{{ $patient->estimated_amount }}</td>
+
+                                        <td style="width: 15%;" class="kalimati-font">
+                                            <input type="text" name="paid_amount[]"
+                                                class="border-0 outline-none focus:ring-0 focus:border-0">
+                                        </td>
+                                    </tr>
+                                @endforeach
+
+                                <button type="button" onclick="submitSifarish()" class="btn btn-primary mt-3 mb-2 noprint">
+                                    सिफारिस सेभ गर्नुहोस
+                                </button>
+                            </form>
+
                         </table>
 
                     </div>
@@ -206,3 +232,43 @@
         </div>
     </div>
 </div>
+
+
+<script>
+function submitSifarish() {
+    const form = document.getElementById('sifarishForm');
+    const formData = new FormData(form);
+
+    // Debug: print all data to console
+    console.log('Submitting Form Data:');
+    for (let [key, value] of formData.entries()) {
+        console.log(key, value);
+    }
+
+    fetch(form.action, {
+        method: 'POST',
+        headers: {
+            'X-CSRF-TOKEN': document.querySelector('input[name="_token"]').value,
+            'Accept': 'application/json'
+        },
+        body: formData
+    })
+    .then(async response => {
+        const data = await response.json().catch(() => null);
+        // console.log('Server Response:', response, data);
+        if (!response.ok) throw data || response;
+
+        alert(data?.message || 'सिफारिस सफलतापूर्वक सेभ भयो');
+    })
+    .catch(error => {
+        console.error('Submission Error:', error);
+
+        if (error?.errors) {
+            const messages = Object.values(error.errors).flat().join("\n");
+            alert(messages);
+        } else {
+            alert('केही समस्या आयो');
+        }
+    });
+}
+</script>

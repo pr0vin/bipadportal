@@ -37,24 +37,14 @@
                     </h5>
 
                     @if (!$patient->registered_date && !$patient->closed_date)
-                        @if ($patient->status === 0)
-                            <small class="text-danger">( दर्ता नभएको )</small>
-                        @elseif ($patient->status === 1)
+                        <small class="text-danger">( दर्ता नभएको )</small>
+                    @else
+                        @if ($patient->status === 0 && !$patient->closed_date)
+                            <small class="text-success">( सिफारीस भएको )</small>
+                        @elseif($patient->status === 1&& !$patient->closed_date)
+                            <small class="text-primary">( भुक्तानी भएको )</small>
+                        @else
                             <small class="text-primary">( दर्ता भएको )</small>
-                        @elseif ($patient->status === 2)
-                            <small class="text-success">( भुक्तानी भएको )</small>
-                        @endif
-                    @endif
-
-
-
-                    @if ($patient->registered_date && !$patient->closed_date)
-                        @if ($patient->status === 0)
-                            <small class="text-danger">( दर्ता नभएको )</small>
-                        @elseif ($patient->status === 1)
-                            <small class="text-primary">( दर्ता भएको )</small>
-                        @elseif ($patient->status === 2)
-                            <small class="text-success">( भुक्तानी भएको )</small>
                         @endif
                     @endif
                 </div>
@@ -290,7 +280,7 @@
                                         @endif
                                     </tr>
                                     <tr>
-                                        <td class="font-weight-bold">अनुसूची २ बमोजिमको निबेदन</td>
+                                        <td class="font-weight-bold">निबेदन</td>
                                         @if ($patient->application)
                                             <td class="d-flex justify-content-between m-0 px-3"
                                                 id="application_document_div">

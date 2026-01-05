@@ -39,6 +39,7 @@ use App\Http\Controllers\DistributionController;
 use App\Http\Controllers\Admin\ApplicationController;
 use App\Http\Controllers\CommitteePositionController;
 use App\Http\Controllers\DiseasesController;
+use App\Http\Controllers\SifarishController;
 
 Auth::routes(['register' => false]);
 Route::get('/registration', 'FrontendController@index')->name('organization.new');
@@ -488,3 +489,6 @@ Route::post('print-desision', [DecisionController::class, 'index'])->name('print
 
 Route::get('{patientId}/search-patient', [SearchController::class, 'searchPatient'])->name('searchPatient');
 Route::post('search-patient', [SearchController::class, 'reApply'])->name('reApply');
+
+Route::post('/sifarish/store', [SifarishController::class, 'store'])->name('sifarish.store');
+
