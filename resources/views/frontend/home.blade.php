@@ -421,7 +421,7 @@
 
                         <div class="py-3 d-flex justify-content-center  w-full ">
                             <a href="{{ route('frontent.apply') }}" class="mohrain-btn mr-2   "
-                                style="text-decoration: none;">नयाँ बिरामी दर्ता</a>
+                                style="text-decoration: none;">नयाँ दर्ता</a>
 
 
 
