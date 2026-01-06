@@ -180,8 +180,7 @@
                                         <td style="width: 15%;" class="kalimati-font">{{ $patient->estimated_amount }}</td>
 
                                         <td style="width: 15%;" class="kalimati-font">
-                                            <input type="text" name="paid_amount[]"
-                                                class="border-0 outline-none focus:ring-0 focus:border-0">
+                                            <input type="text" name="paid_amount[]" class=" py-3 px-4 border-0 outline-none focus:ring-0 focus:border-0">
                                         </td>
                                     </tr>
                                 @endforeach
@@ -240,10 +239,10 @@ function submitSifarish() {
     const formData = new FormData(form);
 
     // Debug: print all data to console
-    console.log('Submitting Form Data:');
-    for (let [key, value] of formData.entries()) {
-        console.log(key, value);
-    }
+    // console.log('Submitting Form Data:');
+    // for (let [key, value] of formData.entries()) {
+    //     console.log(key, value);
+    // }
 
     fetch(form.action, {
         method: 'POST',

@@ -15,8 +15,9 @@ return new class extends Migration
     {
         Schema::create('sifarish', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('patient_id')->nullable()->constrained('patients')->OnDelete('cascade');
-            $table->string('paid_amount')->nullable();
+            $table->foreignId('decision_id')->nullable()->constrained()->OnDelete('cascade');
+            $table->foreignId('patient_id')->nullable()->constrained()->OnDelete('cascade');
+            $table->string('paying_amount')->nullable();
             $table->date('sifarish_date')->nullable();
             $table->timestamps();
         });

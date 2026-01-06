@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::table('patients', function (Blueprint $table) {
              Schema::table('patients', function (Blueprint $table) {
-            $table->tinyInteger('status')->nullable()->index()->after('description'); 
+            $table->string('status')->nullable()->index()->after('description'); 
         });
         });
     }

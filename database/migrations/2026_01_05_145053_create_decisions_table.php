@@ -13,13 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('paids', function (Blueprint $table) {
+        Schema::create('decisions', function (Blueprint $table) {
             $table->id();
-            $table->string('topic')->nullable();
-             $table->foreignId('patient_id')->nullable()->constrained('patients')->OnDelete('cascade');
-            $table->string('paid_amount')->nullable();
-            $table->date('paid_date')->nullable();
-            $table->text('remark')->nullable();
+            $table->date('decision_date')->nullable();
+            $table->string('title')->nullable();
+            $table->decimal('total', 10, 2)->default(0)->nullable();
             $table->timestamps();
         });
     }
@@ -31,6 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('paids');
+        Schema::dropIfExists('decisions');
     }
 };

@@ -11,8 +11,9 @@ class Sifarish extends Model
     protected $table = 'sifarish';
 
     protected $fillable = [
+        'decision_id',
         'patient_id',
-        'paid_amount',
+        'paying_amount',
         'sifarish_date',
     ];
 
@@ -23,5 +24,10 @@ class Sifarish extends Model
     public function patient()
     {
         return $this->belongsTo(Patient::class);
+    }
+
+    public function decision()
+    {
+        return $this->belongsTo(Decision::class);
     }
 }

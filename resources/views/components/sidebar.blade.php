@@ -75,7 +75,7 @@
 
 
         <li id="sidebarCollapse " class="{{ setActive('distributions') }} mb-1">
-            <a class="nav-link text-dark" href="{{ route('distributions.distribution.form') }}">
+            <a class="nav-link text-dark" href="{{ route('decision.index') }}">
                 <span class=" pr-3">
                     <i><svg class="w-5 h-5 text-gray-800 dark:text-white" aria-hidden="true"
                             xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none"
@@ -84,7 +84,7 @@
                                 d="M11 5H6a2 2 0 0 0-2 2v11a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2v-5m-1.414-9.414a2 2 0 1 1 2.828 2.828L11.828 15H9v-2.828l8.586-8.586Z" />
                         </svg>
                     </i>
-                </span> राहत भुक्तानी
+                </span> निर्णय भएका
             </a>
         </li>
 

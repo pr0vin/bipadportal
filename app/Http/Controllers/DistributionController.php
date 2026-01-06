@@ -129,4 +129,6 @@ class DistributionController extends Controller
         return redirect()->route('distributions.index')
             ->with('success', 'वितरण विवरण सफलतापूर्वक हटाइयो।');
     }
+
+    
 }

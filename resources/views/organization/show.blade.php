@@ -29,7 +29,7 @@
             <div class="card-body">
                 <div class="text-center mb-4 border-bottom pb-2 font-nep">
                     <h3 class="h2-reponsive font-weight-bold text-primary">
-                        {{ $patient->patientApplication->first()->application_type->name ?? '' }} सम्बन्धी विवरण
+                        {{ $patient->patientApplication->first()->application_type->name ?? '' }}
                     </h3>
 
                     <h5 class="text-secondary kalimati-font">
@@ -145,8 +145,7 @@
                                 <thead>
                                     <tr>
                                         <td class="font-weight-bold">
-                                            {{ $patient->disease->id == 1 ? 'दर्ता ' : 'सिफारिस ' }}
-                                            नम्बर
+                                          दर्ता  नम्बर
                                         </td>
                                         <td class="kalimati-font">
                                             @if ($patient->registration_number)
@@ -155,8 +154,8 @@
                                                 </span>
                                             @else
                                                 <span class="px-2 py-1 text-danger border border-danger rounded-lg">
-                                                    {{ $patient->disease->id == 1 ? 'दर्ता ' : 'सिफारिस ' }}
-                                                    नभएको
+                                                    
+                                                   दर्ता नभएको
                                                 </span>
                                             @endif
                                         </td>
@@ -190,8 +189,8 @@
 
                                     <tr>
                                         <td class="font-weight-bold">
-                                            {{ $patient->disease->id == 1 ? 'दर्ता ' : 'सिफारिस ' }}
-                                            मिति
+                                         
+                                           दर्ता मिति
                                         </td>
 
                                         <td class="kalimati-font">
@@ -201,8 +200,7 @@
                                                 </span>
                                             @else
                                                 <span class="px-2 py-1 text-danger border border-danger rounded-lg">
-                                                    {{ $patient->disease->id == 1 ? 'दर्ता ' : 'सिफारिस ' }}
-                                                    नभएको
+                                                  दर्ता   नभएको
                                                 </span>
                                             @endif
                                         </td>

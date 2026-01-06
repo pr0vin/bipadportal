@@ -490,5 +490,9 @@ Route::post('print-desision', [DecisionController::class, 'index'])->name('print
 Route::get('{patientId}/search-patient', [SearchController::class, 'searchPatient'])->name('searchPatient');
 Route::post('search-patient', [SearchController::class, 'reApply'])->name('reApply');
 
-Route::post('/sifarish/store', [SifarishController::class, 'store'])->name('sifarish.store');
+Route::post('/decision/store', [SifarishController::class, 'store'])->name('sifarish.store');
+Route::get('/decision/index', [SifarishController::class, 'index'])->name('decision.index');
+Route::get('/distributions/form/{decision}', [SifarishController::class, 'showDistributionForm'])->name('distributions.distribution.form');
+Route::post('/distributions/save', [DistributionController::class, 'storeDistribution'])
+    ->name('distributions.save');
 
