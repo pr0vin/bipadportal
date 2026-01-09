@@ -115,7 +115,7 @@ class ApplicationController extends Controller
         }
 
 
-        $patients = Patient::with(['patientApplication.patientApplicationDisease.disease'])->where('address_id', $municipality_id)->where('address_id', $municipality_id)->whereNotNull('verified_date')->whereNotNull('registered_date')->whereNull('status')->whereNull('closed_date');
+        $patients = Patient::with(['patientApplication.patientApplicationDisease.disease'])->where('address_id', $municipality_id)->where('address_id', $municipality_id)->whereNotNull('verified_date')->whereNotNull('registered_date')->whereNull('closed_date');
 
 
         if ($request->filled('diseaseType')) {
