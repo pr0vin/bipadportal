@@ -129,7 +129,7 @@ class SifarishController extends Controller
         ])
             ->latest()
             ->paginate(10);
-        return view('decision.index', compact('decisions'));
+        return view('decision.dindex', compact('decisions'));
     }
 
     public function showDistributionForm(Decision $decision)
