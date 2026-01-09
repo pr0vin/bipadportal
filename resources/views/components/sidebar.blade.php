@@ -200,10 +200,6 @@
                         <a class="nav-link text-dark" href="{{ route('units.index') }}">ईकाई</a>
                     </li>
 
-                    <li>
-                        <a class="nav-link text-dark" href="{{ route('distributions.index') }}">वितरण</a>
-                    </li>
-
                     @canany(['disease.store', 'disease.edit', 'disease.delete'])
                         <li>
                             <a class="nav-link text-dark" href="{{ route('diseases.index') }}">प्रभाव सूची</a>

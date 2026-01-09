@@ -13,7 +13,6 @@
                 </a>
             </div>
         </div>
-
         <div class="card">
             <div>
                 <div class="table-responsive">

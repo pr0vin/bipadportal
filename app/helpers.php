@@ -263,6 +263,7 @@ function dateFormat($date)
     return Carbon::parse($date)->format('Y/m/d');
     // }
 }
+
 function formatDate($date)
 {
     // if($date){

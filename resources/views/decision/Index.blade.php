@@ -12,9 +12,9 @@
                         <tr>
                             <th class="text-center">क्र.स.</th>
                             <th>निर्णय शीर्षक</th>
-
                             <th>कुल रकम</th>
                             <th>निर्णय मिति</th>
+                            <th>फाइल अपलोड</th>
                             <th>कार्य</th>
                         </tr>
                     </thead>
@@ -37,7 +37,17 @@
                                 </td>
 
                                 <td class="py-1">
-                                    <a href="{{ route('distributions.distribution.form', $decision->id) }}" class="btn btn-info btn-xs">
+                                    <label for="upload_file_{{ $loop->index }}" class="btn btn-outline-primary btn-sm">
+                                        <i class="fas fa-upload"></i>
+                                    </label>
+
+                                    <input type="file" name="upload_file[]" id="upload_file_{{ $loop->index }}"
+                                        class="d-none">
+                                </td>
+
+                                <td class="py-1">
+                                    <a href="{{ route('distributions.distribution.form', $decision->id) }}"
+                                        class="btn btn-info btn-xs">
                                         भुक्तानी गर्नुहोस
                                     </a>
                                 </td>

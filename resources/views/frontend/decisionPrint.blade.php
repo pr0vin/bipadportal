@@ -180,14 +180,21 @@
                                         <td style="width: 15%;" class="kalimati-font">{{ $patient->estimated_amount }}</td>
 
                                         <td style="width: 15%;" class="kalimati-font">
-                                            <input type="text" name="paid_amount[]" class=" py-3 px-4 border-0 outline-none focus:ring-0 focus:border-0">
+                                            <input type="text" name="paid_amount[]"
+                                                class=" py-3 px-4 border-0 outline-none focus:ring-0 focus:border-0">
                                         </td>
                                     </tr>
                                 @endforeach
+                                <div class="row align-items-center justify-content-end g-2 mb-2">
+                                  
+                                    <div class="col-auto">
+                                        <button type="button" onclick="submitSifarish()" class="btn btn-primary noprint">
+                                            सिफारिस सेभ गर्नुहोस
+                                        </button>
+                                    </div>
+                                </div>
 
-                                <button type="button" onclick="submitSifarish()" class="btn btn-primary mt-3 mb-2 noprint">
-                                    सिफारिस सेभ गर्नुहोस
-                                </button>
+
                             </form>
 
                         </table>
@@ -234,40 +241,40 @@
 
 
 <script>
-function submitSifarish() {
-    const form = document.getElementById('sifarishForm');
-    const formData = new FormData(form);
+    function submitSifarish() {
+        const form = document.getElementById('sifarishForm');
+        const formData = new FormData(form);
 
-    // Debug: print all data to console
-    // console.log('Submitting Form Data:');
-    // for (let [key, value] of formData.entries()) {
-    //     console.log(key, value);
-    // }
+        // Debug: print all data to console
+        // console.log('Submitting Form Data:');
+        // for (let [key, value] of formData.entries()) {
+        //     console.log(key, value);
+        // }
 
-    fetch(form.action, {
-        method: 'POST',
-        headers: {
-            'X-CSRF-TOKEN': document.querySelector('input[name="_token"]').value,
-            'Accept': 'application/json'
-        },
-        body: formData
-    })
-    .then(async response => {
-        const data = await response.json().catch(() => null);
-        // console.log('Server Response:', response, data);
-        if (!response.ok) throw data || response;
+        fetch(form.action, {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('input[name="_token"]').value,
+                    'Accept': 'application/json'
+                },
+                body: formData
+            })
+            .then(async response => {
+                const data = await response.json().catch(() => null);
+                // console.log('Server Response:', response, data);
+                if (!response.ok) throw data || response;
 
-        alert(data?.message || 'सिफारिस सफलतापूर्वक सेभ भयो');
-    })
-    .catch(error => {
-        console.error('Submission Error:', error);
+                alert(data?.message || 'सिफारिस सफलतापूर्वक सेभ भयो');
+            })
+            .catch(error => {
+                console.error('Submission Error:', error);
 
-        if (error?.errors) {
-            const messages = Object.values(error.errors).flat().join("\n");
-            alert(messages);
-        } else {
-            alert('केही समस्या आयो');
-        }
-    });
-}
+                if (error?.errors) {
+                    const messages = Object.values(error.errors).flat().join("\n");
+                    alert(messages);
+                } else {
+                    alert('केही समस्या आयो');
+                }
+            });
+    }
 </script>

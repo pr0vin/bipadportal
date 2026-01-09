@@ -73,14 +73,12 @@ class SifarishController extends Controller
                 $patient = Patient::find($patientId);
                 if (!$patient) continue;
 
-                // Check PAID status
-                if ($patient->status === 'paid') {
+                if ($patient->status === 'recommended') {
                     $messages[] =
                         "सिफारिस पहिले नै गरिएको छ ({$patient->name})";
                     continue;
                 }
 
-                // Create sifarish
                 Sifarish::create([
                     'decision_id'   => $decision->id,
                     'patient_id'    => $patientId,
@@ -88,8 +86,7 @@ class SifarishController extends Controller
                     'sifarish_date' => ad_to_bs(Carbon::today()->toDateString()),
                 ]);
 
-                //  Update patient status → paid
-                $patient->update(['status' => 'paid']);
+                $patient->update(['status' => 'recommended']);
 
                 $createdCount++;
             }
@@ -132,7 +129,6 @@ class SifarishController extends Controller
         ])
             ->latest()
             ->paginate(10);
-
         return view('decision.index', compact('decisions'));
     }
 

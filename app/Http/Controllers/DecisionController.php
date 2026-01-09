@@ -16,9 +16,8 @@ class DecisionController extends Controller
         foreach ($ids as $id) {
             $patients[] = Patient::with('disease')->find($id);
         }
-
-        $type_id = $patients[0]->disease->application_types[0]->id;
-        $committee = Committee::where('application_type_id', $type_id)->where('address_id',municipalityId())->first();
+        
+        $committee = Committee::where('address_id',municipalityId())->first();
         $members = null;
         if ($committee) {
             $members = Member::with('position', 'committeePosition')

@@ -113,17 +113,9 @@ class ApplicationController extends Controller
         if (!$municipality_id) {
             return redirect()->back()->with('error', 'कृपया पालिका छान्नुहोस्');
         }
-        // $patients = Patient::with('disease.application_types')
-        //     ->where('address_id', $municipality_id)
-        //     ->whereNotNull('verified_date')
-        //     ->whereNotNull('registered_date')
-        //     ->whereNull('closed_date')
-        //     ->whereHas('disease.application_types', function ($query) use ($request) {
-        //         $query->where('application_types.id', $request->diseaseType);
-        //     })->orderBy('updated_at', 'desc');
 
 
-        $patients = Patient::with(['patientApplication.patientApplicationDisease.disease'])->where('address_id', $municipality_id)->where('address_id', $municipality_id)->whereNotNull('verified_date')->whereNotNull('registered_date')->whereNull('closed_date');
+        $patients = Patient::with(['patientApplication.patientApplicationDisease.disease'])->where('address_id', $municipality_id)->where('address_id', $municipality_id)->whereNotNull('verified_date')->whereNotNull('registered_date')->whereNull('status')->whereNull('closed_date');
 
 
         if ($request->filled('diseaseType')) {
@@ -131,9 +123,6 @@ class ApplicationController extends Controller
                 $query->where('application_type_id', $request->diseaseType);
             });
         }
-
-
-        // return $patients->get();
 
         if ($request->name) {
             $patients = $patients->where(function ($query) use ($request) {

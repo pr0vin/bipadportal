@@ -40,6 +40,7 @@ use App\Http\Controllers\Admin\ApplicationController;
 use App\Http\Controllers\CommitteePositionController;
 use App\Http\Controllers\DiseasesController;
 use App\Http\Controllers\SifarishController;
+use App\Http\Controllers\PaymentsController;
 
 Auth::routes(['register' => false]);
 Route::get('/registration', 'FrontendController@index')->name('organization.new');
@@ -486,13 +487,11 @@ Route::get('get-doctor/{id}', [DoctorProfileController::class, 'getDoctor'])->na
 
 Route::post('print-desision', [DecisionController::class, 'index'])->name('print-decision');
 
-
 Route::get('{patientId}/search-patient', [SearchController::class, 'searchPatient'])->name('searchPatient');
 Route::post('search-patient', [SearchController::class, 'reApply'])->name('reApply');
 
 Route::post('/decision/store', [SifarishController::class, 'store'])->name('sifarish.store');
 Route::get('/decision/index', [SifarishController::class, 'index'])->name('decision.index');
 Route::get('/distributions/form/{decision}', [SifarishController::class, 'showDistributionForm'])->name('distributions.distribution.form');
-Route::post('/distributions/save', [DistributionController::class, 'storeDistribution'])
-    ->name('distributions.save');
+Route::post('/distributions/save', [PaymentsController::class, 'store'])->name('distributions.save');
 

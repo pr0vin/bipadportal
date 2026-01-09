@@ -193,37 +193,33 @@
                         <th></th>
                     @endif
                     @if (Illuminate\Support\Facades\Route::currentRouteName() == 'newApplication')
-
                         <th>टोकन नं.</th>
                         <th>आवेदन मिति</th>
                         <th>पिडितको नाम</th>
-                        <th>लिंग</th>
-                        <th>प्रकोप</th>
+                        <th>लिङ्ग</th>
+                        <th>प्रभाव</th>
                         <th>सम्पर्क व्यक्ति नाम थर</th>
                     @elseif (Illuminate\Support\Facades\Route::currentRouteName() == 'renewedPatient' ||
                             Illuminate\Support\Facades\Route::currentRouteName() == 'dateExpiredPatient')
                         <th>दर्ता नं.</th>
                         <th>नबिकरण मिति</th>
                         <th>पिडितको नाम</th>
-                        <th>लिंग</th>
+                        <th>प्रभाव </th>
                         <th>प्रकोप</th>
                         <th>सम्पर्क व्यक्ति नाम थर</th>
                     @elseif (Illuminate\Support\Facades\Route::currentRouteName() == 'closedPatient')
                         <th>दर्ता नं.</th>
                         <th>लगतकट्टा मिति</th>
                         <th>पिडितको नाम</th>
-                        <th>लिंग</th>
+                        <th>प्रभाव </th>
                         <th>प्रकोप</th>
                         <th>सम्पर्क व्यक्ति नाम थर</th>
                     @else
                         <th>दर्ता नं.</th>
                         <th>दर्ता मिति</th>
                         <th>पिडितको नाम</th>
-                        <th>लिंग</th>
-                        @if (request('all') == 1)
-                            <th>रोगको प्रकार</th>
-                        @endif
-                        <th>रोग</th>
+                        <th>लिङ्ग</th>
+                        <th>प्रभाव </th>
                         <th>सम्पर्क व्यक्ति नाम थर</th>
                     @endif
 
@@ -286,6 +282,7 @@
                             <div class="text-muted">
                             </div>
                         </td>
+
                         <td>
                             @if ($organization->gender == 'Male' || $organization->gender == 'male' || strtolower($organization->gender) == 'male')
                                 पुरुष
@@ -298,13 +295,16 @@
                                 अन्य
                             @endif
                         </td>
+
                         @if (request('all') == 1)
                             <td>{{ $organization->disease->application_types[0]->name }}</td>
                         @endif
 
+                        <td>{{ $organization->patientApplication->first()->application_type->name }}</td>
 
 
-                        <td>
+
+                        {{-- <td>
                             @php
                                 $diseases = [];
                             @endphp
@@ -347,7 +347,7 @@
                             .hover-group:hover .hover-box {
                                 display: block;
                             }
-                        </style>
+                        </style> --}}
 
 
                         <td>
@@ -365,16 +365,15 @@
                         <td class="font-noto notPrintable">
                             @if (\Request::route()->getName() == 'newApplication')
                                 <span class="badge badge-warning z-depth-0 px-2 py-1">दर्ता नभएको</span>
-                            @elseif(\Request::route()->getName() == 'regLocation')
-                                <span class="badge badge-info z-depth-0 px-2 py-1">दर्ता भएको</span>
-                            @elseif(\Request::route()->getName() == 'closedPatient')
-                                <span class="badge badge-danger z-depth-0 px-2 py-1">लागतकट्टा भएको</span>
-                            @elseif(\Request::route()->getName() == 'renewedPatient')
-                                <span class="badge badge-success z-depth-0 px-2 py-1">नविकरण भएको</span>
-                            @elseif(\Request::route()->getName() == 'dateExpiredPatient')
-                                <span class="badge badge-danger z-depth-0 px-2 py-1">नविकरण नभएको</span>
+                            @elseif (is_null($organization->status))
+                                <span class="badge badge-info z-depth-0 px-2 py-1">सिफारिस नभएको</span>
+                            @elseif ($organization->status === 'paid')
+                                <span class="badge badge-danger z-depth-0 px-2 py-1">भुक्तानी भएको</span>
+                            @else
+                                <span class="badge badge-success z-depth-0 px-2 py-1">सिफारिस भएको</span>
                             @endif
                         </td>
+
 
 
                         <td class="m-0 p-0 notPrintable" style="min-width: 150px">

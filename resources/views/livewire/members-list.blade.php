@@ -24,7 +24,7 @@
                                 @if (in_array($member->id, $filteredMembers)) checked @endif>
                             <label class="pt-3 ml-2 font-weight-normal" style="font-size: 15px"
                                 for="checkbox{{ $member->id }}">{{ $member->position->name }} श्री {{ $member->name }}
-                                ({{ $member->committeePosition->name }})c
+                                ({{ $member->committeePosition->name }})
                             </label>
                         </li>
                     @endforeach

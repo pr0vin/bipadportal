@@ -17,17 +17,7 @@
                                 @isset($committee->id)
                                     @method('put')
                                 @endisset
-                                <div class="form-group">
-                                    <label>समितिको प्रकार</label>
-                                    <select name="application_type_id" id="" class="form-control">
-                                        <option value="" selected disabled>समितिको प्रकार छान्नुहोस्</option>
-                                        @foreach ($committeeTypes as $committeeType)
-                                            <option value="{{ $committeeType->id }}"
-                                                {{ old('application_type_id', $committee->application_type_id == $committeeType->id ? 'selected' : '') }}>
-                                                {{ $committeeType->name }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
+
                                 <div class="form-group">
                                     <label>समितिको नाम</label>
                                     <input type="text" class="form-control" name="name"
@@ -54,7 +44,7 @@
                                 <tr class="text-center">
                                     <th>क्र.स.</th>
                                     <th>समिति</th>
-                                    {{-- <th>समितिको प्रकार (हरु)</th> --}}
+                                   
                                     <th></th>
                                 </tr>
                             </thead>
@@ -63,7 +53,6 @@
                                     <tr class="text-center">
                                         <td class="kalimati-font">{{ $loop->iteration }}</td>
                                         <td>{{ $committee->name }}</td>
-                                        {{-- <td>{{ $committee->type->name }}</td> --}}
                                         <td class="d-flex m-0 p-0 pt-1">
                                             @canany(['committee.edit', 'committee.delete', 'member.store', 'member.edit',
                                                 'member.delete'])
