@@ -10,7 +10,7 @@
                 <table class="table table-hover table-borderless">
                     <thead class="bg-deep-blue text-white">
                         <tr>
-                            <th class="text-center">क्र.स.</th>
+                            <th class="text-center">क्र.स</th>
                             <th>निर्णय शीर्षक</th>
                             <th>कुल रकम</th>
                             <th>निर्णय मिति</th>
@@ -48,7 +48,7 @@
                                 <td class="py-1">
                                     <a href="{{ route('distributions.distribution.form', $decision->id) }}"
                                         class="btn btn-info btn-xs">
-                                        भुक्तानी गर्नुहोस
+                                        भुक्तानी गर्नुहोस 
                                     </a>
                                 </td>
                             </tr>
