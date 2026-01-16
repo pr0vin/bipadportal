@@ -23,4 +23,5 @@ class FiscalYear extends Model
     {
         $query->where('is_running', true);
     }
+    
 }

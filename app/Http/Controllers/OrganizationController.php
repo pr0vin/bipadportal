@@ -52,7 +52,7 @@ class OrganizationController extends Controller
         $organizations = Organization::with(['address'])->latest()->get();
         $organization = new Organization();
         $address = new Address();
-        return view('user_settings.index', compact(['provinces','organizations','organization','address']));
+        return view('user_settings.index', compact(['provinces', 'organizations', 'organization', 'address']));
     }
 
     public function orgDelete(Organization $organization)
@@ -145,114 +145,59 @@ class OrganizationController extends Controller
         return redirect()->back()->with('success', 'पालिका सफलतापूर्वक थपियो ।');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Organization  $organization
-     * @return \Illuminate\Http\Response
-     */
-    // public function show(Patient $patient, Request $request)
-    // {
-       
-    //     $application_type_id = $patient->disease->application_types[0]->id;
-       
-    //     // $permissions = [
-    //     //     '1' => 'dirgha.show',
-    //     //     '2' => 'bipanna.show',
-    //     //     '3' => 'samajik.show',
-    //     //     '4' => 'nagarpalika.show',   
-    //     // ];
-    //     // $diseaseTypeId = checkPermission($permissions, $application_type_id);
-        
-    //     $prefixIncrement = settings('registration_auto_increment_prefix');
-
-    //     $patientRegNumber = Patient::where('address_id', municipalityId())->whereHas('disease.application_types', function ($query) use ($application_type_id) {
-    //         $query->where('application_types.id', $application_type_id);
-    //     })->whereNotNull('registration_number')->orderBy('updated_at', 'desc')->first();
-
-    //     $registrationNumber = $patientRegNumber ? $patientRegNumber->registration_number : '0';
-    //     $registrationNumber = str_pad($registrationNumber + $prefixIncrement, settings('registration_number_digits') ?? 4, '0', STR_PAD_LEFT);
-    //     $patient = $this->organizationService->loadRelations($patient);
-
-    //     return view('organization.show', compact('patient', 'registrationNumber'));
-    // }
-
     public function show(Patient $patient, Request $request)
-{
-     $patient = $patient->load(['patientApplication.patientApplicationDisease.disease', 'address', 'doctor', 'onlineApplication', 'renews']);
-  
-    $prefixIncrement = settings('registration_auto_increment_prefix');
+    {
+        $patient = $patient->load(['patientApplication.patientApplicationDisease.disease', 'address', 'doctor', 'onlineApplication', 'renews']);
 
-    $patientRegNumber = Patient::where('address_id', municipalityId())
-        ->whereNotNull('registration_number')
-        ->orderBy('updated_at', 'desc')
-        ->first();
+        $prefixIncrement = settings('registration_auto_increment_prefix');
 
-    $registrationNumber = $patientRegNumber ? $patientRegNumber->registration_number : '0';
-    $registrationNumber = str_pad(
-        $registrationNumber + $prefixIncrement,
-        settings('registration_number_digits') ?? 4,
-        '0',
-        STR_PAD_LEFT
-    );
+        $patientRegNumber = Patient::where('address_id', municipalityId())
+            ->whereNotNull('registration_number')
+            ->orderBy('updated_at', 'desc')
+            ->first();
 
-    return view('organization.show', compact('patient', 'registrationNumber'));
-}
+        $registrationNumber = $patientRegNumber ? $patientRegNumber->registration_number : '0';
+        $registrationNumber = str_pad(
+            $registrationNumber + $prefixIncrement,
+            settings('registration_number_digits') ?? 4,
+            '0',
+            STR_PAD_LEFT
+        );
 
+        
 
+        $latestRegNumber = Patient::whereNotNull('reg_number')->max('reg_number');
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Organization  $organization
-     * @return \Illuminate\Http\Response
-     */
-    // public function edit(Patient $patient)
-    // {
-    //     $application_type_id = $patient->disease->application_types[0]->id;
-    //     // $permissions = [
-    //     //     '1' => 'dirgha.edit',
-    //     //     '2' => 'bipanna.edit',
-    //     //     '3' => 'samajik.edit',
-    //     //     '4' => 'nagarpalika.edit',
-    //     // ];
-    //     // $diseaseTypeId = checkPermission($permissions, $application_type_id);
-    //     $relations = Relation::latest()->get();
-    //     $applicationTypes = ApplicationType::latest()->get();
-    //   
-    //     $diseaseApplicationId = DiseaseApplication::where('disease_id', $patient->disease_id)->first()->application_type_id;
-    //     $diseases = Disease::whereHas('application_types', function ($query) use ($diseaseApplicationId) {
-    //         $query->where('application_types.id', $diseaseApplicationId);
-    //     })->latest()->get();
-    //     // return $diseases = DiseaseApplication::with('disease')->where('application_type_id', $diseaseApplicationId)->latest()->get();
-    //     // $this->checkAuthorization($patient);
-    //     // $diseases = Disease::latest()->get();
-    //     $provinces = Address::select('province')->distinct()->get();
-    //     $districts = Address::select('district')->where('province', $patient->address->province)->distinct()->get();
-    //     $municipalities = Address::select('municipality')->where('district', $patient->address->district)->get();
-    //     return view('organization.edit', compact('patient','diseases', 'provinces', 'districts', 'municipalities', 'applicationTypes', 'relations'));
-    // }
+        $nextRegNumber = $latestRegNumber
+            ? $latestRegNumber + 1
+            : 1;
+
+        // return $nextRegNumber;
+
+        return view('organization.show', compact('patient', 'registrationNumber'));
+    }
 
 
-public function edit(Patient $patient)
-{
-    $relations = Relation::latest()->get();
-    $applicationTypes = ApplicationType::latest()->get();
-    $diseases = Disease::latest()->get();
 
-    // Load selected application
-    $patientApplication = $patient->patientApplication()->latest()->first();
+    public function edit(Patient $patient)
+    {
+        $relations = Relation::latest()->get();
+        $applicationTypes = ApplicationType::latest()->get();
+        $diseases = Disease::latest()->get();
 
-    // Load selected diseases from pivot table
-    $selectedDiseaseIds = $patientApplication
-        ? $patientApplication->patientApplicationDisease()->pluck('disease_id')->toArray()
-        : [];
 
-    $provinces = Address::select('province')->distinct()->get();
-    $districts = Address::select('district')->where('province', $patient->address->province)->distinct()->get();
-    $municipalities = Address::select('municipality')->where('district', $patient->address->district)->get();
-    return view('organization.edit', compact('patient','diseases','provinces','districts','municipalities','applicationTypes','relations','patientApplication','selectedDiseaseIds'));
-}
+        $patientApplication = $patient->patientApplication()->latest()->first();
+
+        // Load selected diseases from pivot table
+        $selectedDiseaseIds = $patientApplication
+            ? $patientApplication->patientApplicationDisease()->pluck('disease_id')->toArray()
+            : [];
+
+        $provinces = Address::select('province')->distinct()->get();
+        $districts = Address::select('district')->where('province', $patient->address->province)->distinct()->get();
+        $municipalities = Address::select('municipality')->where('district', $patient->address->district)->get();
+        return view('organization.edit', compact('patient', 'diseases', 'provinces', 'districts', 'municipalities', 'applicationTypes', 'relations', 'patientApplication', 'selectedDiseaseIds'));
+    }
 
     /**
      * Update the specified resource in storage.
@@ -263,7 +208,7 @@ public function edit(Patient $patient)
      */
     public function update(OrganizationRequest $request, Organization $organization, DocumentService $documentService)
     {
-       
+
         $this->checkAuthorization($organization);
         $this->organizationService->update($organization, $request->except('id'));
 

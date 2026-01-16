@@ -14,7 +14,12 @@
                             <th>निर्णय शीर्षक</th>
                             <th>कुल रकम</th>
                             <th>निर्णय मिति</th>
-                            <th>फाइल अपलोड</th>
+                            @foreach($decisions as $key => $decision)
+                                @if ($decision->status === 'paid')
+                                    <th>स्थिति</th>
+                                @endif
+                            @endforeach
+                            <th class="text-center">फाइल अपलोड</th>
                             <th>कार्य</th>
                         </tr>
                     </thead>
@@ -36,19 +41,37 @@
                                     {{ optional($decision->decision_date)->format('Y-m-d') }}
                                 </td>
 
-                                <td class="py-1">
-                                    <label for="upload_file_{{ $loop->index }}" class="btn btn-outline-primary btn-sm">
-                                        <i class="fas fa-upload"></i>
-                                    </label>
+                                @if ($decision->status === 'paid')
+                                    <td class="kalimati-font text-center">
+                                        भुक्तानी भयको
+                                    </td>
+                                @endif
 
-                                    <input type="file" name="upload_file[]" id="upload_file_{{ $loop->index }}"
-                                        class="d-none">
+
+                                <td class="py-1 text-center ">
+                                    @if ($decision->decision_file)
+                                        <a href="{{ asset('storage/' . $decision->decision_file) }}" target="_blank"
+                                            class="btn btn-success btn-sm">
+                                            <i class="fas fa-eye"></i> View
+                                        </a>
+                                    @else
+                                        <label for="upload_file_{{ $decision->id }}" class="btn btn-outline-primary btn-sm">
+                                            <i class="fas fa-upload"></i> Upload
+                                        </label>
+
+                                        <input type="file" data-id="{{ $decision->id }}"
+                                            id="upload_file_{{ $decision->id }}" class="d-none upload-file-input">
+                                    @endif
                                 </td>
+
+
+
+
 
                                 <td class="py-1">
                                     <a href="{{ route('distributions.distribution.form', $decision->id) }}"
                                         class="btn btn-info btn-xs">
-                                        भुक्तानी गर्नुहोस 
+                                        भुक्तानी गर्नुहोस
                                     </a>
                                 </td>
                             </tr>
@@ -69,3 +92,39 @@
         </div>
     </div>
 @endsection
+
+@push('scripts')
+    <script>
+        document.querySelectorAll('.upload-file-input').forEach(input => {
+            input.addEventListener('change', function() {
+                let decisionId = this.dataset.id;
+                let file = this.files[0];
+
+                if (!file) return;
+
+                let formData = new FormData();
+                formData.append('file', file);
+                formData.append('_token', '{{ csrf_token() }}');
+
+                fetch(`/decisions/${decisionId}/upload-file`, {
+                        method: 'POST',
+                        body: formData
+                    })
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.status) {
+                            this.closest('td').innerHTML = `
+                    <a href="${data.file_url}" target="_blank"
+                        class="btn btn-success btn-sm">
+                        <i class="fas fa-eye"></i> View
+                    </a>
+                `;
+                        } else {
+                            alert('Upload failed');
+                        }
+                    })
+                    .catch(() => alert('Something went wrong'));
+            });
+        });
+    </script>
+@endpush

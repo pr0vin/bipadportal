@@ -66,8 +66,7 @@ class DatabaseSeeder extends Seeder
         // Setting Seeder
 
         $this->call(OtherSeeder::class);
-        $this->call( MaterialsSeeder::class);
-
+       
 
         // $this->call(TruncateSeeder::class);
     }

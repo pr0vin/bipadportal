@@ -53,6 +53,7 @@
                             <tr>
                                 <th>क्र.सं.</th>
                                 <th>नाम</th>
+                                <th>बैंक खाता नम्बर</th>
                                 <th>आनुमानित रकम</th>
                                 <th>भुक्तानी रकम</th>
                                 <th>कैफियत</th>
@@ -61,19 +62,24 @@
                         <tbody>
                             @foreach ($sifarishList as $index => $sifarish)
                             <tr>
-                                <td>{{ $loop->iteration }}</td>
-                                <td>
+                                <td class="kalimati-font">{{ $loop->iteration }}</td>
+                                <td class="kalimati-font">
                                     <strong>{{ $sifarish->patient->name }}</strong><br>
                                     {{ $sifarish->patient->mobile_number ?? '' }}
                                 </td>
-                                <td>{{ $sifarish->patient->estimated_amount ?? '' }}</td>
-                                <td>
+
+                                 <td class="kalimati-font">
+                                    
+                                    {{ $sifarish->patient->bank_account_number ?? '' }}
+                                </td>
+                                <td class="kalimati-font">{{ $sifarish->patient->estimated_amount ?? '' }}</td>
+                                <td class="kalimati-font">
                                     <input type="hidden" name="patients[{{ $index }}][id]"
                                         value="{{ $sifarish->patient->id }}">
                                     <input type="number" name="patients[{{ $index }}][paid_amount]" class="form-control"
                                         value="{{ $sifarish->paying_amount }}">
                                 </td>
-                                <td>
+                                <td class="kalimati-font">
                                     <input type="text" name="patients[{{ $index }}][remark]" class="form-control" value="{{ old('patients.' . $index . '.remark') }}">
 
                                 </td>

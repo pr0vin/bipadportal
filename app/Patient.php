@@ -130,4 +130,9 @@ class Patient extends Model
 
         return $date;
     }
+
+    public function paymentDetails()
+    {
+        return $this->hasMany(PaymentDetail::class);
+    }
 }

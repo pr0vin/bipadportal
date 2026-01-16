@@ -9,6 +9,7 @@ use App\Patient;
 use App\Distribution;
 use App\PatientApplicationDisease;
 use App\Hospital;
+use App\DistributionDetail;
 use Carbon\Carbon;
 use App\FiscalYear;
 use App\Exports\DataExport;
@@ -25,6 +26,7 @@ use App\Exports\ReliefDistributionExport;
 use App\Exports\SamajikExport;
 use App\Exports\ResourceDistributionExport;
 
+
 class OrganizationReportController extends Controller
 {
     public function __construct()
@@ -34,13 +36,7 @@ class OrganizationReportController extends Controller
 
     public function index(Request $request)
     {
-        // $permissions = [
-        //     '1' => 'dirgha.report',
-        //     '2' => 'bipanna.report',
-        //     '3' => 'samajik.report',
-        //     '4' => 'nagarpalika.report',
-        // ];
-        // $diseaseTypeId = checkPermission($permissions, request('diseaseType'));
+
         if (!municipalityId()) {
             return redirect()->back()->with('error', 'कृपया पालिका छान्नुहोस्');
         }
@@ -113,7 +109,7 @@ class OrganizationReportController extends Controller
         $patients = $patients->latest()->get()->groupBy('patient_id');
         $patientsList = [];
         foreach ($patients as $patient) {
-            // foreach($patient as $item){
+
 
             $patientsList[] = [
                 'patient_name' => $patient[0]->patient->name,
@@ -126,9 +122,8 @@ class OrganizationReportController extends Controller
                 'patient' => $patient,
                 'doctor' => $patient[0]->patient->doctor,
             ];
-            // }
         }
-        // return $patientsList;
+
         $months = [4, 5, 6, 7, 8, 9, 10, 11, 12, 1, 2, 3];
         if ($request->excel) {
             $title = 'औषधि उपचार बापत खर्च पाउने व्यक्तिहरुको अभिलेख राख्ने ढाँचा';
@@ -142,224 +137,301 @@ class OrganizationReportController extends Controller
         return view('organization.report.dirghaReport.index', compact('diseases', 'patientsList', 'months'));
     }
 
+    // public function dirghaReport(Request $request)
+    // {
+
+    //     if (!municipalityId()) {
+    //         return redirect()->back()->with('error', 'कृपया पालिका छान्नुहोस्');
+    //     }
+    //     $todayDate = ad_to_bs(now()->format('Y-m-d'));
+    //     $year = Carbon::parse($todayDate)->format('Y');
+    //     $month = Carbon::parse($todayDate)->format('m');
+    //     if ($month + 3 > 12) {
+    //         $year = $year + 1;
+    //     }
+    //     $oldMonth = $month;
+    //     $month = $month + 3;
+    //     if ($month == 13) {
+    //         $month = 1;
+    //     }
+    //     if ($month == 14) {
+    //         $month = 2;
+    //     }
+    //     if ($month == 15) {
+    //         $month = 3;
+    //     }
+    //     $fiscalYear = FiscalYear::where('is_running', 1)->first();
+
+    //     if (!$fiscalYear) {
+    //         return redirect()->back()->with('error', 'Please active a fiscal year');
+    //     }
+
+    //     if ($request->date_from) {
+    //         $dateFrom = $request->date_from[0];
+    //     }
+    //     if ($request->date_to) {
+    //         $dateTo = $request->date_to[0];
+    //     }
+
+    //     if ($request->diseaseType == 1) {
+    //         $fileName = "दीर्घरोगी मासिक उपचार खर्च.xlsx";
+    //         if (request('payment_status' == "upaid")) {
+
+    //             $message = "मृर्गौला प्रत्यारोपण गरेका, डायलासिस गराई रहेका, क्यान्सर रोगी र मेरुदण्ड पक्षघातका बिरामीहरुलाई औषधि उपचार बापत खर्च उपलब्ध गराउने सम्बन्धि कार्यविधि २०७८ बमोजिम
+    //                             मासिक रु. ५ हजारका दरले रकम भुक्तानी नदिएको विवरण";
+    //         } else {
+    //             $message = "मृर्गौला प्रत्यारोपण गरेका, डायलासिस गराई रहेका, क्यान्सर रोगी र मेरुदण्ड पक्षघातका बिरामीहरुलाई औषधि उपचार बापत खर्च उपलब्ध गराउने सम्बन्धि कार्यविधि २०७८ बमोजिम
+    //             मासिक रु. ५ हजारका दरले रकम भुक्तानी पाएका विवरण";
+    //         }
+    //     } elseif ($request->diseaseType == 2) {
+    //         $fileName = "बिपन्न सहयोगको सिफारिस.xlsx";
+    //         $message = " विपन्न नागरिक बिरामीहरुलाई औषधी उपचार बापत खर्च उपलब्ध गराउने सम्बन्धि कार्यविधि २०७८ बमोजिम मासिक रू. ५००० का दरलेरकम भुक्तानी दिएको विवरण";
+    //     } elseif ($request->diseaseType == 3) {
+    //         $fileName = "सामाजिक विकास मन्त्रालय.xlsx";
+    //         $message = "सामाजिक विकास मन्त्रालय औषधी उपचार बापत खर्च उपलब्ध गराउने सम्बन्धि कार्यविधि २०७८ बमोजिम मासिक रू. ५००० का दरलेरकम भुक्तानी दिएको विवरण";
+    //     } elseif ($request->diseaseType == 4) {
+    //         $fileName = "नगरपालिका.xlsx";
+    //         $message = "नगरपालिका औषधी उपचार बापत खर्च उपलब्ध गराउने सम्बन्धि कार्यविधि २०७८ बमोजिम मासिक रू. ५००० का दरलेरकम भुक्तानी दिएको विवरण ";
+    //     }
+
+    //     $message = $message . "(आ. व." . $fiscalYear->name;
+    //     if ($request->date_from) {
+    //         $message = $message . " मिति " . englishToNepaliLetters($dateFrom) . " देखि ";
+    //     }
+    //     if ($request->date_to) {
+
+    //         $message = $message  . englishToNepaliLetters($dateTo) . " सम्म";
+    //     }
+    //     $message = $message . ")";
+    //     $currentQuarter = null;
+    //     if (request('quarter')) {
+    //         $currentQuarter = (int)request('quarter');
+    //     } else {
+    //         $currentQuarter = currentquarter();
+    //     }
+
+    //     if ($request->excel) {
+    //         if ($request->diseaseType == 1) {
+    //             return Excel::download(new ReportExport($message, $currentQuarter), $fileName);
+    //         } else {
+    //             return Excel::download(new DataExport($message, $dateFrom, $dateTo), $fileName);
+    //         }
+    //     }
+
+
+    //     $applicationTypeId = $request->diseaseType ?? 1;
+
+    //     $title = 'रिपोर्ट';
+    //     return view('organization.report.index', [
+    //         'title' => $title,
+    //         'message' => $message,
+    //         // 'diseaseCounts' => $diseaseCounts,
+    //         'applicationTypeId' => $applicationTypeId,
+    //     ]);
+    // }
+
+
+
     public function dirghaReport(Request $request)
     {
-        // $permissions = [
-        //     '1' => 'dirgha.report',
-        //     '2' => 'bipanna.report',
-        //     '3' => 'samajik.report',
-        //     '4' => 'nagarpalika.report',
-        // ];
-        //  $diseaseTypeId = checkPermission($permissions, request('diseaseType'));
+
         if (!municipalityId()) {
             return redirect()->back()->with('error', 'कृपया पालिका छान्नुहोस्');
         }
+
+        // ===============================
+        // Nepali date + quarter logic
+        // ===============================
         $todayDate = ad_to_bs(now()->format('Y-m-d'));
-        $year = Carbon::parse($todayDate)->format('Y');
+        $year  = Carbon::parse($todayDate)->format('Y');
         $month = Carbon::parse($todayDate)->format('m');
+
         if ($month + 3 > 12) {
-            $year = $year + 1;
+            $year++;
         }
-        $oldMonth = $month;
-        $month = $month + 3;
-        if ($month == 13) {
-            $month = 1;
+
+        $month += 3;
+        if ($month > 12) {
+            $month -= 12;
         }
-        if ($month == 14) {
-            $month = 2;
-        }
-        if ($month == 15) {
-            $month = 3;
-        }
+
+        // ===============================
+        // Fiscal year check
+        // ===============================
         $fiscalYear = FiscalYear::where('is_running', 1)->first();
 
         if (!$fiscalYear) {
             return redirect()->back()->with('error', 'Please active a fiscal year');
         }
 
-        if ($request->date_from) {
-            $dateFrom = $request->date_from[0];
-        }
-        if ($request->date_to) {
-            $dateTo = $request->date_to[0];
-        }
-
-        if ($request->diseaseType == 1) {
-            $fileName = "दीर्घरोगी मासिक उपचार खर्च.xlsx";
-            if (request('payment_status' == "upaid")) {
-
-                $message = "मृर्गौला प्रत्यारोपण गरेका, डायलासिस गराई रहेका, क्यान्सर रोगी र मेरुदण्ड पक्षघातका बिरामीहरुलाई औषधि उपचार बापत खर्च उपलब्ध गराउने सम्बन्धि कार्यविधि २०७८ बमोजिम
-                                मासिक रु. ५ हजारका दरले रकम भुक्तानी नदिएको विवरण";
-            } else {
-                $message = "मृर्गौला प्रत्यारोपण गरेका, डायलासिस गराई रहेका, क्यान्सर रोगी र मेरुदण्ड पक्षघातका बिरामीहरुलाई औषधि उपचार बापत खर्च उपलब्ध गराउने सम्बन्धि कार्यविधि २०७८ बमोजिम
-                मासिक रु. ५ हजारका दरले रकम भुक्तानी पाएका विवरण";
-            }
-        } elseif ($request->diseaseType == 2) {
-            $fileName = "बिपन्न सहयोगको सिफारिस.xlsx";
-            $message = " विपन्न नागरिक बिरामीहरुलाई औषधी उपचार बापत खर्च उपलब्ध गराउने सम्बन्धि कार्यविधि २०७८ बमोजिम मासिक रू. ५००० का दरलेरकम भुक्तानी दिएको विवरण";
-        } elseif ($request->diseaseType == 3) {
-            $fileName = "सामाजिक विकास मन्त्रालय.xlsx";
-            $message = "सामाजिक विकास मन्त्रालय औषधी उपचार बापत खर्च उपलब्ध गराउने सम्बन्धि कार्यविधि २०७८ बमोजिम मासिक रू. ५००० का दरलेरकम भुक्तानी दिएको विवरण";
-        } elseif ($request->diseaseType == 4) {
-            $fileName = "नगरपालिका.xlsx";
-            $message = "नगरपालिका औषधी उपचार बापत खर्च उपलब्ध गराउने सम्बन्धि कार्यविधि २०७८ बमोजिम मासिक रू. ५००० का दरलेरकम भुक्तानी दिएको विवरण ";
-        }
-
-        $message = $message . "(आ. व." . $fiscalYear->name;
-        if ($request->date_from) {
-            $message = $message . " मिति " . englishToNepaliLetters($dateFrom) . " देखि ";
-        }
-        if ($request->date_to) {
-
-            $message = $message  . englishToNepaliLetters($dateTo) . " सम्म";
-        }
-        $message = $message . ")";
-        $currentQuarter = null;
-        if (request('quarter')) {
-            $currentQuarter = (int)request('quarter');
-        } else {
-            $currentQuarter = currentquarter();
-        }
-        // return $currentQuarter;
-        if ($request->excel) {
-            if ($request->diseaseType == 1) {
-                return Excel::download(new ReportExport($message, $currentQuarter), $fileName);
-            } else {
-                return Excel::download(new DataExport($message, $dateFrom, $dateTo), $fileName);
-            }
-        }
-
+        // ===============================
+        // Filters
+        // ===============================
+        $dateFrom = $request->date_from[0] ?? null;
+        $dateTo   = $request->date_to[0] ?? null;
 
         $applicationTypeId = $request->diseaseType ?? 1;
 
-        $title = 'रिपोर्ट';
+        $message = 'प्रकोपको सङख्या र क्षतिको विवरण';
+        $title   = 'रिपोर्ट';
+
+        // ===============================
+        // Build SAME data as Livewire
+        // ===============================
+        $applicationTypeCounts = PatientApplicationDisease::with([
+            'disease',
+            'patientApplication.application_type',
+            'patientApplication.patient'
+        ])
+            ->whereHas('patientApplication.patient', function ($query) {
+                $query->whereNotNull('verified_date');
+            })
+            ->when($dateFrom, function ($q) use ($dateFrom) {
+                $q->whereHas('patientApplication', function ($qq) use ($dateFrom) {
+                    $qq->where('registered_date', '>=', $dateFrom);
+                });
+            })
+            ->when($dateTo, function ($q) use ($dateTo) {
+                $q->whereHas('patientApplication', function ($qq) use ($dateTo) {
+                    $qq->where('registered_date', '<=', $dateTo);
+                });
+            })
+            ->get()
+            ->groupBy(
+                fn($item) =>
+                $item->patientApplication->application_type->name ?? 'Unknown'
+            )
+            ->map(function ($diseases, $typeName) {
+
+                $totalLoss = $diseases->sum(
+                    fn($d) =>
+                    $d->patientApplication->patient->estimated_amount ?? 0
+                );
+
+                return (object) [
+                    'name' => $typeName,
+                    'diseases' => $diseases->map(function ($d) {
+                        return (object) [
+                            'disease_id'    => $d->disease_id,
+                            'disease_name'  => $d->disease->name ?? 'Unknown',
+                            'patient_count' => 1,
+                        ];
+                    }),
+                    'estimated_loss' => $totalLoss,
+                ];
+            })
+            ->values();
+
+        // ===============================
+        // Excel export
+        // ===============================
+        if ($request->has('excel')) {
+            return Excel::download(
+                new ReportExport($applicationTypeCounts),
+                'प्रकोपको सङख्या र क्षतिको विवरण.xlsx'
+            );
+        }
+
+        // ===============================
+        // Normal view (Livewire loads data again)
+        // ===============================
         return view('organization.report.index', [
-            'title' => $title,
-            'message' => $message,
-            // 'diseaseCounts' => $diseaseCounts,
-            'applicationTypeId' => $applicationTypeId,
+            'title'              => $title,
+            'message'            => $message,
+            'applicationTypeId'  => $applicationTypeId,
         ]);
     }
 
+
+
     public function reliefReport(Request $request)
+    {
+
+        if (!municipalityId()) {
+            return redirect()->back()->with('error', 'कृपया पालिका छान्नुहोस्');
+        }
+
+
+        if ($request->has('excel')) {
+            return Excel::download(
+                new ReliefDistributionExport($request),
+                'relief_distribution_report.xlsx'
+            );
+        }
+
+
+        $patientsQuery = Patient::query()->whereNotNull('verified_date')->where('status', 'paid')->whereHas('paymentDetails.payment');
+
+
+        if ($request->filled('fiscal_year_id')) {
+            $patientsQuery->whereHas('paymentDetails.payment', function ($q) use ($request) {
+                $q->where('fiscal_year_date', $request->fiscal_year_id);
+            });
+        }
+
+
+        if ($request->filled('from_date') || $request->filled('to_date')) {
+
+            $patientsQuery->whereHas('paymentDetails.payment', function ($q) use ($request) {
+
+                if ($request->filled('from_date')) {
+                    $q->whereDate('paid_date', '>=', $request->from_date);
+                }
+
+                if ($request->filled('to_date')) {
+                    $q->whereDate('paid_date', '<=', $request->to_date);
+                }
+            });
+        }
+
+
+        $patients = $patientsQuery
+            ->with([
+                'paymentDetails.payment' => function ($q) {
+                    $q->latest();
+                }
+            ])->get();
+
+        return view('livewire.ReliefDistributionReport', [
+            'reliefDetails' => $patients
+        ]);
+    }
+
+
+
+
+
+    public function resourceDistributionReport(Request $request)
     {
         if (!municipalityId()) {
             return redirect()->back()->with('error', 'कृपया पालिका छान्नुहोस्');
         }
+
         if ($request->excel) {
-
-            $fileName = 'relief_distribution_report.xlsx';
-
             return Excel::download(
-                new ReliefDistributionExport(municipalityId()),
-                $fileName
+                new ResourceDistributionExport('राहत उद्धार सामग्रीहरुको विवरण'),
+                'resource_distribution_report.xlsx'
             );
         }
-        $reliefDetails = Patient::whereNotNull('verified_date')->get();
 
-        return view('livewire.ReliefDistributionReport', compact('reliefDetails'));
-    }
+        $resourceDetails = DistributionDetail::with([
+            'resource.unit',
+            'distribution'
+        ])
+            ->whereHas('distribution', function ($q) {
+                $q->where('type', 0)
+                    ->whereNull('deleted_at');
+            })
+            ->latest()
+            ->get();
 
-    public function resourceDistributionReport(Request $request)
-{
-    if (!municipalityId()) {
-        return redirect()->back()->with('error', 'कृपया पालिका छान्नुहोस्');
-    }
-
-    if ($request->excel) {
-        $fileName = 'resource_distribution_report.xlsx';
-
-        return Excel::download(
-            new ResourceDistributionExport(municipalityId()),
-            $fileName
+        return view(
+            'livewire.ResourceDistributionReport',
+            compact('resourceDetails')
         );
     }
 
-    $resourceDetails = Distribution::with(['patient', 'resource'])
-        ->whereNull('deleted_at')->where('type',0)
-        ->orderBy('distributed_date', 'desc')
-        ->get();
 
-    return view(
-        'livewire.ResourceDistributionReport',
-        compact('resourceDetails')
-    );
-}
-
-
-    public function periodSession(Request $request)
-    {
-        Session::put('renewalPeriod', $request->renewalPeriod);
-        return redirect()->back();
-    }
-
-    public function hospitalWiseReport(Request $request)
-    {
-        $patients =  Patient::where('fiscal_year_id', currentFiscalYear()->id)->where('address_id', municipalityId())->whereHas('disease.application_types', function ($query) {
-            $query->where('application_types.id', 2);
-        });
-        if (request('date_from')) {
-            $dateFrom = request('date_from')[0];
-        }
-        if (request('date_to')) {
-            $dateTo = request('date_to')[0];
-        }
-        if ($request->disease_id) {
-            $patients = $patients->where('disease_id', $request->disease_id);
-        }
-
-        if (request('date_from')) {
-            $patients = $patients->where('registered_date', '>=', $dateFrom);
-        }
-        if (request('date_to')) {
-            $patients = $patients->where('registered_date', '<=', $dateTo);
-        }
-        if (request('ward_number')) {
-            $patients = $patients->where('ward_number', request('ward_number'));
-        }
-        if (request('gender')) {
-            $patients = $patients->whereRaw('LOWER(gender) = ?', [strtolower(request('gender'))]);
-        }
-
-        $patients = $patients->get();
-
-        $datas = [];
-        $hospitals = Hospital::latest()->get();
-        foreach ($hospitals as $hospital) {
-            $total = $patients->where('hospital_id', $hospital->id)->count();
-
-            // Case-insensitive gender counts
-            $male = $patients->filter(function ($patient) use ($hospital) {
-                return $patient->hospital_id == $hospital->id && strtolower($patient->gender) == 'male';
-            })->count();
-
-            $female = $patients->filter(function ($patient) use ($hospital) {
-                return $patient->hospital_id == $hospital->id && strtolower($patient->gender) == 'female';
-            })->count();
-
-            $other = $patients->filter(function ($patient) use ($hospital) {
-                return $patient->hospital_id == $hospital->id && strtolower($patient->gender) == 'other';
-            })->count();
-
-            // Add data to the array
-            if ($total > 0) {
-
-                $datas[] = [
-                    'hospital' => $hospital->name,
-                    'total' => $total,
-                    'male' => $male,
-                    'female' => $female,
-                    'other' => $other,
-                ];
-            }
-        }
-        $datasCollection = collect($datas)->sortByDesc('total');
-        $patientLists = $datasCollection->values()->all();
-        if ($request->excel) {
-            return Excel::download(new BipannaHospitalWiseExport($patientLists), 'bipanna hospital wise report.xlsx');
-        }
-        return view('organization.report.hospitalReport', compact('patientLists'));
-    }
 
     public function registeredPatientReport()
     {
@@ -368,387 +440,5 @@ class OrganizationReportController extends Controller
         })->whereNotNull('registered_date')->get();
 
         return view('organization.report.bipanna.registeredReport', compact('patients'));
-    }
-    public function bipannaFinalReport(Request $request)
-    {
-        // Get the relevant diseases based on the application type
-        $diseases = Disease::latest()->whereHas('application_types', function ($query) {
-            $query->where('application_types.id', 2);
-        })->get();
-
-        // Pluck the disease IDs
-        $diseaseIds = $diseases->pluck('id')->toArray();
-
-
-        $patients = Patient::select('hospital_id', 'disease_id', DB::raw('count(*) as total_patients'))
-            ->where('address_id', municipalityId());
-
-        if ($request->fiscal_year_id) {
-            $patients->where('fiscal_year_id', $request->fiscal_year_id);
-        } else {
-            $patients->where('fiscal_year_id', currentFiscalYear()->id);
-        }
-        $patients = $patients->whereNotNull('hospital_id')->whereIn('disease_id', $diseaseIds)
-            ->whereHas('disease.application_types', function ($query) {
-                $query->where('application_types.id', 2);
-            })
-            ->groupBy('hospital_id', 'disease_id')->get();;
-
-
-        // Prepare data for the table
-        $hospitalData = [];
-        $hospitalTotalPatients = []; // To store the total patients per hospital
-        $diseaseNames = Disease::whereIn('id', $diseaseIds)->pluck('name', 'id')->toArray();
-        $hospitalNames = Hospital::pluck('name', 'id')->toArray(); // Assuming you have a Hospital model
-
-        foreach ($patients as $patient) {
-            // Store the count of patients by hospital and disease
-            $hospitalData[$patient->hospital_id][$patient->disease_id] = $patient->total_patients;
-
-            // Add the total count for the hospital
-            if (!isset($hospitalTotalPatients[$patient->hospital_id])) {
-                $hospitalTotalPatients[$patient->hospital_id] = 0;
-            }
-            $hospitalTotalPatients[$patient->hospital_id] += $patient->total_patients;
-        }
-
-
-
-        if ($request->fiscal_year_id) {
-            $fiscalYear = FiscalYear::findOrFail($request->fiscal_year_id);
-        } else {
-            $fiscalYear = currentFiscalYear();
-        }
-        // return $hospitalData;
-        if ($request->excel) {
-            return Excel::download(new BipannaHospitalWiseExport($hospitalData, $diseaseNames, $hospitalNames, $hospitalTotalPatients), 'दिर्घ मासिक उपचार खर्च रिपोर्ट.xlsx');
-        }
-
-
-
-
-        // Pass data to the view
-        return view('organization.report.bipanna.finalreport', compact('hospitalData', 'diseaseNames', 'hospitalNames', 'hospitalTotalPatients', 'fiscalYear'));
-    }
-
-
-
-    public function diseaseWiseReport(Request $request)
-    {
-        $patients =  Patient::where('fiscal_year_id', currentFiscalYear()->id)->where('address_id', municipalityId())->whereHas('disease.application_types', function ($query) {
-            $query->where('application_types.id', 2);
-        });
-
-        $datas = [];
-        $diseases = Disease::latest()->whereHas('application_types', function ($query) {
-            $query->where('application_types.id', request('diseaseType'));
-        })->get();
-
-        if (request('date_from')) {
-            $dateFrom = request('date_from')[0];
-        }
-        if (request('date_to')) {
-            $dateTo = request('date_to')[0];
-        }
-        if ($request->disease_id) {
-            $patients = $patients->where('disease_id', $request->disease_id);
-        }
-
-        if (request('date_from')) {
-            $patients = $patients->where('registered_date', '>=', $dateFrom);
-        }
-        if (request('date_to')) {
-            $patients = $patients->where('registered_date', '<=', $dateTo);
-        }
-        if (request('ward_number')) {
-            $patients = $patients->where('ward_number', request('ward_number'));
-        }
-        if (request('gender')) {
-            // $patients = $patients->where('gender', request('gender'));
-            $patients = $patients->whereRaw('LOWER(gender) = ?', [strtolower(request('gender'))]);
-        }
-        $patients = $patients->get();
-        foreach ($diseases as $disease) {
-            $total = $patients->where('disease_id', $disease->id)->count();
-
-            $male = $patients->filter(function ($patient) use ($disease) {
-                return $patient->disease_id == $disease->id && strtolower($patient->gender) == 'male';
-            })->count();
-
-            $female = $patients->filter(function ($patient) use ($disease) {
-                return $patient->disease_id == $disease->id && strtolower($patient->gender) == 'female';
-            })->count();
-
-            $other = $patients->filter(function ($patient) use ($disease) {
-                return $patient->disease_id == $disease->id && strtolower($patient->gender) == 'other';
-            })->count();
-
-            $totalRegistered = $patients->where('disease_id', $disease->id)->whereNotNull('registered_date')->count();
-
-            $maleRegistered = $patients->filter(function ($patient) use ($disease) {
-                return $patient->disease_id == $disease->id && strtolower($patient->gender) == 'male';
-            })->whereNotNull('registered_date')->count();
-
-            $femaleRegistered = $patients->filter(function ($patient) use ($disease) {
-                return $patient->disease_id == $disease->id && strtolower($patient->gender) == 'female';
-            })->whereNotNull('registered_date')->count();
-
-            $otherRegistered = $patients->filter(function ($patient) use ($disease) {
-                return $patient->disease_id == $disease->id && strtolower($patient->gender) == 'other';
-            })->whereNotNull('registered_date')->count();
-
-            if ($total > 0) {
-
-                $datas[] = [
-                    'disease' => $disease->name,
-                    'total' => $total,
-                    'male' => $male,
-                    'female' => $female,
-                    'other' => $other,
-
-                    'totalRegistered' => $totalRegistered,
-                    'maleRegistered' => $maleRegistered,
-                    'femaleRegistered' => $femaleRegistered,
-                    'otherRegistered' => $otherRegistered
-                ];
-            }
-        }
-        $datasCollection = collect($datas)->sortByDesc('total');
-        $patientLists = $datasCollection->values()->all();
-        if ($request->excel) {
-            return Excel::download(new BipannaDiseseWiseExport($patientLists), 'bipanna disease wise report.xlsx');
-        }
-        return view('organization.report.bipanna.diseaseReport', compact('patientLists'));
-    }
-
-
-    public function socialDevelopmentMinistryFianlReport(Request $request)
-    {
-        $patients =  Patient::with(['disease', 'hospital'])->where('address_id', municipalityId())->whereHas('disease.application_types', function ($query) {
-            $query->where('application_types.id', 3);
-        });
-
-        if ($request->fiscal_year_id) {
-
-            $patients = $patients->where('fiscal_year_id', $request->fiscal_year_id);
-        } else {
-            $patients = $patients->where('fiscal_year_id', currentFiscalYear()->id);
-        }
-
-        if (request('date_from')) {
-            $dateFrom = request('date_from')[0];
-        }
-        if (request('date_to')) {
-            $dateTo = request('date_to')[0];
-        }
-        if ($request->disease_id) {
-            $patients = $patients->where('disease_id', $request->disease_id);
-        }
-
-        if (request('date_from')) {
-            $patients = $patients->where('registered_date', '>=', $dateFrom);
-        }
-        if (request('date_to')) {
-            $patients = $patients->where('registered_date', '<=', $dateTo);
-        }
-        if (request('ward_number')) {
-            $patients = $patients->where('ward_number', request('ward_number'));
-        }
-        if (request('gender')) {
-            // $patients = $patients->where('gender', request('gender'));
-            $patients = $patients->whereRaw('LOWER(gender) = ?', [strtolower(request('gender'))]);
-        }
-
-        $patients = $patients->get();
-
-        if ($request->excel) {
-            return Excel::download(new SamajikExport($patients), 'bipanna disease wise report.xlsx');
-        }
-
-        if ($request->fiscal_year_id) {
-            $fiscalYear = FiscalYear::findOrFail($request->fiscal_year_id);
-        } else {
-            $fiscalYear = currentFiscalYear();
-        }
-
-        return view('organization.report.socialDevelopment.final-report', compact('patients', 'fiscalYear'));
-    }
-
-    public function socialDevelopmentMinistryReport(Request $request)
-    {
-        $patients =  Patient::where('fiscal_year_id', currentFiscalYear()->id)->where('address_id', municipalityId())->whereHas('disease.application_types', function ($query) {
-            $query->where('application_types.id', 3);
-        });
-
-        $datas = [];
-        $diseases = Disease::latest()->whereHas('application_types', function ($query) {
-            $query->where('application_types.id', 3);
-        })->get();
-
-        if (request('date_from')) {
-            $dateFrom = request('date_from')[0];
-        }
-        if (request('date_to')) {
-            $dateTo = request('date_to')[0];
-        }
-        if ($request->disease_id) {
-            $patients = $patients->where('disease_id', $request->disease_id);
-        }
-
-        if (request('date_from')) {
-            $patients = $patients->where('registered_date', '>=', $dateFrom);
-        }
-        if (request('date_to')) {
-            $patients = $patients->where('registered_date', '<=', $dateTo);
-        }
-        if (request('ward_number')) {
-            $patients = $patients->where('ward_number', request('ward_number'));
-        }
-        if (request('gender')) {
-            // $patients = $patients->where('gender', request('gender'));
-            $patients = $patients->whereRaw('LOWER(gender) = ?', [strtolower(request('gender'))]);
-        }
-        $patients = $patients->get();
-        foreach ($diseases as $disease) {
-            $total = $patients->where('disease_id', $disease->id)->count();
-
-            $male = $patients->filter(function ($patient) use ($disease) {
-                return $patient->disease_id == $disease->id && strtolower($patient->gender) == 'male';
-            })->count();
-
-            $female = $patients->filter(function ($patient) use ($disease) {
-                return $patient->disease_id == $disease->id && strtolower($patient->gender) == 'female';
-            })->count();
-
-            $other = $patients->filter(function ($patient) use ($disease) {
-                return $patient->disease_id == $disease->id && strtolower($patient->gender) == 'other';
-            })->count();
-
-            // =========================
-            $totalRegistered = $patients->where('disease_id', $disease->id)->whereNotNull('registered_date')->count();
-
-            $maleRegistered = $patients->filter(function ($patient) use ($disease) {
-                return $patient->disease_id == $disease->id && strtolower($patient->gender) == 'male';
-            })->whereNotNull('registered_date')->count();
-
-            $femaleRegistered = $patients->filter(function ($patient) use ($disease) {
-                return $patient->disease_id == $disease->id && strtolower($patient->gender) == 'female';
-            })->whereNotNull('registered_date')->count();
-
-            $otherRegistered = $patients->filter(function ($patient) use ($disease) {
-                return $patient->disease_id == $disease->id && strtolower($patient->gender) == 'other';
-            })->whereNotNull('registered_date')->count();
-
-            if ($total > 0) {
-
-                $datas[] = [
-                    'disease' => $disease->name,
-                    'total' => $total,
-                    'male' => $male,
-                    'female' => $female,
-                    'other' => $other,
-
-                    'totalRegistered' => $totalRegistered,
-                    'maleRegistered' => $maleRegistered,
-                    'femaleRegistered' => $femaleRegistered,
-                    'otherRegistered' => $otherRegistered
-                ];
-            }
-        }
-        $datasCollection = collect($datas)->sortByDesc('total');
-        $patientLists = $datasCollection->values()->all();
-        if ($request->excel) {
-            return Excel::download(new BipannaDiseseWiseExport($patientLists), 'social development ministry report.xlsx');
-        }
-        return view('organization.report.socialDevelopment.diseaseReport', compact('patientLists'));
-    }
-
-    public function municipalityHealthRelifFund(Request $request)
-    {
-        $patients =  Patient::where('fiscal_year_id', currentFiscalYear()->id)->where('address_id', municipalityId())->whereHas('disease.application_types', function ($query) {
-            $query->where('application_types.id', 4);
-        });
-
-        $datas = [];
-        $diseases = Disease::latest()->whereHas('application_types', function ($query) {
-            $query->where('application_types.id', 4);
-        })->get();
-
-        if (request('date_from')) {
-            $dateFrom = request('date_from')[0];
-        }
-        if (request('date_to')) {
-            $dateTo = request('date_to')[0];
-        }
-        if ($request->disease_id) {
-            $patients = $patients->where('disease_id', $request->disease_id);
-        }
-
-        if (request('date_from')) {
-            $patients = $patients->where('registered_date', '>=', $dateFrom);
-        }
-        if (request('date_to')) {
-            $patients = $patients->where('registered_date', '<=', $dateTo);
-        }
-        if (request('ward_number')) {
-            $patients = $patients->where('ward_number', request('ward_number'));
-        }
-        if (request('gender')) {
-            // $patients = $patients->where('gender', request('gender'));
-            $patients = $patients->whereRaw('LOWER(gender) = ?', [strtolower(request('gender'))]);
-        }
-        $patients = $patients->get();
-        foreach ($diseases as $disease) {
-            $total = $patients->where('disease_id', $disease->id)->count();
-
-            $male = $patients->filter(function ($patient) use ($disease) {
-                return $patient->disease_id == $disease->id && strtolower($patient->gender) == 'male';
-            })->count();
-
-            $female = $patients->filter(function ($patient) use ($disease) {
-                return $patient->disease_id == $disease->id && strtolower($patient->gender) == 'female';
-            })->count();
-
-            $other = $patients->filter(function ($patient) use ($disease) {
-                return $patient->disease_id == $disease->id && strtolower($patient->gender) == 'other';
-            })->count();
-
-            // =========================
-            $totalRegistered = $patients->where('disease_id', $disease->id)->whereNotNull('registered_date')->count();
-
-            $maleRegistered = $patients->filter(function ($patient) use ($disease) {
-                return $patient->disease_id == $disease->id && strtolower($patient->gender) == 'male';
-            })->whereNotNull('registered_date')->count();
-
-            $femaleRegistered = $patients->filter(function ($patient) use ($disease) {
-                return $patient->disease_id == $disease->id && strtolower($patient->gender) == 'female';
-            })->whereNotNull('registered_date')->count();
-
-            $otherRegistered = $patients->filter(function ($patient) use ($disease) {
-                return $patient->disease_id == $disease->id && strtolower($patient->gender) == 'other';
-            })->whereNotNull('registered_date')->count();
-
-            if ($total > 0) {
-
-                $datas[] = [
-                    'disease' => $disease->name,
-                    'total' => $total,
-                    'male' => $male,
-                    'female' => $female,
-                    'other' => $other,
-
-                    'totalRegistered' => $totalRegistered,
-                    'maleRegistered' => $maleRegistered,
-                    'femaleRegistered' => $femaleRegistered,
-                    'otherRegistered' => $otherRegistered
-                ];
-            }
-        }
-        $datasCollection = collect($datas)->sortByDesc('total');
-        $patientLists = $datasCollection->values()->all();
-        if ($request->excel) {
-            return Excel::download(new BipannaDiseseWiseExport($patientLists), 'पालिकाको स्वास्थ्य राहत कोष.xlsx');
-        }
-        return view('organization.report.municipality.diseaseReport', compact('patientLists'));
     }
 }

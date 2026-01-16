@@ -12,18 +12,15 @@
         @endisset
         {{ settings()->get('app_name', $default = 'विपद दर्ता प्रणाली') }}
 
-        {{-- {{ settings()->get("app_name", $default = "बिरामी दर्ता प्रणाली") }} --}}
-        {{-- {{ config('app.name') }} --}}
+
     </title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <!-- Select2 CSS -->
+
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 
-    <!-- jQuery (required by Select2) -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-    <!-- Select2 JS -->
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
     @include('layouts.partials.styles')
@@ -32,6 +29,8 @@
     @stack('styles')
 
     <script src="{{ asset('OneSignalSDKWorker.js') }}"></script>
+
+
 </head>
 
 <body>
@@ -113,6 +112,8 @@
         window.print();
     })
 </script>
+<script src="https://nepalidatepicker.sajanmaharjan.com.np/v5/nepali.datepicker/js/nepali.datepicker.v5.0.6.min.js"
+    type="text/javascript"></script>
 
 @stack('myScript')
 

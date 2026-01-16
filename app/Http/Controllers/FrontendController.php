@@ -82,15 +82,8 @@ class FrontendController extends Controller
     public function suchiPrint($patient)
     {
         $patient = Patient::with(['address', 'district'])->find($patient);
-        $application_type_id = $patient->disease->application_types[0]->id;
-        // $permissions = [
-        //     '1' => 'dirgha.tokenletter',
-        //     '2' => 'bipanna.TokenLetter',
-        //     '3' => 'samajik.TokenLetter',
-        //     '4' => 'nagarpalika.TokenLetter',
-        // ];
-        // $diseaseTypeId= checkPermission($permissions,$application_type_id);
-
+        // $application_type_id = $patient->disease->application_types[0]->id;
+       
         if(Auth::user()){
             $municipalityId=municipalityId();
         }else{

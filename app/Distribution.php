@@ -5,23 +5,28 @@ namespace App;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\DistributionDetail;
 
 class Distribution extends Model
 {
     use HasFactory, SoftDeletes;
     protected $fillable = [
         'patient_id',
+        'organization_name',
         'distributed_date',
-        'resource_id',
-        'quantity',
         'type',
         'remark',
+        'fiscal_year_date',
     ];
 
     protected $casts = [
         'distributed_date' => 'date',
         'type' => 'boolean',
     ];
+    public function details()
+    {
+        return $this->hasMany(DistributionDetail::class);
+    }
 
     public function resource()
     {

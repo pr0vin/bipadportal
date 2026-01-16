@@ -35,38 +35,38 @@ class OrganizationReport extends Component
     public $applicationTypeId;
 
     public $rate = 5000;
-   
+
     public function mount($message)
     {
         $rate = ApplicationType::where('id', 1)->first();
         $this->rate = $rate->amount;
         $this->message = $message;
 
-     $this->applicationTypeCounts = PatientApplicationDisease::with([
-        'disease',
-        'patientApplication.application_type',
-        'patientApplication.patient'
-    ])->whereHas('patientApplication.patient', function($query) {
-        $query->whereNotNull('verified_date');
-    })
-    ->get()
-    ->groupBy(fn($item) => $item->patientApplication->application_type->name ?? 'Unknown')
-    ->map(function($diseases, $typeName) {
-        $totalLoss = $diseases->sum(fn($d) => $d->patientApplication->patient->estimated_amount ?? 0);
+        $this->applicationTypeCounts = PatientApplicationDisease::with([
+            'disease',
+            'patientApplication.application_type',
+            'patientApplication.patient'
+        ])->whereHas('patientApplication.patient', function ($query) {
+            $query->whereNotNull('verified_date');
+        })
+            ->get()
+            ->groupBy(fn($item) => $item->patientApplication->application_type->name ?? 'Unknown')
+            ->map(function ($diseases, $typeName) {
+                $totalLoss = $diseases->sum(fn($d) => $d->patientApplication->patient->estimated_amount ?? 0);
 
-        return (object)[
-            'name' => $typeName,
-            'diseases' => $diseases->map(function($d) {
                 return (object)[
-                    'disease_id' => $d->disease_id,
-                    'disease_name' => $d->disease->name ?? 'Unknown',
-                    'patient_count' => 1
+                    'name' => $typeName,
+                    'diseases' => $diseases->map(function ($d) {
+                        return (object)[
+                            'disease_id' => $d->disease_id,
+                            'disease_name' => $d->disease->name ?? 'Unknown',
+                            'patient_count' => 1
+                        ];
+                    }),
+                    'estimated_loss' => $totalLoss
                 ];
-            }),
-            'estimated_loss' => $totalLoss
-        ];
-    })
-    ->values();
+            })
+            ->values();
 
 
 
@@ -84,8 +84,6 @@ class OrganizationReport extends Component
             $currentQuarter = currentquarter();
         }
 
-        // dd($currentQuarter);
-
         if ($currentQuarter == 1) {
             $period = 4;
         } elseif ($currentQuarter == 2) {
@@ -95,8 +93,7 @@ class OrganizationReport extends Component
         } else {
             $period = 1;
         }
-        // $dateFrom = timePeriodFilter($period)['to'];
-        // dd($dateFrom);
+     
         $this->status = 'registered';
         $municipality_id = municipalityId();
         if (request('diseaseType') != 1) {
@@ -143,26 +140,10 @@ class OrganizationReport extends Component
             if (request('fiscal_year')) {
 
                 $organizations = $organizations->where('fiscal_year_id', request('fiscal_year'));
-                // dd($organizations->get());
             } else {
                 $organizations = $organizations->where('fiscal_year_id', currentFiscalYear()->id);
             }
-            // if (request('date_from')) {
-            //     $organizations = $organizations->whereHas('patient', function ($query) use ($dateFrom) {
-            //         $query->where('registered_date', '>', $dateFrom);
-            //     });
-            // } else {
-            //     $dateFrom = timePeriodFilter($period)['from'];
-
-            //     $organizations = $organizations->where('current_renew_quarter', $currentQuarter);
-            // }
-            // if (request('date_to')) {
-            //     $organizations = $organizations->where('registered_date', '<=', $dateTo);
-            // } else {
-            //     $dateTo = timePeriodFilter($period)['to'];
-            //     $organizations = $organizations->where('next_renew_date', '<', $dateTo);
-
-            // }
+           
             if (request('status') == "closed") {
                 $organizations = $organizations->whereHas('patient', function ($query) {
                     $query->whereNotNull('closed_date');
@@ -212,17 +193,16 @@ class OrganizationReport extends Component
                     });
                 });
             }
-            // dd($dateTo);
+
             $organizations = $organizations->whereHas('patient', function ($query2) use ($municipality_id) {
                 $query2->where('address_id', $municipality_id);
             });
-            // $organizations = $organizations->latest()->paginate(15);
+
             $organizations = $organizations->latest()->get();
             $filteredOrganizations = $organizations->filter(function ($organization) use ($currentQuarter) {
                 return $organization->current_renew_quarter === $currentQuarter;
             });
 
-            // dd($filteredOrganizations);
             $this->organizations = $filteredOrganizations;
         }
     }
@@ -235,35 +215,14 @@ class OrganizationReport extends Component
                 $query->where('registered_date', '<', $this->dateFrom[0]);
             })->latest()->paginate(15);
         }
-        // $organizations = Organization::latest();
-        // switch ($this->status) {
-        //     case 'registered':
-        //         $organizations = $organizations->registered(true)->whereBetween('registered_date', [$this->dateFrom, $this->dateTo]);
-        //         break;
-        //     case 'closed':
-        //         $organizations = $organizations->closed(true)->whereBetween('closed_date', [$this->dateFrom, $this->dateTo]);
-        //         break;
-        //     case 'renewed':
-        //         $organizations = $organizations->renewed(true)->whereBetween('renewed_date', [$this->dateFrom, $this->dateTo]);
-        //         break;
-        //     case 'not_renewed':
-        //         $organizations = $organizations->renewed(false)->whereNotBetween('renewed_date', [$this->dateFrom, $this->dateTo]);
-        //         break;
-        //     default:
-        //         break;
-        // };
-        // $this->organizations = $organizations->paginate(15);
+       
     }
-
-
 
     public function render()
     {
         return view('livewire.organization-report')->with([
             'organizations' => $this->organizations,
             'applicationTypeCounts' => $this->applicationTypeCounts,
-
-            // 'period' => timePeriod(explode('/', ad_to_bs(today()->format('Y-m-d')))[1])['period']
         ]);
     }
 }

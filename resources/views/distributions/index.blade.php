@@ -5,7 +5,21 @@
 
         @include('alerts.all')
 
-        <div class="mb-3 text-end">
+        <div class="d-flex justify-content-between mb-3 mt-4">
+            <form method="GET">
+                <select name="type" class="form-select" onchange="this.form.submit()">
+                    <option value="0" {{ request('type', '0') == '0' ? 'selected' : '' }}>
+                        वितरण
+                    </option>
+                    <option value="1" {{ request('type') == '1' ? 'selected' : '' }}>
+                        प्राप्त
+                    </option>
+                    <option value="" {{ request('type') === null ? 'selected' : '' }}>
+                        सबै
+                    </option>
+                </select>
+            </form>
+
             <a href="{{ route('distributions.create') }}" class="btn btn-primary">
                 <i class="fas fa-plus"></i> नयाँ वितरण
             </a>
@@ -21,48 +35,62 @@
                             <th>प्रकार</th>
                             <th>परिमाण</th>
                             <th>कैफियत</th>
-                            <th>कार्य</th>
+                            <th class="text-center">कार्य</th>
                         </tr>
                     </thead>
+
                     <tbody>
-                        @forelse($distributions as $key => $d)
-                            <tr>
-                                <td class="kalimati-font text-center">{{ $distributions->firstItem() + $key }}</td>
+                        @forelse ($distributions as $key => $d)
+                            @foreach ($d->details as $detail)
+                                <tr>
+                                    <td class="text-center kalimati-font">
+                                        {{ $distributions->firstItem() + $key }}
+                                    </td>
 
-                                <td>{{ $d->resource->name }}</td>
-                                <td>
-                                    <span class="badge p-2 {{ $d->type ? 'bg-success' : 'bg-danger' }}">
-                                        {{ $d->type ? 'प्राप्त' : 'वितरण' }}
-                                    </span>
-                                </td>
-                                <td class="kalimati-font">{{ $d->quantity }}</td>
-                                <td>
-                                    @if ($d->type)
-                                        {{ $d->remark ?? '—' }}
-                                    @else
-                                        {{ $d->patient->name ?? '—' }}
-                                        {{ !empty($d->remark) ? ' / ' . $d->remark : '' }}
-                                    @endif
-                                </td>
+                                    <td>{{ $detail->resource->name ?? '—' }}</td>
 
-                                <td>
-                                    <a href="{{ route('distributions.edit', $d) }}" class="btn btn-warning btn-sm">
-                                        <i class="fas fa-edit"></i>
-                                    </a>
+                                    <td>
+                                        <span class="badge p-1 {{ $d->type ? 'bg-success' : 'bg-danger' }}">
+                                            {{ $d->type ? 'प्राप्त' : 'वितरण' }}
+                                        </span>
+                                    </td>
 
-                                    <form action="{{ route('distributions.destroy', $d) }}" method="POST"
-                                        class="d-inline">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button class="btn btn-danger btn-sm" onclick="return confirm('Delete?')">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </form>
-                                </td>
-                            </tr>
+                                    <td class="kalimati-font">
+                                        {{ $detail->quantity }}
+                                        {{ $detail->resource->unit->name ?? '' }}
+                                    </td>
+
+                                    <td>
+                                        @if ($d->type == 0)
+                                            {{ $d->patient->name ?? '—' }}
+                                            {{ $d->remark ? ' / ' . $d->remark : '' }}
+                                        @else
+                                            {{ $d->organization_name ?? '—' }}
+                                            {{ $d->remark ? ' / ' . $d->remark : '' }}
+                                        @endif
+                                    </td>
+
+                                    <td class="text-center">
+                                        <a href="{{ route('distributions.edit', $d) }}" class="btn btn-warning btn-sm">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+
+                                        <form action="{{ route('distributions.destroy', $d) }}" method="POST"
+                                            class="d-inline">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button class="btn btn-danger btn-sm" onclick="return confirm('Delete?')">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            @endforeach
                         @empty
                             <tr>
-                                <td colspan="6" class="text-center">डाटा उपलब्ध छैन</td>
+                                <td colspan="6" class="text-center">
+                                    डाटा उपलब्ध छैन
+                                </td>
                             </tr>
                         @endforelse
                     </tbody>
@@ -75,41 +103,3 @@
         </div>
     </div>
 @endsection
-
-<style>
-    /* Body rows only */
-    .table tbody td {
-        padding-top: 6px !important;
-        padding-bottom: 6px !important;
-        padding-left: 8px;
-        padding-right: 8px;
-        vertical-align: middle;
-    }
-
-    /* Remove extra space under last row */
-    .table tbody tr:last-child td {
-        border-bottom: 0;
-    }
-
-    /* Table itself should not add margin */
-    .table {
-        margin-bottom: 0 !important;
-    }
-
-    /* Remove padding inside table wrapper */
-    .table-responsive {
-        padding-bottom: 0 !important;
-        margin-bottom: 0 !important;
-    }
-
-    /* Card should not add extra bottom gap */
-    .card {
-        padding-bottom: 0;
-    }
-
-    /* Pagination spacing controlled */
-    .card .d-flex.justify-content-end {
-        padding-top: 6px;
-        padding-bottom: 6px;
-    }
-</style>

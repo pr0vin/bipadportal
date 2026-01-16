@@ -5,7 +5,7 @@
         font-weight: bold;
     }
 
-    .nav-link1.active {
+    a .nav-link1.active {
         background-color: #1C4267 !important;
     }
 
@@ -38,6 +38,10 @@
     .myFont {
         font-family: 'kalimati-font' !important;
     }
+
+    .nepali-date-picker {
+    z-index: 10000 !important;
+}
 </style>
 @php
     $isAllDocument = false;
@@ -76,26 +80,26 @@
                 सम्पादन</a>
 
             @if (!$patient->isRecommended)
-                <button type="button" class="btn my-btn" id="registerModal" data-toggle="modal"
-                    data-target="#exampleModalCenter">
+                <button type="button" class="btn my-btn" id="registerModal" data-bs-toggle="modal"
+                    data-bs-target="#exampleModalCenter">
                     <i class="fas fa-plus pr-3"></i>
                     दर्ता गर्नुहोस
                 </button>
             @endif
 
             @if ($patient->registered_date)
-                <button type="button" class="btn my-btn" data-toggle="modal" data-target="#reApply">
+                <button type="button" class="btn my-btn" data-bs-toggle="modal" data-target="#reApply">
                     <i class="fas fa-retweet pr-3"></i> पुनः आबेदन गर्नुहोस
                 </button>
             @endif
 
-            @if ($patient->registered_date)
+            {{-- @if ($patient->registered_date)
                 <button type="button" class="btn bg-info text-white" data-toggle="modal"
                     data-target="#paymentModal-{{ $patient->id }}">
                     <i class="fas fa-plus pr-3"></i>
                     भुक्तानी विवरण
                 </button>
-            @endif
+            @endif --}}
         </div>
     </div>
     <div class="tab-pane fade px-3" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
@@ -105,11 +109,11 @@
                 <i class="fas fa-print pr-3"></i>Print token letter
             </a>
 
-            <a href="{{ route('schedule.one', $patient) }}" class="btn my-btn" type="button" id="">
-                <i class="fas fa-file pr-3"></i>अनुसूची १
-            </a>
             <a href="{{ route('schedule.two', $patient) }}" class="btn my-btn" type="button" id="">
-                <i class="fas fa-file pr-3"></i>अनुसूची २
+                <i class="fas fa-file pr-3"></i>निवेदन
+            </a>
+            <a href="{{ route('schedule.one', $patient) }}" class="btn my-btn" type="button" id="">
+                <i class="fas fa-file pr-3"></i>अन्य निवेदन
             </a>
         </div>
     </div>
@@ -117,17 +121,17 @@
 
 
 <div class="d-flex">
-    <!-- Modal -->
+
     <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog"
         aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLongTitle">
-                        {{ $patient->disease->id == 1 ? 'दर्ता ' : 'सिफारिस ' }} गर्नुहोस /
+                        दर्ता गर्नुहोस /
                         कागजात थप्नुहोस
                     </h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
@@ -138,20 +142,23 @@
                         <input type="hidden" name="patient_id" value="{{ $patient->id }}">
                         <div class="row">
                             @can('dirgha.register')
-                                <div class="col-12">
+                                <div class="col-6">
                                     <div class="form-group mx-0 px-0 col-12">
                                         <label for="">क)
-
                                             दर्ता मिति</label>
                                         <input type="text" name="date_from" id="input-date-from" data-single="true"
                                             class="form-control nepali-date rounded-0 kalimati-font"
-                                            value="{{ $patient->date_from ? ad_to_bs($patient->date_from) : '' }}">
+                                            value="{{ $patient->date_from
+                                                ? ad_to_bs($patient->date_from)
+                                                : englishToNepaliLetters(ad_to_bs(now()->format('Y-m-d'))) }}">
                                         @error('registered_date')
                                             <label class="text-danger">{{ $message }}</label>
                                         @enderror
                                     </div>
                                 </div>
-                                <div class="col-12">
+
+
+                                <div class="col-6">
                                     <div class="form-group mx-0 px-0 col-12">
                                         <label for="">ख)
 
@@ -243,7 +250,8 @@
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">रद्द गर्नुहोस</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">रद्द
+                                गर्नुहोस</button>
                             @if ($patient->hospital_document && $patient->disease_proved_document && $patient->citizenship_card)
                                 @php
                                     $isAllDocument = true;
@@ -253,45 +261,7 @@
                                 class="btn btn-primary btnRegister" id="btnRegister" style="width: 200px">
                                 {{ 'दर्ता' }}
                                 गर्नुहोस</button>
-                            <button type="button" style="width: 100px" onclick="docUpload({{ $patient->id }})"
-                                class="btn btn-primary">ड्राफ्ट</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
 
-        <!-- Modal -->
-        <div class="modal fade" id="exampleModalCenter1" tabindex="-1" role="dialog"
-            aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLongTitle">दर्ता गर्नुहोस</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <form action="{{ route('patient.registration', $patient) }}" method="POST">
-                        @csrf
-                        @method('put')
-                        <div class="modal-body">
-                            <div class="form-group">
-                                <label for="">दर्ता मिति</label>
-                                <input type="text" name="registered_date" id="nepali-datepicker"
-                                    class="form-control  rounded-0" placeholder="yyyy-mm-dd" readonly
-                                    value="{{ ad_to_bs(now()->format('Y-m-d')) }}">
-                            </div>
-
-                            <div class="form-group">
-                                <label for="">दर्ता नम्बर</label>
-                                <input type="number" name="registration_number" class="form-control" required>
-                            </div>
-
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary">Save changes</button>
                         </div>
                     </form>
                 </div>
@@ -414,7 +384,8 @@
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">रद्द गर्नुहोस्</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">रद्द
+                                गर्नुहोस्</button>
                             <button type="submit" class="btn btn-primary" style="width: 150px">सेभ गर्नुहोस्</button>
                         </div>
                     </form>
@@ -429,11 +400,12 @@
     </script>
     <script src="https://cdn-script.com/ajax/libs/jquery/3.7.1/jquery.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.7.3/axios.min.js"></script>
+
     <script>
         $("#select_hospital_name").on('change', () => {
             let id = $("#select_hospital_name").val();
             let urlTemplate =
-                "{{ route('hospital.getDisease', ':id') }}"; // Ensure this is properly outputted by your template engine
+                "{{ route('hospital.getDisease', ':id') }}";
             let url = urlTemplate.replace(':id', id);
             axios.get(url).then((response) => {
                 $("#txtDeases").val(response.data.diseases)
@@ -468,7 +440,7 @@
 
             function fetchPatientData() {
                 let patient = @json($patient);
-                // if (patient.disease.application_types[0].id == 1) {
+
                 if (patient.bank_account_number) {
                     data['bank_account_number'] = patient.bank_account_number;
                 }
@@ -493,7 +465,7 @@
                 if (patient.decision_document) {
                     data['decision_document'] = patient.decision_document;
                 }
-                // }
+
             }
             fetchPatientData();
 
@@ -666,3 +638,5 @@
             })
         </script>
     @endpush
+
+  

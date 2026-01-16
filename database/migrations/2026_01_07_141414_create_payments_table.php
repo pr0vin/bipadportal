@@ -20,7 +20,8 @@ return new class extends Migration
             $table->string('title')->nullable();
             $table->decimal('total', 10, 2)->default(0);
             $table->text('remark')->nullable();
-             $table->date('fiscal_year_date')->nullable();
+             $table->string('fiscal_year_date')->nullable();
+             $table->string('status')->nullable();
             $table->timestamps();
         });
     }

@@ -15,7 +15,7 @@
             </div>
         </div>
     </a>
-    
+
     <ul class="list-unstyled components font-nep">
         <li id="sidebarCollapse " class="{{ setActive('home') }} mb-1">
             <a class="nav-link text-dark" href="{{ route('home') }}">
@@ -69,12 +69,12 @@
                                 d="M10 3v4a1 1 0 0 1-1 1H5m4 6 2 2 4-4m4-8v16a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V7.914a1 1 0 0 1 .293-.707l3.914-3.914A1 1 0 0 1 9.914 3H18a1 1 0 0 1 1 1Z" />
                         </svg>
                     </i>
-                </span>दर्ता/सिफारिस भएका
+                </span>दर्ता भएका
             </a>
         </li>
 
 
-        <li id="sidebarCollapse " class="{{ setActive('distributions') }} mb-1">
+        <li id="sidebarCollapse " class="{{ setActive('decision.index') }} mb-1">
             <a class="nav-link text-dark" href="{{ route('decision.index') }}">
                 <span class=" pr-3">
                     <i><svg class="w-5 h-5 text-gray-800 dark:text-white" aria-hidden="true"
@@ -84,20 +84,38 @@
                                 d="M11 5H6a2 2 0 0 0-2 2v11a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2v-5m-1.414-9.414a2 2 0 1 1 2.828 2.828L11.828 15H9v-2.828l8.586-8.586Z" />
                         </svg>
                     </i>
-                </span> निर्णय भएका
+                </span> निर्णय
+            </a>
+        </li>
+
+        <li id="sidebarCollapse " class="{{ setActive('payments.index') }} mb-1">
+            <a class="nav-link text-dark" href="{{ route('payments.index') }}">
+                <span class=" pr-3">
+                    <i> <svg class="w-5 h-5 text-gray-800 dark:text-white" aria-hidden="true"
+                            xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none"
+                            viewBox="0 0 24 24">
+                            <!-- Money/Payment icon -->
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2Z" />
+                        </svg>
+                    </i>
+                </span> भुक्तानी
             </a>
         </li>
 
 
-        <li id="sidebarCollapse " class="{{ setActive('distributions') }} mb-1">
+
+        <li id="sidebarCollapse " class="{{ setActive('distributions.index') }} mb-1">
             <a class="nav-link text-dark" href="{{ route('distributions.index') }}">
                 <span class=" pr-3">
-                    <i><svg class="w-5 h-5 text-gray-800 dark:text-white" aria-hidden="true"
+                    <i>
+                        <svg class="w-5 h-5 text-gray-800 dark:text-white" aria-hidden="true"
                             xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none"
                             viewBox="0 0 24 24">
                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
                                 stroke-width="2"
-                                d="M11 5H6a2 2 0 0 0-2 2v11a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2v-5m-1.414-9.414a2 2 0 1 1 2.828 2.828L11.828 15H9v-2.828l8.586-8.586Z" />
+                                d="M12 6v13m0-13V4a1 1 0 0 1 1-1h3.9a1 1 0 0 1 .7.3l2.6 2.6a1 1 0 0 1 .3.7V10a1 1 0 0 1-1 1H12m0-5H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-3" />
                         </svg>
                     </i>
                 </span>राहत सामाग्री वितरण

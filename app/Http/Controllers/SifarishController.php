@@ -14,6 +14,7 @@ class SifarishController extends Controller
 {
     public function store(Request $request)
     {
+
         DB::beginTransaction();
 
         try {
@@ -48,15 +49,15 @@ class SifarishController extends Controller
             }
 
             // Calculate total amount
-            $totalAmount = collect($validated['paid_amount'])
-                ->filter(fn($v) => $v !== null && $v !== '')
-                ->sum();
+            $totalAmount = collect($validated['paid_amount'])->filter(fn($v) => $v !== null && $v !== '')->sum();
 
+            $id = currentFiscalYear()?->id;
             // Create Decision FIRST
             $decision = Decision::create([
                 'title'         => $committee->name . ' बाट सिफारिस निर्णय',
                 'decision_date' => ad_to_bs(Carbon::today()->toDateString()),
                 'total'         => $totalAmount,
+                'fiscal_year_date' => $id,
             ]);
 
             $messages = [];
@@ -73,7 +74,7 @@ class SifarishController extends Controller
                 $patient = Patient::find($patientId);
                 if (!$patient) continue;
 
-                if ($patient->status === 'recommended') {
+                if ($patient->status === 'decision') {
                     $messages[] =
                         "सिफारिस पहिले नै गरिएको छ ({$patient->name})";
                     continue;
@@ -86,7 +87,7 @@ class SifarishController extends Controller
                     'sifarish_date' => ad_to_bs(Carbon::today()->toDateString()),
                 ]);
 
-                $patient->update(['status' => 'recommended']);
+                $patient->update(['status' => 'decision']);
 
                 $createdCount++;
             }
@@ -124,11 +125,14 @@ class SifarishController extends Controller
 
     public function index()
     {
+        $municipality_id = municipalityId();
+        if (!$municipality_id) {
+            return redirect()->back()->with('error', 'कृपया पालिका छान्नुहोस्');
+        }
+
         $decisions = Decision::with([
             'sifarish.patient'
-        ])
-            ->latest()
-            ->paginate(10);
+        ])->wherenull('status')->latest()->paginate(10);
         return view('decision.dindex', compact('decisions'));
     }
 

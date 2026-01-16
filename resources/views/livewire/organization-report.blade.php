@@ -1,14 +1,6 @@
-{{-- @if (request('diseaseType') == '2')
-@include('partials.bipanna-tab')
-@endif --}}
 <div class="card  z-depth-0 printableCard">
     <div class="card-body">
-        {{-- <div class="blue lighten-5 p-3 notPrintable">
-            @php
-            $diseases = App\ApplicationType::find(request('diseaseType') ?? 1)->diseases;
-            @endphp
-            <x-organization-filter-bar :diseases="$diseases"></x-organization-filter-bar>
-        </div> --}}
+      
         <div class="d-flex justify-content-end mt-2 notPrintable">
             <div class="d-flex justify-content-end">
                 <button type="button" class="bg-transparent border-0 mr-2" id="report_print"><i class="fa fa-print"

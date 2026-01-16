@@ -13,6 +13,8 @@ class Decision extends Model
     protected $fillable = [
         'title',
         'decision_date',
+        'decision_file',
+        'fiscal_year_date',
         'total'
     ];
 

@@ -45,6 +45,9 @@
                                         value="{{ old('name', $disease->name) }}">
                                 </div>
 
+                                
+
+
                                 <div class="form-group">
                                     <button type="submit"
                                         class="btn btn-info col-12 z-depth-0">{{ $disease->id ? 'अपडेट गर्नुहोस्' : 'सेभ गर्नुहोस' }}</button>
@@ -65,7 +68,9 @@
                                 <option value="">सबै प्रकार</option>
                                 @if (request('application_type_id'))
                                     @foreach (App\ApplicationType::latest()->get() as $item)
-                                        <option value="{{ $item->id }}" {{request('application_type_id') == $item->id ? 'selected' : ''}}>{{ $item->name }}</option>
+                                        <option value="{{ $item->id }}"
+                                            {{ request('application_type_id') == $item->id ? 'selected' : '' }}>
+                                            {{ $item->name }}</option>
                                     @endforeach
                                 @else
                                     @foreach (App\ApplicationType::latest()->get() as $item)

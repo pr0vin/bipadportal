@@ -41,7 +41,6 @@ if (!function_exists('invalid_class')) {
     }
 }
 
-
 if (!function_exists('invalid_feedback')) {
     /**
      * Check if the route is active or not
@@ -59,7 +58,6 @@ if (!function_exists('invalid_feedback')) {
     }
 }
 
-
 function runningFiscalYear($key = null)
 {
     $runningFiscalYear = app(FiscalYearService::class)->getRunning();
@@ -68,6 +66,18 @@ function runningFiscalYear($key = null)
         ? $runningFiscalYear->$key
         : $runningFiscalYear;
 }
+
+function rfYear($key = null)
+{
+    $runningFiscalYear = app(FiscalYearService::class)->getRunning();
+
+    if (!$runningFiscalYear || !$key) {
+        return $runningFiscalYear;
+    }
+
+    return data_get($runningFiscalYear, $key);
+}
+
 
 
 if (!function_exists('slashDateFormat')) {

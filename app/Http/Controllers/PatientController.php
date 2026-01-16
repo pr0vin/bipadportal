@@ -370,17 +370,67 @@ class PatientController extends Controller
             'isRecommended' => true,
         ];
 
-      
+
         if ($request->application_type_id != 1) {
             $data['yearly_payment'] = $request->yearly_payment;
         }
         $patient->update($data);
-        
+
         $renewDate = nextRenewDate($request->date_from);
         $date1 = Carbon::parse($request->date_from)->format('m');
         $date2 = Carbon::parse($renewDate)->format('m');
+
         return redirect()->route('patient.show', $patient)->with('success', 'पिडित विवरण सफलतापुर्वक दर्ता भयो');
     }
+
+
+
+
+    public function show(Patient $patient)
+    {
+        $fiscalYear = currentFiscalYear();
+
+        if (!$fiscalYear) {
+            return redirect()->back()->with('error', 'कृपया आर्थिक वर्ष छान्नुहोस्');
+        }
+
+        $applicationTypeId = $patient->disease->application_types->first()->id;
+
+        // Get registration numbers
+        $latestRegistrationNumber = Patient::whereNotNull('registration_number')
+            ->where('fiscal_year_id', $fiscalYear->id)
+            ->where('municipality_id', municipalityId())
+            ->where('application_type_id', $applicationTypeId)
+            ->max('registration_number');
+
+        $registrationNumber = $latestRegistrationNumber
+            ? $latestRegistrationNumber + 1
+            : 1;
+
+        // Get reg numbers
+        $latestRegNumber = Patient::whereNotNull('reg_number')
+            ->where('fiscal_year_id', $fiscalYear->id)
+            ->where('municipality_id', municipalityId())
+            ->where('application_type_id', $applicationTypeId)
+            ->max('reg_number');
+
+        $nextRegNumber = $latestRegNumber
+            ? $latestRegNumber + 1
+            : 1;
+
+        return $nextRegNumber;
+
+        // Get patient's current reg number if exists
+        $currentRegNumber = $patient->reg_number;
+
+        return view('organization.show', compact(
+            'patient',
+            'registrationNumber',
+            'nextRegNumber',
+            'currentRegNumber'
+        ));
+    }
+
 
     public function checkDocument($patient)
     {
@@ -1106,19 +1156,17 @@ class PatientController extends Controller
 
     // In PatientController.php, add this method:
 
-public function distributionForm(Request $request)
-{
-    $municipality_id = municipalityId();
-    
-    $patients = Patient::with(['disease', 'onlineApplication', 'province', 'district', 'address'])
-        ->where('address_id', $municipality_id)
-        ->whereNotNull('verified_date')
-        ->whereNull('closed_date') 
-        ->orderBy('created_at', 'desc')
-        ->get();
-    
-    return view('distributions.distribution-form', compact('patients'));
-}
+    public function distributionForm(Request $request)
+    {
+        $municipality_id = municipalityId();
 
+        $patients = Patient::with(['disease', 'onlineApplication', 'province', 'district', 'address'])
+            ->where('address_id', $municipality_id)
+            ->whereNotNull('verified_date')
+            ->whereNull('closed_date')
+            ->orderBy('created_at', 'desc')
+            ->get();
 
+        return view('distributions.distribution-form', compact('patients'));
+    }
 }

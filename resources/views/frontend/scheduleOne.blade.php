@@ -62,13 +62,7 @@
         <div class="p-4 resizable-block">
             <section>
                 <div class="my-4"></div>
-                <h4 class="font-weight-bold text-center">अनुसूची-१ </h4>
-                <h4 class="font-weight-bold text-center">(विपद् सम्बन्धित प्रमाणित ढाँचा)</h4>
-
-                <h5 class="font-weight-bold col-12 text-center">
-                    विपद् प्रभावित व्यक्तिको अवस्थासम्बन्धी प्रमाणित गर्ने ढाँचा
-                </h5>
-
+                <h2 class="font-weight-bold text-center">निवेदन</h2>
                 <div class="ml-auto text-right resizable">
                     <div>
                         मिति:

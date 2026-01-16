@@ -43,6 +43,10 @@ use App\Http\Controllers\SifarishController;
 use App\Http\Controllers\PaymentsController;
 
 Auth::routes(['register' => false]);
+// Route::get('/', function () {
+//     return view('auth.login');
+// });
+
 Route::get('/registration', 'FrontendController@index')->name('organization.new');
 Route::post('/check-organization-name', 'FrontendController@checkOrganizationName')->name('check-organization-name');
 Route::get('/home', 'HomeController@index')->name('home');
@@ -492,6 +496,10 @@ Route::post('search-patient', [SearchController::class, 'reApply'])->name('reApp
 
 Route::post('/decision/store', [SifarishController::class, 'store'])->name('sifarish.store');
 Route::get('/decision/index', [SifarishController::class, 'index'])->name('decision.index');
+Route::post('/decisions/{decision}/upload-file', [DecisionController::class, 'uploadFile'])->name('decisions.upload-file');
+
 Route::get('/distributions/form/{decision}', [SifarishController::class, 'showDistributionForm'])->name('distributions.distribution.form');
 Route::post('/distributions/save', [PaymentsController::class, 'store'])->name('distributions.save');
+Route::get('/payments/index', [PaymentsController::class, 'index'])->name('payments.index');
+
 

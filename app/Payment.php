@@ -14,15 +14,21 @@ class Payment extends Model
         'paid_date',
         'title',
         'remark',
+        'fiscal_year_date',
         'total',
     ];
 
-     protected $casts = [
+    protected $casts = [
         'paid_date' => 'date',
     ];
 
     public function decision()
     {
         return $this->belongsTo(Decision::class);
+    }
+
+    public function paymentDetails()
+    {
+        return $this->hasMany(PaymentDetail::class);
     }
 }

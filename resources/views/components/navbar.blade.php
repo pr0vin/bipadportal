@@ -8,7 +8,7 @@
         @if (Auth::user()->roles[0]->name != 'doctor')
             @role('super-admin')
                 <form action="{{ route('setOrganization') }}" method="GET">
-                    <select name="address_id" class="border-0 devanagiri-font-size font-14"
+                    <select name="address_id" class="border-0 form-control devanagiri-font-size font-14 "
                         style="background-color: transparent" onchange="this.form.submit()">
                         <option value="">पालिका छान्नुहोस्</option>
                         @foreach (\App\Organization::latest()->get() as $organization)
@@ -24,19 +24,18 @@
             @endrole
         @else
             <a class="navbar-brand  devanagiri-font-size font-nep text-danger"
-                href="{{ route('home') }}">{{ settings()->get('app_name', $default = 'बिरामी दर्ता प्रणाली') }}</a>
+                href="{{ route('home') }}">{{ settings()->get('app_name', $default = 'विपद दर्ता प्रणाली') }}</a>
         @endif
 
-        <div class="d-flex justify-content-end">
+        <div class="d-flex justify-content-end ml-4">
             <div class="letsgo">
                 <div class="select">
                     <div class="d-flex">
-                        <input type="text" class="search-input" placeholder="बिरामी खोजि गर्नुहोस्...">
+                        <input type="text" class="search-input" placeholder="पिडित खोजि गर्नुहोस्...">
                         <button class="search bg-transparent search-btn"><i class="fa fa-search"></i></button>
                     </div>
                     <div class="list">
                     </div>
-
                 </div>
             </div>
         </div>

@@ -10,35 +10,48 @@
             <div class="col-md-4">
                 <div class="card z-depth-0">
                     <div class="card-body">
-                        <form
-                            method="POST"
+                        <form method="POST"
                             action="{{ isset($disease) ? route('diseases.update', $disease->id) : route('diseases.store') }}"
                             class="form">
                             @csrf
-                            @if(isset($disease))
+                            @if (isset($disease))
                                 @method('PUT')
                             @endif
 
                             <div class="form-group">
                                 <label for="input-name">रोगको नाम</label>
-                                <input type="text"
-                                       id="input-name"
-                                       name="name"
-                                       class="form-control"
-                                       value="{{ old('name', $disease->name ?? '') }}">
+                                <input type="text" id="input-name" name="name" class="form-control"
+                                    value="{{ old('name', $disease->name ?? '') }}">
                                 @error('name')
                                     <small class="text-danger">{{ $message }}</small>
                                 @enderror
                             </div>
 
+                               <div>
+                                        <link href="https://nepalidatepicker.sajanmaharjan.com.np/v5/nepali.datepicker/css/nepali.datepicker.v5.0.6.min.css" rel="stylesheet" type="text/css"/>
+
+                                        <input type="text" id="nepali-datepicker" name="registered_date"
+                                          
+                                        class="form-control kalimati-font" placeholder="मिति छान्नुहोस्">
+                                         <script src="https://nepalidatepicker.sajanmaharjan.com.np/v5/nepali.datepicker/js/nepali.datepicker.v5.0.6.min.js" type="text/javascript"></script>
+                                        </script>
+                                        <script type="text/javascript">
+                                            window.onload = function() {
+                                                var mainInput = document.getElementById("nepali-datepicker");
+                                                mainInput.NepaliDatePicker();
+                                            };
+                                        </script>
+
+                                    </div>
+
+                         
                             <div class="form-group">
-                                <button type="submit"
-                                        class="btn btn-info col-12 z-depth-0">
+                                <button type="submit" class="btn btn-info col-12 z-depth-0">
                                     {{ isset($disease) ? 'अपडेट गर्नुहोस्' : 'सेभ गर्नुहोस्' }}
                                 </button>
                             </div>
 
-                            @if(isset($disease))
+                            @if (isset($disease))
                                 <a href="{{ route('diseases.index') }}" class="btn btn-secondary col-12 z-depth-0">
                                     रद्द गर्नुहोस्
                                 </a>
@@ -71,16 +84,16 @@
                                         <td class="d-flex justify-content-center">
                                             <div class="dropdown">
                                                 <button class="btn btn-option" style="box-shadow: none" type="button"
-                                                        id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
-                                                        aria-expanded="false">
+                                                    id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
+                                                    aria-expanded="false">
                                                     <label for="">...</label>
                                                 </button>
                                                 <div class="dropdown-menu" style="position: relative; left: 500px"
-                                                     aria-labelledby="dropdownMenuButton">
-                                                    <a class="dropdown-item" href="{{ route('diseases.edit', $item->id) }}">सम्पादन</a>
-                                                    <form action="{{ route('diseases.destroy', $item->id) }}"
-                                                          method="POST"
-                                                          onsubmit="return confirm('के तपाइँ यो रेकर्ड मेटाउन निश्चित हुनुहुन्छ ?')">
+                                                    aria-labelledby="dropdownMenuButton">
+                                                    <a class="dropdown-item"
+                                                        href="{{ route('diseases.edit', $item->id) }}">सम्पादन</a>
+                                                    <form action="{{ route('diseases.destroy', $item->id) }}" method="POST"
+                                                        onsubmit="return confirm('के तपाइँ यो रेकर्ड मेटाउन निश्चित हुनुहुन्छ ?')">
                                                         @csrf
                                                         @method('DELETE')
                                                         <button type="submit" class="dropdown-item">हटाउनुहोस्</button>
@@ -106,3 +119,19 @@
         </div>
     </div>
 @endsection
+
+
+@push('scripts')
+<script src="https://nepalidatepicker.sajanmaharjan.com.np/v5/nepali.datepicker/js/nepali.datepicker.v5.0.6.min.js"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const input = document.getElementById('registered_date');
+
+    if (input) {
+        console.log("Nepali DatePicker initialized");
+        input.NepaliDatePicker();
+    }
+});
+</script>
+@endpush

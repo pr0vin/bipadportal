@@ -15,12 +15,12 @@ return new class extends Migration
     {
         Schema::create('distributions', function (Blueprint $table) {
             $table->id();
+            $table->string('organization_name')->nullable();
             $table->foreignId('patient_id')->nullable()->constrained()->OnDelete('cascade');
-            $table->foreignId('resource_id')->constrained()->onDelete('cascade');
-            $table->integer('quantity')->default(0);
             $table->boolean('type');
             $table->text('remark')->nullable();
             $table->date('distributed_date');
+            $table->string('fiscal_year_date')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

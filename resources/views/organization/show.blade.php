@@ -9,6 +9,9 @@
             color: #343a40;
         }
     </style>
+
+    <link href="https://nepalidatepicker.sajanmaharjan.com.np/v5/nepali.datepicker/css/nepali.datepicker.v5.0.6.min.css"
+        rel="stylesheet" type="text/css" />
 @endpush
 
 @section('content')
@@ -41,7 +44,7 @@
                     @else
                         @if ($patient->status === 0 && !$patient->closed_date)
                             <small class="text-success">( सिफारीस भएको )</small>
-                        @elseif($patient->status === 1&& !$patient->closed_date)
+                        @elseif($patient->status === 1 && !$patient->closed_date)
                             <small class="text-primary">( भुक्तानी भएको )</small>
                         @else
                             <small class="text-primary">( दर्ता भएको )</small>
@@ -54,6 +57,24 @@
                         <div class="col-md-6">
                             <table id="org-details-table">
                                 <thead>
+
+                                    <div>
+
+
+                                        <input type="text" id="nepali-datepicker" name="registered_date"
+                                            class="form-control kalimati-font" placeholder="मिति छान्नुहोस्">
+                                        {{-- <script src="https://nepalidatepicker.sajanmaharjan.com.np/v5/nepali.datepicker/js/nepali.datepicker.v5.0.6.min.js" type="text/javascript"></script>
+                                        </script>
+                                        <script type="text/javascript">
+                                            window.onload = function() {
+                                                var mainInput = document.getElementById("nepali-datepicker");
+                                                mainInput.NepaliDatePicker();
+                                            };
+                                        </script> --}}
+
+                                    </div>
+
+
                                     <tr>
                                         <td class="font-weight-bold">नाम</td>
                                         <td>{{ $patient->name }} <i>({{ $patient->name_en }})</i></td>
@@ -145,7 +166,7 @@
                                 <thead>
                                     <tr>
                                         <td class="font-weight-bold">
-                                          दर्ता  नम्बर
+                                            दर्ता नम्बर
                                         </td>
                                         <td class="kalimati-font">
                                             @if ($patient->registration_number)
@@ -154,8 +175,8 @@
                                                 </span>
                                             @else
                                                 <span class="px-2 py-1 text-danger border border-danger rounded-lg">
-                                                    
-                                                   दर्ता नभएको
+
+                                                    दर्ता नभएको
                                                 </span>
                                             @endif
                                         </td>
@@ -189,8 +210,8 @@
 
                                     <tr>
                                         <td class="font-weight-bold">
-                                         
-                                           दर्ता मिति
+
+                                            दर्ता मिति
                                         </td>
 
                                         <td class="kalimati-font">
@@ -200,7 +221,7 @@
                                                 </span>
                                             @else
                                                 <span class="px-2 py-1 text-danger border border-danger rounded-lg">
-                                                  दर्ता   नभएको
+                                                    दर्ता नभएको
                                                 </span>
                                             @endif
                                         </td>
@@ -628,390 +649,6 @@
                     </div>
 
 
-
-                    {{-- <table id="org-details-table" class="table table-bordered">
-                        <thead>
-                            <tr>
-                                <td class="font-weight-bold">
-                                    {{ $patient->disease->id == 1 ? 'दर्ता ' : 'सिफारिस ' }} नम्बर
-                                </td>
-                                <td class="kalimati-font">{{ $patient->registration_number ?? '' }}</td>
-                            </tr>
-                            <tr>
-                                <td class="font-weight-bold">आवेदन मिति</td>
-                                <td class="kalimati-font">
-                                    {{ $patient->applied_date ? ad_to_bs($patient->applied_date) : '' }}</td>
-                            </tr>
-                            <tr>
-                                <td class="font-weight-bold">
-                                    {{ $patient->disease->id == 1 ? 'दर्ता ' : 'सिफारिस ' }} मिति
-                                </td>
-                                <td class="kalimati-font">
-                                    {{ $patient->registered_date ? dateFormat($patient->registered_date) : '' }}</td>
-                            </tr>
-                            @if ($patient->disease->id == 1)
-                            <tr>
-                                <td class="font-weight-bold">लागतकट्टा मिति</td>
-                                <td class="kalimati-font">
-                                    {{ $patient->closed_date ? dateFormat($patient->closed_date) : '' }}</td>
-                            </tr>
-                            <tr>
-                                <td class="font-weight-bold">लागतकट्टाको कारण</td>
-                                <td>{{ $patient->closing_document }}</td>
-                            </tr>
-                            <tr>
-                                <td class="font-weight-bold">नवीकरण मिति</td>
-                                <td class="kalimati-font">
-                                    @if ($patient->renews()->count() > 0)
-                                    {{ dateFormat($patient->renews()->latest()->first()->renew_date) }}
-
-                                    @endif
-                                </td>
-                            </tr>
-
-                            @endif
-
-                            <tr>
-                                <td colspan="2" class="font-weight-bold h5-responsive">बिरामीको विवरण</td>
-                            </tr>
-                            <tr>
-                                <td class="font-weight-bold">नाम</td>
-                                <td>{{ $patient->name }} <i>({{ $patient->name_en }})</i></td>
-                            </tr>
-                            <tr>
-                                <td class="font-weight-bold">नागरिकता नं.</td>
-                                <td class="kalimati-font">{{ $patient->citizenship_number }}</td>
-                            </tr>
-                            <tr>
-                                <td class="font-weight-bold">रोग</td>
-                                <td>{{ $patient->disease->name }}</td>
-                            </tr>
-                            <tr>
-                                <td class="font-weight-bold">लिंग</td>
-                                <td>
-                                    @if (strtolower($patient->gender) == 'male')
-                                    पुरुष
-                                    @elseif(strtolower($patient->gender) == 'female')
-                                    महिला
-                                    @else
-                                    अन्य
-                                    @endif
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="font-weight-bold">उमेर</td>
-                                <td class="kalimati-font">{{ $patient->age }}</td>
-                            </tr>
-                            <tr>
-                                <td class="font-weight-bold">प्रदेश</td>
-                                <td>
-                                    {{ $patient->address->province }}
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="font-weight-bold">जिल्ला</td>
-                                <td>
-                                    {{ $patient->address->district }}
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <td class="font-weight-bold">नगरपालिका</td>
-                                <td>
-                                    {{ $patient->address->municipality }}
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="font-weight-bold">वडा नं.</td>
-                                <td class="kalimati-font">
-                                    {{ $patient->ward_number }}
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="font-weight-bold">टोल/गाउँ</td>
-                                <td>{{ $patient->tole }}</td>
-                            </tr>
-
-                            <tr>
-                                <td class="font-weight-bold">फोन नं</td>
-                                <td class="kalimati-font">{{ $patient->mobile_number }}</td>
-                            </tr>
-
-                            <tr>
-                                <td class="font-weight-bold">इमेल</td>
-                                <td>{{ $patient->email }}</td>
-                            </tr>
-                            <tr>
-                                <td class="font-weight-bold">सम्पर्क व्यक्ति</td>
-                                <td>{{ $patient->contact_person }}</td>
-                            </tr>
-                            <tr>
-                                <td class="font-weight-bold">बिरामीसंगको नाता</td>
-                                <td>{{ $patient->relation_with_patients ?? '' }}</td>
-                            </tr>
-                            <tr>
-                                <td class="font-weight-bold">कैफियत</td>
-                                <td>{{ $patient->description }}</td>
-                            </tr>
-                            <tr>
-                                <td colspan="2" class="font-weight-bold h5-responsive">बिरामीको कागजातहरु</td>
-                            </tr>
-                            <tr class="">
-                                <td class="font-weight-bold">आस्पतालको पुर्जाको फोटोकपी</td>
-                                @if ($patient->hospital_document)
-                                <td class="d-flex justify-content-between m-0 px-3" id="hospital_document_div">
-                                    <a target="__blank" id="hospital_document"
-                                        href="{{ asset('storage') . '/' . $patient->hospital_document }}"><u
-                                            class="text-info">कागजात हेर्नुहोस</u></a>
-                                    <form action="{{ route('reuploadImage', $patient) }}" method="POST"
-                                        enctype="multipart/form-data" class="d-none align-items-center"
-                                        id="hospital_document_form">
-                                        @csrf
-                                        @method('put')
-                                        <input type="file" name="hospital_document" class="form-control"
-                                            style="width: 250px" required>
-                                        <button class="btn">अपडेट </button>
-                                    </form>
-                                    @can('hospital_document')
-                                    <button class="bg-transparent border-0" id="hospital_document_edit_btn"
-                                        title="पुन: अपलोड गर्नुहोस"><i class="fas fa-sync-alt"></i>
-                                    </button>
-                                    @endcan
-                                    <button class="bg-transparent border-0 d-none" id="hospital_document_calcel_btn"
-                                        title="रद्द गर्नुहोस"><i class="fas fa-times"></i>
-                                    </button>
-                                </td>
-                                @else
-                                <td>
-                                    <span class="text-danger">कागजात छैन</span>
-                                </td>
-                                @endif
-                            </tr>
-                            <tr>
-                                <td class="font-weight-bold">रोग प्रमाणित कागजात</td>
-                                @if ($patient->disease_proved_document)
-
-                                <td class="d-flex justify-content-between m-0 px-3" id="disease_proved_document_div">
-                                    <a target="__blank" id="disease_proved_document"
-                                        href="{{ asset('storage') . '/' . $patient->disease_proved_document }}"><u
-                                            class="text-info">कागजात हेर्नुहोस</u></a>
-                                    <form action="{{ route('reuploadImage', $patient) }}" method="POST"
-                                        enctype="multipart/form-data" class="d-none align-items-center"
-                                        id="disease_proved_document_form">
-                                        @csrf
-                                        @method('put')
-                                        <input type="file" name="disease_proved_document" class="form-control"
-                                            style="width: 250px" required>
-                                        <button class="btn">अपडेट </button>
-                                    </form>
-                                    @can('disease_proved_document')
-                                    <button class="bg-transparent border-0" id="disease_proved_document_edit_btn"
-                                        title="पुन: अपलोड गर्नुहोस"><i class="fas fa-sync-alt"></i>
-                                    </button>
-                                    @endcan
-                                    <button class="bg-transparent border-0 d-none" id="disease_proved_document_calcel_btn"
-                                        title="रद्द गर्नुहोस"><i class="fas fa-times"></i>
-                                    </button>
-                                </td>
-                                @else
-                                <td>
-                                    <span class="text-danger">कागजात छैन</span>
-                                </td>
-                                @endif
-                            </tr>
-                            <tr>
-                                <td class="font-weight-bold">नागरिकता/ जन्मदर्ता / बसाइसराई कागजात</td>
-                                @if ($patient->citizenship_card)
-                                <td class="d-flex justify-content-between m-0 px-3" id="citizenship_card_document_div">
-                                    <a target="__blank" id="citizenship_card_document"
-                                        href="{{ asset('storage') . '/' . $patient->citizenship_card }}"><u
-                                            class="text-info">कागजात हेर्नुहोस</u></a>
-                                    <form action="{{ route('reuploadImage', $patient) }}" method="POST"
-                                        enctype="multipart/form-data" class="d-none align-items-center"
-                                        id="citizenship_card_document_form">
-                                        @csrf
-                                        @method('put')
-                                        <input type="file" name="citizenship_card" class="form-control" style="width: 250px"
-                                            required>
-                                        <button class="btn">अपडेट </button>
-                                    </form>
-                                    @can('citizenship_card')
-                                    <button class="bg-transparent border-0" id="citizenship_card_document_edit_btn"
-                                        title="पुन: अपलोड गर्नुहोस"><i class="fas fa-sync-alt"></i>
-                                    </button>
-                                    @endcan
-                                    <button class="bg-transparent border-0 d-none" id="citizenship_card_document_calcel_btn"
-                                        title="रद्द गर्नुहोस"><i class="fas fa-times"></i>
-                                    </button>
-                                </td>
-                                @else
-                                <td>
-                                    <span class="text-danger">कागजात छैन</span>
-                                </td>
-                                @endif
-                            </tr>
-                            <tr>
-                                <td class="font-weight-bold">अनुसूची २ बमोजिमको निबेदन</td>
-                                @if ($patient->application)
-                                <td class="d-flex justify-content-between m-0 px-3" id="application_document_div">
-                                    <a target="__blank" id="application_document"
-                                        href="{{ asset('storage') . '/' . $patient->application }}"><u
-                                            class="text-info">कागजात हेर्नुहोस</u></a>
-                                    <form action="{{ route('reuploadImage', $patient) }}" method="POST"
-                                        enctype="multipart/form-data" class="d-none align-items-center"
-                                        id="application_document_form">
-                                        @csrf
-                                        @method('put')
-                                        <input type="file" name="application" class="form-control" style="width: 250px"
-                                            required>
-                                        <button class="btn">अपडेट </button>
-                                    </form>
-                                    @can('application')
-                                    <button class="bg-transparent border-0" id="application_document_edit_btn"
-                                        title="पुन: अपलोड गर्नुहोस"><i class="fas fa-sync-alt"></i>
-                                    </button>
-                                    @endcan
-                                    <button class="bg-transparent border-0 d-none" id="application_document_calcel_btn"
-                                        title="रद्द गर्नुहोस"><i class="fas fa-times"></i>
-                                    </button>
-                                </td>
-                                @else
-                                <td>
-                                    <span class="text-danger">कागजात छैन</span>
-                                </td>
-                                @endif
-                            </tr>
-
-                            @if ($patient->disease->id == 1)
-                            <tr>
-                                <td class="font-weight-bold">अनुसूची १ डाक्टरको सिफारिस</td>
-                                @if ($patient->doctor_recomandation)
-                                <td class="d-flex justify-content-between m-0 px-3" id="doctor_recomandation_document_div">
-                                    <a target="__blank" id="doctor_recomandation_document"
-                                        href="{{ asset('storage') . '/' . $patient->doctor_recomandation }}"><u
-                                            class="text-info">कागजात हेर्नुहोस</u></a>
-                                    <form action="{{ route('reuploadImage', $patient) }}" method="POST"
-                                        enctype="multipart/form-data" class="d-none align-items-center"
-                                        id="doctor_recomandation_document_form">
-                                        @csrf
-                                        @method('put')
-                                        <input type="file" name="doctor_recomandation" class="form-control"
-                                            style="width: 250px" required>
-                                        <button class="btn">अपडेट </button>
-                                    </form>
-                                    @can('doctor_recomandation')
-                                    <button class="bg-transparent border-0" id="doctor_recomandation_document_edit_btn"
-                                        title="पुन: अपलोड गर्नुहोस"><i class="fas fa-sync-alt"></i>
-                                    </button>
-                                    @endcan
-                                    <button class="bg-transparent border-0 d-none"
-                                        id="doctor_recomandation_document_calcel_btn" title="रद्द गर्नुहोस"><i
-                                            class="fas fa-times"></i>
-                                    </button>
-                                </td>
-                                @else
-                                <td>
-                                    <span class="text-danger">कागजात छैन</span>
-                                </td>
-                                @endif
-                            </tr>
-                            <tr>
-                                <td class="font-weight-bold">बैंक चेक बुक</td>
-                                @if ($patient->bank_cheque)
-                                <td class="d-flex justify-content-between m-0 px-3" id="bank_cheque_document_div">
-                                    <a target="__blank" id="bank_cheque_document"
-                                        href="{{ asset('storage') . '/' . $patient->bank_cheque }}"><u
-                                            class="text-info">कागजात हेर्नुहोस</u></a>
-                                    <form action="{{ route('reuploadImage', $patient) }}" method="POST"
-                                        enctype="multipart/form-data" class="d-none align-items-center"
-                                        id="bank_cheque_document_form">
-                                        @csrf
-                                        @method('put')
-                                        <input type="file" name="bank_cheque" class="form-control" style="width: 250px"
-                                            required>
-                                        <button class="btn">अपडेट </button>
-                                    </form>
-                                    @can('bank_cheque')
-                                    <button class="bg-transparent border-0" id="bank_cheque_document_edit_btn"
-                                        title="पुन: अपलोड गर्नुहोस"><i class="fas fa-sync-alt"></i>
-                                    </button>
-                                    @endcan
-                                    <button class="bg-transparent border-0 d-none" id="bank_cheque_document_calcel_btn"
-                                        title="रद्द गर्नुहोस"><i class="fas fa-times"></i>
-                                    </button>
-                                </td>
-                                @else
-                                <td>
-                                    <span class="text-danger">कागजात छैन</span>
-                                </td>
-                                @endif
-                            </tr>
-                            @else
-                            <tr>
-                                <td class="font-weight-bold">निर्णय</td>
-                                @if ($patient->decision_document)
-                                <td class="d-flex justify-content-between m-0 px-3" id="decision_document_document_div">
-                                    <a target="__blank" id="decision_document_document"
-                                        href="{{ asset('storage') . '/' . $patient->decision_document }}"><u
-                                            class="text-info">कागजात हेर्नुहोस</u></a>
-                                    <form action="{{ route('reuploadImage', $patient) }}" method="POST"
-                                        enctype="multipart/form-data" class="d-none align-items-center"
-                                        id="decision_document_document_form">
-                                        @csrf
-                                        @method('put')
-                                        <input type="file" name="decision_document" class="form-control"
-                                            style="width: 250px" required>
-                                        <button class="btn">अपडेट </button>
-                                    </form>
-                                    @can('decision_document')
-                                    <button class="bg-transparent border-0" id="decision_document_document_edit_btn"
-                                        title="पुन: अपलोड गर्नुहोस"><i class="fas fa-sync-alt"></i>
-                                    </button>
-                                    @endcan
-                                    <button class="bg-transparent border-0 d-none"
-                                        id="decision_document_document_calcel_btn" title="रद्द गर्नुहोस"><i
-                                            class="fas fa-times"></i>
-                                    </button>
-                                </td>
-                                @else
-                                <td>
-                                    <span class="text-danger">कागजात छैन</span>
-                                </td>
-                                @endif
-                            </tr>
-                            @endif
-
-
-
-
-
-                            @if ($patient->renewing_document)
-                            <tr>
-                                <td class="font-weight-bold">उपचार भैरहेको अस्पतालको कागजात</td>
-                                <td class="d-flex justify-content-between m-0 px-3" id="renewing_document_div">
-                                    <a target="__blank" id="renewing_document"
-                                        href="{{ asset('storage') . '/' . $patient->renewing_document }}"><u
-                                            class="text-info">कागजात हेर्नुहोस</u></a>
-                                    <form action="{{ route('reuploadImage', $patient) }}" method="POST"
-                                        enctype="multipart/form-data" class="d-none align-items-center"
-                                        id="renewing_document_form">
-                                        @csrf
-                                        @method('put')
-                                        <input type="file" name="renewing_document" class="form-control"
-                                            style="width: 250px" required>
-                                        <button class="btn">अपडेट </button>
-                                    </form>
-                                    <button class="bg-transparent border-0" id="renewing_document_edit_btn"
-                                        title="पुन: अपलोड गर्नुहोस"><i class="fas fa-sync-alt"></i>
-                                    </button>
-                                    <button class="bg-transparent border-0 d-none" id="renewing_document_calcel_btn"
-                                        title="रद्द गर्नुहोस"><i class="fas fa-times"></i>
-                                    </button>
-                                </td>
-                            </tr>
-                            @endif
-                        </thead>
-                    </table> --}}
                 </div>
             </div>
         </div>
@@ -1021,3 +658,15 @@
 
     </div>
 @endsection
+
+
+@push('myScript')
+    <script src="https://nepalidatepicker.sajanmaharjan.com.np/v5/nepali.datepicker/js/nepali.datepicker.v5.0.6.min.js"
+        type="text/javascript"></script>
+    <script type="text/javascript">
+        window.onload = function() {
+            var mainInput = document.getElementById("nepali-datepicker");
+            mainInput.NepaliDatePicker();
+        };
+    </script>
+@endpush

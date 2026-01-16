@@ -197,21 +197,21 @@
                         <th>आवेदन मिति</th>
                         <th>पिडितको नाम</th>
                         <th>लिङ्ग</th>
-                        <th>प्रभाव</th>
+                        <th>घटना</th>
                         <th>सम्पर्क व्यक्ति नाम थर</th>
                     @elseif (Illuminate\Support\Facades\Route::currentRouteName() == 'renewedPatient' ||
                             Illuminate\Support\Facades\Route::currentRouteName() == 'dateExpiredPatient')
                         <th>दर्ता नं.</th>
                         <th>नबिकरण मिति</th>
                         <th>पिडितको नाम</th>
-                        <th>प्रभाव </th>
+                        <th>घटना </th>
                         <th>प्रकोप</th>
                         <th>सम्पर्क व्यक्ति नाम थर</th>
                     @elseif (Illuminate\Support\Facades\Route::currentRouteName() == 'closedPatient')
                         <th>दर्ता नं.</th>
                         <th>लगतकट्टा मिति</th>
                         <th>पिडितको नाम</th>
-                        <th>प्रभाव </th>
+                        <th>घटना </th>
                         <th>प्रकोप</th>
                         <th>सम्पर्क व्यक्ति नाम थर</th>
                     @else
@@ -219,7 +219,7 @@
                         <th>दर्ता मिति</th>
                         <th>पिडितको नाम</th>
                         <th>लिङ्ग</th>
-                        <th>प्रभाव </th>
+                        <th>घटना </th>
                         <th>सम्पर्क व्यक्ति नाम थर</th>
                     @endif
 
@@ -366,11 +366,11 @@
                             @if (\Request::route()->getName() == 'newApplication')
                                 <span class="badge badge-warning z-depth-0 px-2 py-1">दर्ता नभएको</span>
                             @elseif (is_null($organization->status))
-                                <span class="badge badge-info z-depth-0 px-2 py-1">सिफारिस नभएको</span>
+                                <span class="badge badge-info z-depth-0 px-2 py-1">निर्णय नभएको</span>
                             @elseif ($organization->status === 'paid')
                                 <span class="badge badge-danger z-depth-0 px-2 py-1">भुक्तानी भएको</span>
                             @else
-                                <span class="badge badge-success z-depth-0 px-2 py-1">सिफारिस भएको</span>
+                                <span class="badge badge-success z-depth-0 px-2 py-1">निर्णय भएको</span>
                             @endif
                         </td>
 

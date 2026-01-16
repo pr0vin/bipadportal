@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Patient;
 use App\Payment;
 use App\PaymentDetail;
+use App\Decision;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -15,7 +16,7 @@ class PaymentsController extends Controller
         DB::beginTransaction();
 
         try {
-            // Validate request
+
             $validated = $request->validate([
                 'decision_id'      => 'required|exists:decisions,id',
                 'distributed_date' => 'required|date',
@@ -35,23 +36,23 @@ class PaymentsController extends Controller
                 return back()->with('error', 'कृपया केही एक पिडितको लागि रकम भर्नुहोस्।')->withInput();
             }
 
-            // Calculate total amount
+
             $totalAmount = $patientsData->sum(fn($p) => $p['paid_amount'] ?? 0);
 
-            // Create Payment (summary)
+            $id = currentFiscalYear()?->id;
             $payment = Payment::create([
                 'decision_id'      => $validated['decision_id'],
                 'paid_date'        => $validated['distributed_date'],
                 'title'            => $validated['title'],
                 'remark'           => $validated['remark'] ?? null,
-                'fiscal_year_date' => runningFiscalYear('start_date'),
+                'fiscal_year_date' => $id,
                 'total'            => $totalAmount,
             ]);
 
             $messages = [];
             $updatedCount = 0;
 
-            // Loop through patients
+
             foreach ($patientsData as $p) {
                 $patient = Patient::find($p['id']);
                 if (!$patient) continue;
@@ -69,7 +70,6 @@ class PaymentsController extends Controller
                     continue;
                 }
 
-                // Create payment detail
                 PaymentDetail::create([
                     'payment_id'  => $payment->id,
                     'patient_id'  => $patient->id,
@@ -77,7 +77,6 @@ class PaymentsController extends Controller
                     'remark'      => $remark,
                 ]);
 
-                // Update patient table
                 $patient->update([
                     'paid_amount' => $paidAmount,
                     'status'      => 'paid',
@@ -91,6 +90,9 @@ class PaymentsController extends Controller
                 return back()->with('error', implode("\n", $messages) ?: 'कुनै पनि भुक्तानी सेभ भएन।')->withInput();
             }
 
+            Decision::where('id', $validated['decision_id'])
+                ->update(['status' => 'paid']);
+
             DB::commit();
 
             $successMessage = count($messages)
@@ -98,10 +100,23 @@ class PaymentsController extends Controller
                 : 'भुक्तानी सफलतापूर्वक सेभ भयो।';
 
             return redirect()->route('decision.index')->with('success', $successMessage);
-
         } catch (\Throwable $e) {
             DB::rollBack();
             return back()->with('error', 'केही समस्या आयो। ' . ($e->getMessage() ?? ''))->withInput();
         }
+    }
+
+
+    public function index()
+    {
+          $municipality_id = municipalityId();
+        if (!$municipality_id) {
+            return redirect()->back()->with('error', 'कृपया पालिका छान्नुहोस्');
+        }
+
+        
+        $payments = Payment::with('decision')->latest()->paginate(10);
+
+        return view('payments.index', compact('payments'));
     }
 }

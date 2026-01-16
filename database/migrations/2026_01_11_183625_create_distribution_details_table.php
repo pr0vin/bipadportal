@@ -13,14 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('decisions', function (Blueprint $table) {
+        Schema::create('distribution_details', function (Blueprint $table) {
             $table->id();
-            $table->date('decision_date')->nullable();
-            $table->string('title')->nullable();
-            $table->string('decision_file')->nullable();
-            $table->decimal('total', 10, 2)->default(0)->nullable();
-            $table->string('fiscal_year_date')->nullable();
-            $table->string('status')->nullable();
+            $table->foreignId('distribution_id')->constrained()->onDelete('cascade');
+            $table->foreignId('resource_id')->constrained()->onDelete('cascade');
+            $table->integer('quantity')->default(0);
             $table->timestamps();
         });
     }
@@ -32,6 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('decisions');
+        Schema::dropIfExists('distribution_details');
     }
 };
