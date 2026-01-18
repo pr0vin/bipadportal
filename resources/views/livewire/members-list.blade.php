@@ -10,7 +10,7 @@
             </div>
         </div>
     </div>
-    {{-- <div class="position-fixed left-0 top-0 h-100 w-100 {{ $toggle ? 'd-flex' : 'd-none' }} justify-content-center align-items-center"
+    <div class="position-fixed left-0 top-0 h-100 w-100 {{ $toggle ? 'd-flex' : 'd-none' }} justify-content-center align-items-center"
         style="background-color: rgba(0,0,0,0.5);left:0;top:0;cursor:pointer;">
         <div class="bg-white p-3 rounded col-md-4" style="overflow:hidden">
             <h5>सदस्यहरु</h5>
@@ -35,11 +35,11 @@
                 <button class="btn btn-info" wire:click="toggleModal">पेश गर्नुहोस्</button>
             </div>
         </div>
-    </div> --}}
+    </div>
 
     
 
-     <div class="position-fixed left-0 top-0 h-100 w-100 {{ $toggle ? 'd-flex' : 'd-none' }} justify-content-center align-items-center"
+     {{-- <div class="position-fixed left-0 top-0 h-100 w-100 {{ $toggle ? 'd-flex' : 'd-none' }} justify-content-center align-items-center"
         style="background-color: rgba(0,0,0,0.5);left:0;top:0;cursor:pointer;">
         <div class="bg-white p-3 rounded col-md-4" style="overflow:hidden">
             <h5>समितिहरु</h5>
@@ -62,7 +62,7 @@
                 <button class="btn btn-info" wire:click="toggleModal">पेश गर्नुहोस्</button>
             </div>
         </div>
-    </div>
+    </div> --}}
 
 
 
