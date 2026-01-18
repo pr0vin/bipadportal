@@ -16,7 +16,7 @@
                             <div class="row">
                                 <div class="col-md-2 px-2" style="min-width: 150px">
                                     <input type="text" name="name" class="form-control rounded-0 mb-2"
-                                        value="{{ request()->query('name') }}" placeholder="बिरामीको नाम">
+                                        value="{{ request()->query('name') }}" placeholder="पिडितको नाम">
                                 </div>
                                 <div class="col-md-2 px-2" style="min-width: 150px">
                                     @if (request('disease_id'))

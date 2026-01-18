@@ -63,21 +63,16 @@ class DistributionController extends Controller
 
         DB::transaction(function () use ($request) {
 
-            /** --------------------------
-             * CREATE DISTRIBUTION HEADER
-             * -------------------------- */
             $distribution = Distribution::create([
                 'patient_id'       => $request->type == 0 ? $request->patient_id : null,
                 'organization_name' => $request->type == 1 ? $request->organization : null,
                 'distributed_date' => $request->distributed_date,
                 'type'             => $request->type,
                 'remark'           => $request->remark,
-                'fiscal_year_date' => currentFiscalYear()?->name,
+                'fiscal_year_date' => currentFiscalYear()?->id,
             ]);
 
-            /** --------------------------
-             * LOOP RESOURCES
-             * -------------------------- */
+         
             foreach ($request->resources as $row) {
 
                 /** --------------------------
@@ -117,9 +112,7 @@ class DistributionController extends Controller
                     $resource->increment('quantity', $row['quantity']);
                 }
 
-                /** --------------------------
-                 * CREATE DISTRIBUTION DETAIL
-                 * -------------------------- */
+             
                 DistributionDetail::create([
                     'distribution_id' => $distribution->id,
                     'resource_id'     => $resource->id,

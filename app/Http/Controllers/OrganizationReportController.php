@@ -414,16 +414,37 @@ class OrganizationReportController extends Controller
             );
         }
 
-        $resourceDetails = DistributionDetail::with([
-            'resource.unit',
-            'distribution'
-        ])
+
+        $query = DistributionDetail::query()
+            ->with([
+                'resource.unit',
+                'distribution.patient'
+            ])
             ->whereHas('distribution', function ($q) {
                 $q->where('type', 0)
                     ->whereNull('deleted_at');
-            })
-            ->latest()
-            ->get();
+            });
+
+        if ($request->filled('fiscal_year_id')) {
+            $query->whereHas('distribution', function ($q) use ($request) {
+                $q->where('fiscal_year_date', $request->fiscal_year_id);
+            });
+        }
+
+        if ($request->filled('from_date')) {
+            $query->whereHas('distribution', function ($q) use ($request) {
+                $q->whereDate('distributed_date', '>=', $request->from_date);
+            });
+        }
+
+        if ($request->filled('to_date')) {
+            $query->whereHas('distribution', function ($q) use ($request) {
+                $q->whereDate('distributed_date', '<=', $request->to_date);
+            });
+        }
+
+
+        $resourceDetails = $query->latest()->get();
 
         return view(
             'livewire.ResourceDistributionReport',

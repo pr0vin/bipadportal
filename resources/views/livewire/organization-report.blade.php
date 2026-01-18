@@ -6,12 +6,12 @@
                 <button type="button" class="bg-transparent border-0 mr-2" id="report_print"><i class="fa fa-print"
                         aria-hidden="true"></i>
                     Print</button>
-                @php
+                {{-- @php
                     $fullUrl = url()->full() . '&excel=1';
                 @endphp
                 <a href="{{ $fullUrl }}" class="bg-transparent border-0" style=""><i class="fa fa-file-excel"
                         aria-hidden="true"></i>
-                    Excel</a>
+                    Excel</a> --}}
             </div>
         </div>
         <div class="my-3"></div>

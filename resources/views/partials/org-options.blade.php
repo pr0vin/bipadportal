@@ -39,9 +39,7 @@
         font-family: 'kalimati-font' !important;
     }
 
-    .nepali-date-picker {
-    z-index: 10000 !important;
-}
+   
 </style>
 @php
     $isAllDocument = false;
@@ -88,7 +86,7 @@
             @endif
 
             @if ($patient->registered_date)
-                <button type="button" class="btn my-btn" data-bs-toggle="modal" data-target="#reApply">
+                <button type="button" class="btn my-btn" data-bs-toggle="modal" data-bs-target="#reApply">
                     <i class="fas fa-retweet pr-3"></i> पुनः आबेदन गर्नुहोस
                 </button>
             @endif
@@ -276,7 +274,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalLongTitle">पुनः आबेदन गर्नुहोस</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
@@ -638,5 +636,3 @@
             })
         </script>
     @endpush
-
-  

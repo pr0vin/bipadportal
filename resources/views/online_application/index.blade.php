@@ -18,10 +18,7 @@
                     <form action="{{ route('patient.store') }}" method="POST" enctype="multipart/form-data"
                         onsubmit="checkExistData(event)">
                         @csrf
-                        {{-- <div class="input-group mb-3">
-                        <input type="text" class="form-control" id="reg_number" placeholder="दर्ता नम्बर खोज्नुहोस्"
-                            aria-label="Recipient's username" aria-describedby="button-addon2" name="token_number">
-                    </div> --}}
+                      
                         <h5 for="" class="font-weight-bold kalimati-font">१. विपद्‌ पीडित राहत सूचीको लागि निवेदन
                             दिने व्यक्तिको विवरण :</h5>
 
@@ -120,6 +117,7 @@
                                     <input type="text" name="dob" id="dob"
                                         class="form-control kalimati-font date-picker" required readonly data-single="true">
                                 </div>
+
                                 <div class="col-md-2 col-sm-6 mb-2">
                                     <label for="" class="required"> लिङ्ग <span class="text-danger">*</span></label>
                                     <select name="gender" id="gender" class="form-control" required>

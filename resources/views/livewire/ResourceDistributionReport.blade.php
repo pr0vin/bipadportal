@@ -3,6 +3,67 @@
 @section('content')
     <div class="card z-depth-0 printableCard mx-2">
         <div class="card-body">
+            <div class="notPrintable " style="margin-bottom: 60px;">
+                <form method="GET" action="{{ url()->current() }}" class="row g-2 align-items-end">
+
+                    <div class="col-md-3">
+                        <label class="kalimati-font">आर्थिक वर्ष</label>
+                        <select name="fiscal_year_id" class="form-control form-control-sm">
+                            <option value="">-- सबै --</option>
+                            @foreach (\App\FiscalYear::all() as $fy)
+                                <option value="{{ $fy->id }}"
+                                    {{ request('fiscal_year_id') == $fy->id ? 'selected' : '' }}>
+                                    {{ $fy->name ?? $fy->start_ad . ' - ' . $fy->end_ad }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+
+
+                    <link
+                        href="https://nepalidatepicker.sajanmaharjan.com.np/v5/nepali.datepicker/css/nepali.datepicker.v5.0.6.min.css"
+                        rel="stylesheet" />
+
+                    <div class="col-md-3">
+                        <label class="kalimati-font">वितरण मिति (देखि)</label>
+                        <input type="text" name="from_date" id="nepali-datepicker-from"
+                            class="form-control form-control-sm " value="{{ request('from_date') }}">
+                    </div>
+
+                    <div class="col-md-3">
+                        <label class="kalimati-font">वितरण मिति (सम्म)</label>
+                        <input type="text" name="to_date" id="nepali-datepicker-to" class="form-control form-control-sm"
+                            value="{{ request('to_date') }}">
+                    </div>
+
+                    <script src="https://nepalidatepicker.sajanmaharjan.com.np/v5/nepali.datepicker/js/nepali.datepicker.v5.0.6.min.js">
+                    </script>
+
+                    <script>
+                        document.addEventListener("DOMContentLoaded", function() {
+                            document.getElementById("nepali-datepicker-from").NepaliDatePicker({
+                                dateFormat: "YYYY-MM-DD"
+                            });
+
+                            document.getElementById("nepali-datepicker-to").NepaliDatePicker({
+                                dateFormat: "YYYY-MM-DD"
+                            });
+                        });
+                    </script>
+
+                    <div class="col-md-3">
+                        <button type="submit" class="btn btn-primary ">
+                            फिल्टर गर्नुहोस्
+                        </button>
+
+                        <a href="{{ url()->current() }}" class="btn btn-secondary ">
+                            रिसेट
+                        </a>
+                    </div>
+
+                </form>
+            </div>
+
 
             <div class="d-flex justify-content-end mt-2 notPrintable">
                 <button type="button" class="bg-transparent border-0 mr-2" id="report_print">

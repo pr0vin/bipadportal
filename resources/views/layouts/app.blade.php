@@ -112,9 +112,6 @@
         window.print();
     })
 </script>
-<script src="https://nepalidatepicker.sajanmaharjan.com.np/v5/nepali.datepicker/js/nepali.datepicker.v5.0.6.min.js"
-    type="text/javascript"></script>
-
 @stack('myScript')
 
 </html>

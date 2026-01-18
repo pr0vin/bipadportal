@@ -1,6 +1,5 @@
 @extends('layouts.letter')
 @section('content')
-    </div>
 
     @push('styles')
         <style>
@@ -108,7 +107,6 @@
 
     <div>
         <div class="p-4 resizable-block">
-
             <section class="">
                 <div class="my-4"></div>
                 @php
@@ -125,7 +123,8 @@
                     $thirdMember = '';
                 @endphp
 
-                <livewire:members-list :members="$members" :patients="$patients" />
+                <livewire:members-list :members="$members" :patients="$patients" :committees="$committees" />
+
                 <div class="m-0 p-0" contenteditable="true">
                     <div class="mt-4 font-size">
                         प्रस्ताव नं <span class="kalimati-font">1</span> : विपद् राहत सहुलियत का लागि
@@ -186,7 +185,7 @@
                                     </tr>
                                 @endforeach
                                 <div class="row align-items-center justify-content-end g-2 mb-2">
-                                  
+
                                     <div class="col-auto">
                                         <button type="button" onclick="submitSifarish()" class="btn btn-primary noprint">
                                             सिफारिस सेभ गर्नुहोस

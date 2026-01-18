@@ -10,8 +10,6 @@
         }
     </style>
 
-    <link href="https://nepalidatepicker.sajanmaharjan.com.np/v5/nepali.datepicker/css/nepali.datepicker.v5.0.6.min.css"
-        rel="stylesheet" type="text/css" />
 @endpush
 
 @section('content')
@@ -57,23 +55,6 @@
                         <div class="col-md-6">
                             <table id="org-details-table">
                                 <thead>
-
-                                    <div>
-
-
-                                        <input type="text" id="nepali-datepicker" name="registered_date"
-                                            class="form-control kalimati-font" placeholder="मिति छान्नुहोस्">
-                                        {{-- <script src="https://nepalidatepicker.sajanmaharjan.com.np/v5/nepali.datepicker/js/nepali.datepicker.v5.0.6.min.js" type="text/javascript"></script>
-                                        </script>
-                                        <script type="text/javascript">
-                                            window.onload = function() {
-                                                var mainInput = document.getElementById("nepali-datepicker");
-                                                mainInput.NepaliDatePicker();
-                                            };
-                                        </script> --}}
-
-                                    </div>
-
 
                                     <tr>
                                         <td class="font-weight-bold">नाम</td>
@@ -660,13 +641,3 @@
 @endsection
 
 
-@push('myScript')
-    <script src="https://nepalidatepicker.sajanmaharjan.com.np/v5/nepali.datepicker/js/nepali.datepicker.v5.0.6.min.js"
-        type="text/javascript"></script>
-    <script type="text/javascript">
-        window.onload = function() {
-            var mainInput = document.getElementById("nepali-datepicker");
-            mainInput.NepaliDatePicker();
-        };
-    </script>
-@endpush

@@ -11,8 +11,12 @@ use PhpOffice\PhpWord\IOFactory;
 
 class MembersList extends Component
 {
+  
     public $members;
     public $patientId;
+
+    public $committees;
+    public $committeesId;
     public $patients = [];
     public $filteredMembers = [];
     public $firstMember;

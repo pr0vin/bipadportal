@@ -50,8 +50,8 @@ class FiscalYearController extends Controller
         Gate::authorize('fiscalYear.store');
         FiscalYear::create([
             'name'=>$request->name,
-            'start'=>$request->start[0],
-            'end'=>$request->end[0],
+            'start'=>$request->start,
+            'end'=>$request->end,
             'is_running'=>$request->is_running,
         ]);
         $this->fiscalYearService->flushCache();
@@ -71,8 +71,8 @@ class FiscalYearController extends Controller
         Gate::authorize('fiscalYear.edit');
         $fiscalYear->update([
             'name'=>$request->name,
-            'start'=>$request->start[0],
-            'end'=>$request->end[0],
+            'start'=>$request->start,
+            'end'=>$request->end,
             'is_running'=>$request->is_running,
         ]);
         $this->fiscalYearService->flushCache();

@@ -522,8 +522,10 @@ class BSDateHelper
 
     public static function BsToAd($delimiter, $date)
     {
+
         $date_np = "";
         if (!empty($date)) {
+            // dd($date, $delimiter, explode($delimiter, $date));
             $np_date = explode($delimiter, $date);
             $date_np = self::nep_to_eng($np_date[0], $np_date[1], $np_date[2]);
             //return $date_np['year'].'-'.$date_np['month'].'-'.$date_np['date'];

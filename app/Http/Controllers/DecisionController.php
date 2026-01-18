@@ -19,6 +19,7 @@ class DecisionController extends Controller
             $patients[] = Patient::with('disease')->find($id);
         }
 
+
         $committee = Committee::where('address_id', municipalityId())->first();
         $members = null;
         if ($committee) {
@@ -28,7 +29,9 @@ class DecisionController extends Controller
                 ->get();
         }
 
-        return view('frontend.decisionPrint', compact('patients', 'members'));
+        $committees = Committee::where('address_id', municipalityId())->get();
+        
+        return view('frontend.decisionPrint', compact('patients', 'members', 'committees'));
     }
 
     public function uploadFile(Request $request, $id)
