@@ -39,7 +39,7 @@
                                     <label class="required">प्रभाव <span class="text-danger">*</span></label>
                                     <input type="text" id="disease_selector" class="form-control"
                                         placeholder="प्रभाव छनौट गर्नुहोस्" readonly style="cursor: pointer;">
-                                    <!-- Floating dropdown -->
+                                    
                                     <div id="disease_dropdown" class="border p-2 rounded mt-1 bg-white shadow"
                                         style=" display: none; max-height: 200px; overflow-y: auto; position: absolute; width: 100%; z-index: 9999;">
                                         @foreach ($diseases as $disease)
@@ -90,7 +90,6 @@
                                             }
                                         });
                                     </script>
-
                                 </div>
 
                                 <div class="col-md-4 col-sm-6 mb-2">
@@ -98,11 +97,13 @@
                                             class="text-danger">*</span> </label>
                                     <input type="text" name="name" class="form-control" id="name_np" required>
                                 </div>
+
                                 <div class="col-md-4 col-sm-6 mb-2">
                                     <label for="" class="required"> पीडितको नाम (in English) <span
                                             class="text-danger">*</span></label>
                                     <input type="text" name="name_en" id="name_en" class="form-control" required>
                                 </div>
+
                                 <div class="col-md-4 col-sm-6 mb-2">
                                     <label for="" class="required"> नागरिकता नं./जन्मदर्ता नं. <span
                                             class="text-danger">*</span></label>
@@ -111,9 +112,7 @@
                                 </div>
 
                                 <div class="col-md-2 col-sm-6 mb-2">
-                                    <label for="" class="required"> जन्म मिति :<span class="text-danger">*
-                                        </span>
-                                    </label>
+                                    <label for="" class="required"> जन्म मिति :</label>
                                     <input type="text" name="dob" id="dob"
                                         class="form-control kalimati-font date-picker" required readonly data-single="true">
                                 </div>

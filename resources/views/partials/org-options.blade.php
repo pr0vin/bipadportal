@@ -38,8 +38,6 @@
     .myFont {
         font-family: 'kalimati-font' !important;
     }
-
-   
 </style>
 @php
     $isAllDocument = false;
@@ -85,11 +83,11 @@
                 </button>
             @endif
 
-            @if ($patient->registered_date)
+            {{-- @if ($patient->registered_date)
                 <button type="button" class="btn my-btn" data-bs-toggle="modal" data-bs-target="#reApply">
                     <i class="fas fa-retweet pr-3"></i> पुनः आबेदन गर्नुहोस
                 </button>
-            @endif
+            @endif --}}
 
             {{-- @if ($patient->registered_date)
                 <button type="button" class="btn bg-info text-white" data-toggle="modal"
@@ -144,16 +142,21 @@
                                     <div class="form-group mx-0 px-0 col-12">
                                         <label for="">क)
                                             दर्ता मिति</label>
-                                        <input type="text" name="date_from" id="input-date-from" data-single="true"
+                                        {{-- <input type="text" name="date_from" id="input-date-from" data-single="true"
                                             class="form-control nepali-date rounded-0 kalimati-font"
                                             value="{{ $patient->date_from
                                                 ? ad_to_bs($patient->date_from)
-                                                : englishToNepaliLetters(ad_to_bs(now()->format('Y-m-d'))) }}">
+                                                : englishToNepaliLetters(ad_to_bs(now()->format('Y-m-d'))) }}"> --}}
+                                        <input type="text" name="date_from" id="input-date-from" data-single="true"
+                                            class="form-control nepali-date rounded-0 kalimati-font"
+                                            value="{{ formatDate(ad_to_bs(now()->format('Y-m-d'))) }}">
                                         @error('registered_date')
                                             <label class="text-danger">{{ $message }}</label>
                                         @enderror
                                     </div>
                                 </div>
+
+
 
 
                                 <div class="col-6">
@@ -167,7 +170,7 @@
                                                 value="{{ $registrationNumber }}" readonly>
                                             <input type="text" name="reg_number"
                                                 class="form-control rounded-0 kalimati-font"
-                                                value="{{ $patient->reg_number ?? '' }}">
+                                               value="{{ $currentRegNumber ?? $nextRegNumber }}">
                                         </div>
                                         @error('registration_number')
                                             <label class="text-danger">{{ $message }}</label>
@@ -179,10 +182,25 @@
                                 @php
                                     $isBankEnabled = true;
                                 @endphp
-                                <div class="col-12">
+
+                                <div class="col-6">
                                     <div class="form-group">
 
-                                        <label for="">ग) बैंक खाता नम्बर</label>
+                                        <label for="">ग) बैंकको नाम</label>
+                                        <input type="text" name="bank_name" id="bank_name"
+                                            class="form-control rounded-0 kalimati-font"
+                                            value="{{ old('bank_name', $patient->bank_name) }}">
+                                        @error('bank_name')
+                                            <label class="text-danger">{{ $message }}</label>
+                                        @enderror
+
+                                    </div>
+                                </div>
+
+                                <div class="col-6">
+                                    <div class="form-group">
+
+                                        <label for="">घ) बैंक खाता नम्बर</label>
                                         <input type="text" name="bank_account_number" id="bank_account_number"
                                             class="form-control rounded-0 kalimati-font"
                                             value="{{ old('bank_account_number', $patient->bank_account_number) }}"
@@ -190,10 +208,10 @@
                                         @error('bank_account_number')
                                             <label class="text-danger">{{ $message }}</label>
                                         @enderror
-                                        <input type="hidden" name="yearly_payment" class="form-control rounded-0"
-                                            value="{{ $patient->disease->amount }}">
+
                                     </div>
                                 </div>
+
 
                                 <div class="col-12">
 
@@ -268,7 +286,7 @@
 
 
         {{-- Re-apply --}}
-        <div class="modal fade" id="reApply" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+        {{-- <div class="modal fade" id="reApply" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
             aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
@@ -293,50 +311,72 @@
 
                             <div class="col-sm-12 mb-2 p-0">
                                 <input type="hidden" value="{{ $patient->id }}" name="patient_id">
-                                <label for="" class="required"> आवेदनको प्रकार <span
-                                        class="text-danger">*</span></label>
-
+                                <label for="" class="required"> घटना <span class="text-danger">*</span></label>
                                 <select name="application_type_id" id="application_types" class="form-control" required>
-                                    <option value="">आवेदनको प्रकार छान्नुहोस्</option>
+                                    <option value="">घटना छान्नुहोस्</option>
                                     @foreach ($applicationTypes as $applicationType)
-                                        @if ($applicationType->id == 1)
-                                            @can('dirgha.create')
-                                                <option value="{{ $applicationType->id }}">{{ $applicationType->name }}
-                                                </option>
-                                            @endcan
-                                        @endif
-                                        @if ($applicationType->id == 2)
-                                            @can('bipanna.create')
-                                                <option value="{{ $applicationType->id }}">{{ $applicationType->name }}
-                                                </option>
-                                            @endcan
-                                        @endif
-                                        @if ($applicationType->id == 3)
-                                            @can('samajik.create')
-                                                <option value="{{ $applicationType->id }}">{{ $applicationType->name }}
-                                                </option>
-                                            @endcan
-                                        @endif
-
-                                        @if ($applicationType->id == 4)
-                                            @can('nagarpalika.create')
-                                                <option value="{{ $applicationType->id }}">
-                                                    {{ $applicationType->name }}
-                                                </option>
-                                            @endcan
-                                        @endif
+                                        <option value="{{ $applicationType->id }}">{{ $applicationType->name }}
+                                        </option>
                                     @endforeach
-
                                 </select>
+
                             </div>
 
-                            <div class="col-sm-12 mb-2 p-0">
-                                <label for="" class="required"> घटनाको प्रकार <span
-                                        class="text-danger">*</span></label>
-                                <select name="disease_id" id="disease_id" class="form-control" required>
-                                    <option value="">घटनाको प्रकार छान्नुहोस्</option>
+                            <div class="col-sm-12 mb-2 p-0" style="position: relative;">
+                                <label class="required">प्रभाव <span class="text-danger">*</span></label>
+                                <input type="text" id="disease_selector" class="form-control"
+                                    placeholder="प्रभाव छनौट गर्नुहोस्" readonly style="cursor: pointer;">
 
-                                </select>
+                                <div id="disease_dropdown" class="border p-2 rounded mt-1 bg-white shadow"
+                                    style=" display: none; max-height: 200px; overflow-y: auto; position: absolute; width: 100%; z-index: 9999;">
+                                    @foreach ($diseases as $disease)
+                                        <div class="form-check">
+                                            <input class="form-check-input disease-checkbox" type="checkbox"
+                                                name="disease_id[]" value="{{ $disease->id }}"
+                                                id="disease_{{ $disease->id }}" {{ $loop->first ? 'required' : '' }}>
+
+                                            <label class="form-check-label" for="disease_{{ $disease->id }}">
+                                                {{ $disease->name }}
+                                            </label>
+                                        </div>
+                                    @endforeach
+                                </div>
+
+                                <script>
+                                    const selector = document.getElementById('disease_selector');
+                                    const dropdown = document.getElementById('disease_dropdown');
+                                    const checkboxes = document.querySelectorAll('.disease-checkbox');
+
+                                    // Toggle dropdown
+                                    selector.addEventListener('click', function() {
+                                        dropdown.style.display = dropdown.style.display === 'none' ? 'block' : 'none';
+                                    });
+
+                                    // Update input text + handle required
+                                    checkboxes.forEach(cb => {
+                                        cb.addEventListener('change', function() {
+
+                                            let selected = Array.from(document.querySelectorAll('.disease-checkbox:checked'))
+                                                .map(c => c.nextElementSibling.innerText)
+                                                .join(', ');
+
+                                            selector.value = selected;
+
+                                            if (document.querySelectorAll('.disease-checkbox:checked').length > 0) {
+                                                checkboxes.forEach(c => c.required = false);
+                                            } else {
+                                                checkboxes[0].required = true;
+                                            }
+                                        });
+                                    });
+
+                                    // Close dropdown when clicking outside
+                                    document.addEventListener('click', function(e) {
+                                        if (!selector.contains(e.target) && !dropdown.contains(e.target)) {
+                                            dropdown.style.display = 'none';
+                                        }
+                                    });
+                                </script>
                             </div>
                         </div>
                         <div class="modal-footer">
@@ -346,7 +386,7 @@
                     </form>
                 </div>
             </div>
-        </div>
+        </div> --}}
 
 
         <div class="modal fade" id="paymentModal-{{ $patient->id }}" tabindex="-1" role="dialog"

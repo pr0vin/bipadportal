@@ -191,7 +191,7 @@
                 <tr>
                     @if (Illuminate\Support\Facades\Route::currentRouteName() == 'regLocation')
                         <th>
-                            <input type="checkbox"  id="selectAll">
+                            <input type="checkbox" id="selectAll">
                         </th>
                     @endif
                     @if (Illuminate\Support\Facades\Route::currentRouteName() == 'newApplication')
@@ -304,54 +304,6 @@
 
                         <td>{{ $organization->patientApplication->first()->application_type->name }}</td>
 
-
-
-                        {{-- <td>
-                            @php
-                                $diseases = [];
-                            @endphp
-
-                            @foreach ($organization->patientApplication as $application)
-                                @foreach ($application->patientApplicationDisease as $pad)
-                                    @if ($pad->disease)
-                                        @php $diseases[] = $pad->disease->name; @endphp
-                                    @endif
-                                @endforeach
-                            @endforeach
-
-                            @php
-                                $diseaseList = implode(', ', array_unique($diseases));
-                            @endphp
-
-                            <div class="truncate-cell"
-                                style="max-width: 100px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"
-                                title="{{ $diseaseList }}">
-                                {{ $diseaseList }}
-                            </div>
-                        </td>
-                        <style>
-                            .hover-group {
-                                position: relative;
-                            }
-
-                            .hover-box {
-                                display: none;
-                                position: absolute;
-                                top: calc(100% + 4px);
-                                /* directly below text */
-                                left: 0;
-                                z-index: 999;
-                                max-width: 300px;
-                                white-space: normal;
-                                word-break: break-word;
-                            }
-
-                            .hover-group:hover .hover-box {
-                                display: block;
-                            }
-                        </style> --}}
-
-
                         <td>
                             <div>
                                 {{ $organization->contact_person }}
@@ -375,8 +327,6 @@
                                 <span class="badge badge-success z-depth-0 px-2 py-1">निर्णय भएको</span>
                             @endif
                         </td>
-
-
 
                         <td class="m-0 p-0 notPrintable" style="min-width: 150px">
 
@@ -404,7 +354,6 @@
             </tbody>
             </form>
         </table>
-
     </div>
 </div>
 
@@ -450,7 +399,6 @@
     });
 </script>
 
-
 <script>
     const checkboxes = document.getElementsByClassName('myCheckbox');
     const statusText = document.getElementsByClassName('status')[0];
@@ -491,7 +439,7 @@
 document.addEventListener('DOMContentLoaded', function () {
 
     const selectAll = document.getElementById('selectAll');
-    const checkboxes = document.querySelectorAll('.myCheckbox');
+    const checkboxes = document.querySelectorAll('.row-checkbox');
     const btnPrint = document.getElementById('btn_print_decision');
     const inputIds = document.getElementById('ids');
 
@@ -525,5 +473,3 @@ document.addEventListener('DOMContentLoaded', function () {
 
 });
 </script>
-
-

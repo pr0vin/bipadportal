@@ -53,8 +53,9 @@
                             <tr>
                                 <th>क्र.सं.</th>
                                 <th>नाम</th>
+                                <th>बैंकको नाम</th>
                                 <th>बैंक खाता नम्बर</th>
-                                <th>आनुमानित रकम</th>
+                                {{-- <th>आनुमानित रकम</th> --}}
                                 <th>भुक्तानी रकम</th>
                                 <th>कैफियत</th>
                             </tr>
@@ -67,12 +68,12 @@
                                     <strong>{{ $sifarish->patient->name }}</strong><br>
                                     {{ $sifarish->patient->mobile_number ?? '' }}
                                 </td>
-
+                                <td>{{ $sifarish->patient->bank_name ?? '' }}</td>
                                  <td class="kalimati-font">
                                     
                                     {{ $sifarish->patient->bank_account_number ?? '' }}
                                 </td>
-                                <td class="kalimati-font">{{ $sifarish->patient->estimated_amount ?? '' }}</td>
+                                {{-- <td class="kalimati-font">{{ $sifarish->patient->estimated_amount ?? '' }}</td> --}}
                                 <td class="kalimati-font">
                                     <input type="hidden" name="patients[{{ $index }}][id]"
                                         value="{{ $sifarish->patient->id }}">

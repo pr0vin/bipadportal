@@ -117,3 +117,11 @@
         </ol>
     </div>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        document.querySelectorAll('[contenteditable]').forEach(el => {
+            el.setAttribute('contenteditable', 'false');
+        });
+    });
+</script>

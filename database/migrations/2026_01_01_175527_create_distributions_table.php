@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('organization_name')->nullable();
             $table->foreignId('patient_id')->nullable()->constrained()->OnDelete('cascade');
-            $table->boolean('type');
+            $table->string('type');
             $table->text('remark')->nullable();
             $table->date('distributed_date');
             $table->string('fiscal_year_date')->nullable();

@@ -308,6 +308,8 @@ class OrganizationReportController extends Controller
                     $d->patientApplication->patient->estimated_amount ?? 0
                 );
 
+              
+
                 return (object) [
                     'name' => $typeName,
                     'diseases' => $diseases->map(function ($d) {

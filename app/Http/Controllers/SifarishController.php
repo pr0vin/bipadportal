@@ -26,7 +26,7 @@ class SifarishController extends Controller
                 'title'         => 'nullable|string|max:255',
             ]);
 
-            //  Check if all paid_amount are empty
+           
             $allEmpty = collect($validated['paid_amount'])->every(
                 fn($v) => $v === null || $v === ''
             );
@@ -132,7 +132,7 @@ class SifarishController extends Controller
 
         $decisions = Decision::with([
             'sifarish.patient'
-        ])->wherenull('status')->latest()->paginate(10);
+        ])->latest()->paginate(10);
         return view('decision.dindex', compact('decisions'));
     }
 

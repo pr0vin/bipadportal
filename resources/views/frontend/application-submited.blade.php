@@ -19,7 +19,7 @@
             <div class="col-md-6 py-5">
                 @hasanyrole('admin|super-admin|ward-secetary')
                     <div>
-                        <a href="{{ route('home') }}" class="text-secondary"><i class="bi bi-arrow-left"></i> Back</a>
+                        <a href="{{ route('newApplication') }}" class="text-secondary"><i class="bi bi-arrow-left"></i> Back</a>
                     </div>
                 @endhasanyrole
 

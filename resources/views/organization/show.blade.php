@@ -9,7 +9,6 @@
             color: #343a40;
         }
     </style>
-
 @endpush
 
 @section('content')
@@ -20,7 +19,11 @@
         @if (!$patient->closed_date)
             <div class="card z-depth-0 border">
                 <div class="card-body">
-                    @include('partials.org-options')
+                    @include('partials.org-options', [
+                        'nextRegNumber' => $nextRegNumber,
+                       
+                    ])
+
                 </div>
             </div>
         @endif
@@ -499,11 +502,6 @@
                                         </tr>
                                     @endif
 
-
-
-
-
-
                                     @if ($patient->renewing_document)
                                         <tr>
                                             <td class="font-weight-bold">उपचार भैरहेको अस्पतालको कागजात</td>
@@ -639,5 +637,3 @@
 
     </div>
 @endsection
-
-

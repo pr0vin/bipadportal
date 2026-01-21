@@ -3,10 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Distribution;
+use App\DistributionDetail;
 use App\Resource;
 use App\Patient;
 use App\Unit;
-use App\DistributionDetail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
@@ -15,231 +15,273 @@ class DistributionController extends Controller
 {
     public function index(Request $request)
     {
-          $municipality_id = municipalityId();
-        if (!$municipality_id) {
-            return redirect()->back()->with('error', 'कृपया पालिका छान्नुहोस्');
-        }
-
-        $type = $request->type; 
+        $type = $request->type;
 
         $distributions = Distribution::with([
             'details.resource.unit',
             'patient'
         ])
-            ->when($type !== null, function ($q) use ($type) {
-                $q->where('type', $type);
-            })
+            ->when($type, fn($q) => $q->where('type', $type))
             ->latest()
-            ->paginate(10, ['*'], 'page', 1);
+            ->paginate(10);
+
+        // return $distributions;
 
         return view('distributions.index', compact('distributions', 'type'));
+    }
+
+    public function show(Distribution $distribution)
+    {
+        $distribution->load(['details.resource.unit', 'patient']);
+
+        // return $distribution;
+
+        return view('distributions.show', compact('distribution'));
     }
 
 
     public function create()
     {
-        $resources = Resource::all();
-        $patients = Patient::wherenotNull('verified_date')->get();
+        $resources = Resource::with('unit')->get();
+        $patients  = Patient::whereNotNull('verified_date')->get();
+        $unit = Unit::all();
 
-        $units = Unit::all();
+        $returnableDetails = DistributionDetail::with(['resource.unit', 'distribution.patient'])
+            ->where('returnable', 1)
+            ->where('is_returned', 0)
+            ->whereHas('distribution', fn($q) => $q->where('type', 'distribute'))
+            ->get();
 
-        return view('distributions.create', compact('resources', 'patients', 'units'));
+
+        $returnablePatients = $returnableDetails->pluck('distribution.patient')->filter()->unique('id')->values();
+
+        $returnableOrganizations = $returnableDetails->pluck('distribution.organization_name')->filter()->unique()->values();
+
+        return view('distributions.create', [
+            'resources' => $resources,
+            'patients'  => $patients,
+            'units'     => $unit,
+            'returnableDetails' => $returnableDetails,
+            'returnablePatients' => $returnablePatients,
+            'returnableOrganizations' => $returnableOrganizations,
+        ]);
+    }
+
+    public function getReturnableDetails(Request $request)
+    {
+        $query = DistributionDetail::with(['resource.unit', 'distribution'])
+            ->where('returnable', 1)
+            ->where('is_returned', 0)
+            ->whereHas('distribution', function ($q) {
+                $q->where('type', 'distribute');
+            });
+
+        if ($request->patient_id) {
+            $query->whereHas('distribution', function ($q) use ($request) {
+                $q->where('patient_id', $request->patient_id);
+            });
+        }
+
+        if ($request->organization) {
+            $query->whereHas('distribution', function ($q) use ($request) {
+                $q->where('organization_name', $request->organization);
+            });
+        }
+
+        return response()->json($query->get());
     }
 
     public function store(Request $request)
     {
+
+        // return $request;
+
+        if ($request->type === 'return') {
+            $request->merge([
+                'patient_id'   => $request->return_patient_id,
+                'organization' => $request->return_organization,
+            ]);
+        }
+
+        // $request->validate([
+        //     'type'              => 'required|in:distribute,receive,return',
+        //     'distributed_date'  => 'required|date',
+        //     'patient_id'        => 'nullable|exists:patients,id',
+        //     'organization'      => 'nullable|string',
+        //     'remark'            => 'nullable|string',
+        //     'resources'                     => 'required|array|min:1',
+        //     'resources.*.resource_display'  => 'required|string',
+        //     'resources.*.unit' => 'required_without:resources.*.resource_id|string',
+        //     'resources.*.quantity'          => 'required|integer|min:1',
+        // ]);
+
         $request->validate([
-            'type' => 'required|boolean',
+            'type'             => 'required|in:distribute,receive,return',
             'distributed_date' => 'required|date',
+
+            'patient_id' => 'nullable|exists:patients,id',
+            'organization' => 'nullable|string',
             'remark' => 'nullable|string',
 
-            'patient_id' => 'required_if:type,0|nullable|exists:patients,id',
-            'organization' => 'required_if:type,1|nullable|string',
-
             'resources' => 'required|array|min:1',
+            'resources.*.resource_id' => 'required|exists:resources,id',
             'resources.*.quantity' => 'required|integer|min:1',
-            'resources.*.resource_display' => 'required|string',
+            'resources.*.remark' => 'nullable|string',
         ]);
+
 
         DB::transaction(function () use ($request) {
 
+            /** ---------------- HEADER ---------------- */
             $distribution = Distribution::create([
-                'patient_id'       => $request->type == 0 ? $request->patient_id : null,
-                'organization_name' => $request->type == 1 ? $request->organization : null,
-                'distributed_date' => $request->distributed_date,
-                'type'             => $request->type,
-                'remark'           => $request->remark,
-                'fiscal_year_date' => currentFiscalYear()?->id,
-            ]);
-
-         
-            foreach ($request->resources as $row) {
-
-                /** --------------------------
-                 * GET OR CREATE RESOURCE
-                 * -------------------------- */
-                if (!empty($row['resource_id'])) {
-
-                    $resource = Resource::findOrFail($row['resource_id']);
-                } else {
-                    // create unit first
-                    $unit = Unit::firstOrCreate([
-                        'name' => $row['unit'],
-                    ]);
-
-                    // then resource
-                    $resource = Resource::create([
-                        'name'     => $row['resource_display'],
-                        'unit_id'  => $unit->id,
-                        'quantity' => 0,
-                    ]);
-                }
-
-                /** --------------------------
-                 * STOCK MANAGEMENT
-                 * -------------------------- */
-                if ($request->type == 0) {
-                    // वितरण → decrease
-                    if ($resource->quantity < $row['quantity']) {
-                        throw ValidationException::withMessages([
-                            'quantity' => ['पर्याप्त स्टक उपलब्ध छैन : ' . $resource->name],
-                        ]);
-                    }
-
-                    $resource->decrement('quantity', $row['quantity']);
-                } else {
-                    // प्राप्त → increase
-                    $resource->increment('quantity', $row['quantity']);
-                }
-
-             
-                DistributionDetail::create([
-                    'distribution_id' => $distribution->id,
-                    'resource_id'     => $resource->id,
-                    'quantity'        => $row['quantity'],
-                ]);
-            }
-        });
-
-        return redirect()
-            ->route('distributions.index')
-            ->with('success', 'वितरण विवरण सफलतापूर्वक सुरक्षित भयो।');
-    }
-
-
-
-
-
-    public function edit(Distribution $distribution)
-    {
-        $resources = Resource::all();
-        $units     = Unit::all();
-        $patients = Patient::wherenotNull('verified_date')->orWhere('id', $distribution->patient_id)->get();
-        return view('distributions.create', compact('distribution', 'resources', 'patients', 'units'));
-    }
-
-
-
-    public function update(Request $request, Distribution $distribution)
-    {
-        $request->validate([
-            'type' => 'required|boolean',
-            'distributed_date' => 'required|date',
-            'remark' => 'nullable|string',
-
-            'patient_id' => 'required_if:type,0|nullable|exists:patients,id',
-            'organization' => 'required_if:type,1|nullable|string',
-
-            'resources' => 'required|array|min:1',
-            'resources.*.quantity' => 'required|integer|min:1',
-            'resources.*.resource_display' => 'required|string',
-        ]);
-
-        DB::transaction(function () use ($request, $distribution) {
-
-            /** --------------------------------
-             * 1️⃣ ROLLBACK OLD STOCK
-             * -------------------------------- */
-            foreach ($distribution->details as $detail) {
-                if ($distribution->type == 0) {
-                    // Old was वितरण → add back
-                    $detail->resource->increment('quantity', $detail->quantity);
-                } else {
-                    // Old was प्राप्त → remove
-                    $detail->resource->decrement('quantity', $detail->quantity);
-                }
-            }
-
-            /** --------------------------------
-             * 2️⃣ DELETE OLD DETAILS
-             * -------------------------------- */
-            $distribution->details()->delete();
-
-            /** --------------------------------
-             * 3️⃣ UPDATE DISTRIBUTION HEADER
-             * -------------------------------- */
-            $distribution->update([
-                'patient_id'        => $request->type == 0 ? $request->patient_id : null,
-                'organization_name' => $request->type == 1 ? $request->organization : null,
+                'patient_id'        => in_array($request->type, ['distribute', 'return']) ? $request->patient_id : null,
+                'organization_name' => in_array($request->type, ['distribute', 'receive', 'return']) ? $request->organization : null,
                 'distributed_date'  => $request->distributed_date,
                 'type'              => $request->type,
                 'remark'            => $request->remark,
+                'fiscal_year_date'  => currentFiscalYear()?->id,
             ]);
 
-            /** --------------------------------
-             * 4️⃣ APPLY NEW RESOURCES
-             * -------------------------------- */
+            /** ---------------- DETAILS ---------------- */
             foreach ($request->resources as $row) {
 
-                // RESOURCE
-                if (!empty($row['resource_id'])) {
+                $isNewResource = empty($row['resource_id']);
+
+                // ---------------- RESOURCE ----------------
+                if (!$isNewResource) {
                     $resource = Resource::findOrFail($row['resource_id']);
                 } else {
-                    // create unit
-                    $unit = Unit::firstOrCreate([
-                        'name' => $row['unit'],
-                    ]);
-
-                    // create resource
+                    $unit = Unit::firstOrCreate(['name' => $row['unit']]);
                     $resource = Resource::create([
-                        'name'     => $row['resource_display'],
-                        'unit_id'  => $unit->id,
-                        'quantity' => 0,
+                        'name'        => $row['resource_display'],
+                        'unit_id'     => $unit->id,
+                        'quantity'    => 0, // negative stock if new
+                        'description' => $row['remark'] ?? null,
                     ]);
                 }
 
-                // STOCK UPDATE
-                if ($request->type == 0) {
-                    if ($resource->quantity < $row['quantity']) {
+                /** ---------------- STOCK ---------------- */
+                if ($request->type === 'distribute') {
+                    $resource->decrement('quantity', $row['quantity']); // old or new
+                }
+
+                if ($request->type === 'receive') {
+                    $resource->increment('quantity', $row['quantity']); // receive from outside
+                }
+
+                /** ---------------- RETURN LOGIC ---------------- */
+                // if ($request->type === 'return') {
+
+                //     // Find the distribution detail that matches:
+                //     // 1. Same resource
+                //     // 2. returnable = 1
+                //     // 3. is_returned = 0
+                //     // 4. Same patient or organization
+                //     $originalDetail = DistributionDetail::where('resource_id', $resource->id)
+                //         ->where('returnable', 1)
+                //         ->where('is_returned', 0)
+                //         ->whereHas('distribution', function ($q) use ($request) {
+                //             $q->where('type', 'distribute')
+                //                 ->where(function ($q2) use ($request) {
+                //                     $q2->where('patient_id', $request->patient_id)
+                //                         ->orWhere('organization_name', $request->organization);
+                //                 });
+                //         })->first();
+
+                //     if (!$originalDetail) {
+                //         // यदि original detail छैन → return गर्न नपाइने
+                //         throw ValidationException::withMessages([
+                //             'resources' => ['यो सामग्री उक्त आवेदक वा संस्था का लागि फिर्ता योग्य छैन।']
+                //         ]);
+                //     }
+
+                //     // यदि original detail भेटियो → proceed
+                //     $originalDetail->update([
+                //         'is_returned' => 1,
+                //         'returnable'  => 0,
+                //     ]);
+
+                //     // Stock update
+                //     $resource->increment('quantity', $row['quantity']);
+                // }
+
+                if ($request->type === 'return') {
+
+                    $originalDetail = DistributionDetail::where('resource_id', $resource->id)
+                        ->where('returnable', 1)
+                        ->where('is_returned', 0)
+                        ->whereHas('distribution', function ($q) use ($request) {
+                            $q->where('type', 'distribute')
+                                ->where(function ($q2) use ($request) {
+                                    $q2->where('patient_id', $request->patient_id)
+                                        ->orWhere('organization_name', $request->organization);
+                                });
+                        })
+                        ->first();
+
+                    if (!$originalDetail) {
                         throw ValidationException::withMessages([
-                            'quantity' => ['पर्याप्त स्टक उपलब्ध छैन : ' . $resource->name],
+                            'resources' => ['यो सामग्री फिर्ता योग्य छैन।']
                         ]);
                     }
-                    $resource->decrement('quantity', $row['quantity']);
-                } else {
+
+                    // mark original as returned
+                    $originalDetail->update([
+                        'is_returned' => 1,
+                    ]);
+
+                    // stock comes back
                     $resource->increment('quantity', $row['quantity']);
                 }
 
-                // CREATE NEW DETAIL
+
+
+                /** ---------------- DETAIL ---------------- */
                 DistributionDetail::create([
                     'distribution_id' => $distribution->id,
                     'resource_id'     => $resource->id,
                     'quantity'        => $row['quantity'],
+                    'remark'          => $row['remark'] ?? null,
+                    'returnable'      => $request->type === 'distribute' ? !empty($row['is_checked']) : false,
+                    'is_returned'     => $request->type === 'return',
                 ]);
             }
         });
 
         return redirect()
             ->route('distributions.index')
-            ->with('success', 'वितरण विवरण सफलतापूर्वक अद्यावधिक भयो।');
+            ->with('success', 'वितरण सफलतापूर्वक सुरक्षित भयो।');
     }
-
-
 
 
     public function destroy(Distribution $distribution)
     {
-        $distribution->delete();
+
+        DB::transaction(function () use ($distribution) {
+            foreach ($distribution->details as $detail) {
+                switch ($distribution->type) {
+                    case 'distribute':
+                        $detail->resource->increment('quantity', $detail->quantity);
+                        break;
+                    case 'receive':
+                        $detail->resource->decrement('quantity', $detail->quantity);
+                        break;
+                    case 'return':
+                        $detail->resource->decrement('quantity', $detail->quantity);
+                        // Mark original as not returned
+                        $originalDetail = DistributionDetail::where('resource_id', $detail->resource_id)
+                            ->where('is_returned', true)
+                            ->first();
+
+                        if ($originalDetail) {
+                            $originalDetail->update(['is_returned' => false]);
+                        }
+                        break;
+                }
+            }
+
+            $distribution->delete();
+        });
 
         return redirect()->route('distributions.index')
             ->with('success', 'वितरण विवरण सफलतापूर्वक हटाइयो।');

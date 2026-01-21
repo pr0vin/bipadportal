@@ -35,7 +35,6 @@ class OnlineApplicationService
         $onlineApplication->patient_id = $patient->id;
         $onlineApplication->applicant_ip = request()->ip();
         $patient->onlineApplication()->save($onlineApplication);
-
         return $onlineApplication->token_number;
     }
 

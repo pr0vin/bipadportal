@@ -19,7 +19,6 @@ class DecisionController extends Controller
             $patients[] = Patient::with('disease')->find($id);
         }
 
-
         $committee = Committee::where('address_id', municipalityId())->first();
         $members = null;
         if ($committee) {

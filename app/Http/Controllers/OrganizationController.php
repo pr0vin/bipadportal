@@ -156,6 +156,8 @@ class OrganizationController extends Controller
             ->orderBy('updated_at', 'desc')
             ->first();
 
+
+
         $registrationNumber = $patientRegNumber ? $patientRegNumber->registration_number : '0';
         $registrationNumber = str_pad(
             $registrationNumber + $prefixIncrement,
@@ -164,9 +166,10 @@ class OrganizationController extends Controller
             STR_PAD_LEFT
         );
 
-        
+
 
         $latestRegNumber = Patient::whereNotNull('reg_number')->max('reg_number');
+        $diseases = Disease::latest()->get();
 
         $nextRegNumber = $latestRegNumber
             ? $latestRegNumber + 1
@@ -174,7 +177,12 @@ class OrganizationController extends Controller
 
         // return $nextRegNumber;
 
-        return view('organization.show', compact('patient', 'registrationNumber'));
+        return view('organization.show', compact(
+            'patient',
+            'registrationNumber',
+            'nextRegNumber',
+            'diseases'
+        ));
     }
 
 

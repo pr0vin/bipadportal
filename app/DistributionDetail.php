@@ -12,6 +12,9 @@ class DistributionDetail extends Model
         'distribution_id',
         'resource_id',
         'quantity',
+        'returnable',
+        'is_returned',
+        'remark',
     ];
 
     public function resource()

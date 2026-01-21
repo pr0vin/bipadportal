@@ -75,7 +75,6 @@ class PatientController extends Controller
             $patients = $patients->where('disease_id', $request->disease_id);
         }
         if ($request->order) {
-            // return $request->order;
             $patients = $patients->orderBy('created_at', $request->order);
         }
         if ($request->nno) {
@@ -89,11 +88,13 @@ class PatientController extends Controller
         //         $query->where('application_types.id', $request->disease_id);
         //     });
         // }
+
         if ($request->application_type) {
             $patients = $patients->whereHas('disease.application_types', function ($query) use ($request) {
                 $query->where('application_types.id', $request->application_type);
             });
         }
+
         $patients = $patients->paginate($request->per_page ?? 20);
         $isrecommended = false;
         $isRegistered = false;
@@ -116,16 +117,11 @@ class PatientController extends Controller
 
     public function store(Request $request, OnlineApplicationService $onlineApplicationService)
     {
-
-        // return $request->all();
-
-
         $fiscalYear = currentFiscalYear();
         if (!$fiscalYear) {
             return redirect()->back()->with('error', "कृपया आर्थिकबर्ष छान्नुहोस्");
         }
 
-        // $fiscalYear = FiscalYear::where('is_running', 1)->first();
         $address = Address::where('district', $request->district_id)->where('municipality', $request->address_id)->first();
         $users = User::where('municipality_id', $address->id)->latest()->get();
         $superadmin = $admins = User::role('super-admin')->first();
@@ -140,7 +136,7 @@ class PatientController extends Controller
             'name_en' => 'required',
             'citizenship_number' => 'required',
             'gender' => 'required',
-            'dob' => 'required',
+            'dob' => 'nullable',
             'age' => 'nullable',
             'address_id' => 'required',
             'ward_number' => 'required',
@@ -162,11 +158,6 @@ class PatientController extends Controller
 
         $data['age'] = $this->calculateAge($data['dob']);
 
-
-        // dd($data['dob'], $data['age']);
-        // $patient = Patient::create($data);
-        // dd($patient->age);
-
         $kshatiDocs = [];
         if ($request->hasFile('kshati_document')) {
             foreach ($request->file('kshati_document') as $file) {
@@ -175,11 +166,6 @@ class PatientController extends Controller
         }
 
         $data['kshati_document'] = json_encode($kshatiDocs);
-
-
-        // if ($request->has('kshati_document')) {
-        //     $data['kshati_document'] = $request->file('kshati_document')->store('documents');
-        // }
 
         if ($request->has('hospital_document')) {
             $data['hospital_document'] = $request->file('hospital_document')->store('documents');
@@ -209,40 +195,15 @@ class PatientController extends Controller
             'registration_date' => now()->format('Y/m/d'),
         ]);
 
-        // $patientApplication->patientApplicationDisease()->create([
-        //     'disease_id' => $request->disease_id,
-        // ]);
-
         foreach ($request->disease_id as $diseaseId) {
             $patientApplication->patientApplicationDisease()->create([
                 'disease_id' => $diseaseId,
             ]);
         }
 
-
-
-        // $patient->applicationType()->associate($request->application_type_id);
-        // dd($patient);
         $tokenNumber = $onlineApplicationService->create($patient);
         $ids = [];
-        // foreach ($users as $user) {
-        //     $oneSignalIds = Onesignaltoken::where('user_id', $user->id)->latest()->get();
-        //     foreach ($oneSignalIds as $oneSignalId) {
-        //         if ($oneSignalId->token) {
-        //             $ids[] = $oneSignalId->token;
-        //         }
-        //     }
-        // }
-
-
-        // OneSignal::sendNotificationToUser(
-        //     "नयाँ पिडित विवरण प्राप्त भयो",
-        //     $ids,
-        //     $url = null,
-        //     $data = null,
-        //     $buttons = null,
-        //     $schedule = null
-        // );
+        
 
         if (!Auth::check()) {
             return redirect(URL::temporarySignedRoute('token.index', now()->addMinutes(180), $tokenNumber));
@@ -273,8 +234,6 @@ class PatientController extends Controller
             return "Nagarpalika";
         }
 
-        // PatientApplication::create($data);
-
         return redirect()->route('print.token', $request->token_number);
     }
 
@@ -300,6 +259,7 @@ class PatientController extends Controller
             'application' => 'nullable',
             'doctor_recomandation' => 'nullable',
             'hospital_document' => 'nullable',
+            'bank_name' => 'nullable',
             'bank_account_number' => 'nullable',
             'bank_cheque' => 'nullable',
             'decision_document' => 'nullable',
@@ -362,6 +322,7 @@ class PatientController extends Controller
             'registration_number' => $request->registration_number,
             'registered_date' => Carbon::parse($request->date_from),
             'bank_cheque' => $bank_cheque,
+            'bank_name' => $request->bank_name,
             'bank_account_number' => $request->bank_account_number,
             'decision_document' => $decision_document,
             'hospital_document' => $hospital_document,
@@ -388,6 +349,7 @@ class PatientController extends Controller
 
     public function show(Patient $patient)
     {
+       
         $fiscalYear = currentFiscalYear();
 
         if (!$fiscalYear) {
@@ -418,7 +380,7 @@ class PatientController extends Controller
             ? $latestRegNumber + 1
             : 1;
 
-        return $nextRegNumber;
+    
 
         // Get patient's current reg number if exists
         $currentRegNumber = $patient->reg_number;
@@ -632,7 +594,7 @@ class PatientController extends Controller
 
     public function recommended(Request $request)
     {
-        // return "Hello";
+        
         $paginate = $request->per_page ?? 50;
         $patients = Patient::with(['onlineApplication', 'province', 'district', 'municipality'])
             ->where('isRecommended', true)->where('registered_date', null)->where('renewed_date', null)->where('closed_date', null)->paginate($paginate);

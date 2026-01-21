@@ -21,7 +21,6 @@ class Distribution extends Model
 
     protected $casts = [
         'distributed_date' => 'date',
-        'type' => 'boolean',
     ];
     public function details()
     {

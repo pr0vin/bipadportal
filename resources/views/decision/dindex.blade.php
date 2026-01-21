@@ -14,11 +14,11 @@
                             <th>निर्णय शीर्षक</th>
                             <th>कुल रकम</th>
                             <th>निर्णय मिति</th>
-                            @foreach($decisions as $key => $decision)
-                                @if ($decision->status === 'paid')
-                                    <th>स्थिति</th>
-                                @endif
-                            @endforeach
+                            {{-- @foreach ($decisions as $key => $decision)
+                                @if ($decision->status === 'paid') --}}
+                            {{-- <th>स्थिति</th> --}}
+                            {{-- @endif
+                            @endforeach --}}
                             <th class="text-center">फाइल अपलोड</th>
                             <th>कार्य</th>
                         </tr>
@@ -41,11 +41,16 @@
                                     {{ optional($decision->decision_date)->format('Y-m-d') }}
                                 </td>
 
-                                @if ($decision->status === 'paid')
-                                    <td class="kalimati-font text-center">
-                                        भुक्तानी भयको
+                                {{-- @if ($decision->status === 'paid')
+                                    <td class="kalimati-font text-center text-success fw-bold">
+                                        भुक्तानी भएको
                                     </td>
-                                @endif
+                                @else
+                                    <td class="kalimati-font text-center text-danger fw-bold">
+                                        भुक्तानी नभएको
+                                    </td>
+                                @endif --}}
+
 
 
                                 <td class="py-1 text-center ">
@@ -64,16 +69,19 @@
                                     @endif
                                 </td>
 
-
-
-
-
                                 <td class="py-1">
-                                    <a href="{{ route('distributions.distribution.form', $decision->id) }}"
-                                        class="btn btn-info btn-xs">
-                                        भुक्तानी गर्नुहोस
-                                    </a>
+                                    @if ($decision->status !== 'paid')
+                                        <a href="{{ route('distributions.distribution.form', $decision->id) }}"
+                                            class="btn btn-info btn-xs">
+                                            भुक्तानी गर्नुहोस
+                                        </a>
+                                    @else
+                                        <span class="text-success kalimati-font fw-bold">
+                                            भुक्तानी भइसकेको
+                                        </span>
+                                    @endif
                                 </td>
+
                             </tr>
                         @empty
                             <tr>

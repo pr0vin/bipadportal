@@ -26,26 +26,31 @@ class SearchController extends Controller
 
         $patient = Patient::where('address_id', municipalityId());
 
-if ($patientId) {
-    $patient = $patient
-        ->where(function($query) use ($patientId) {
-            $query->where('name', 'like', '%' . $patientId . '%')
-                  ->orWhere('name_en', 'like', '%' . $patientId . '%')
-                  ->orWhere('email', 'like', '%' . $patientId . '%');
-        })
-        ->limit(10)
-        ->get();
-}
+        if ($patientId) {
+            $patient = $patient
+                ->where(function ($query) use ($patientId) {
+                    $query->where('name', 'like', '%' . $patientId . '%')
+                        ->orWhere('name_en', 'like', '%' . $patientId . '%')
+                        ->orWhere('email', 'like', '%' . $patientId . '%');
+                })
+                ->limit(10)
+                ->get();
+        }
 
         return response()->json($patient);
     }
 
     public function reApply(Request $request, OnlineApplicationService $onlineApplicationService)
     {
+
+
         $patient = Patient::find($request->patient_id);
+        // return $patient;
         $newPatient = Patient::create([
             'applied_date' => bs_to_ad($request->applied_date),
-            'disease_id' => $request->disease_id,
+            'disease_id' => is_array($request->disease_id)
+                ? $request->disease_id[0]
+                : $request->disease_id,
             'name' => $patient->name,
             'name_en' => $patient->name_en,
             'citizenship_number' => $patient->citizenship_number,

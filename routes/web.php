@@ -219,6 +219,9 @@ Route::prefix('distributions')->group(function () {
     Route::delete('/{distribution}', [DistributionController::class, 'destroy'])->name('distributions.destroy');
     Route::resource('distributions', DistributionController::class)->except('show');
 });
+Route::get('/distributions/returnable-details', [DistributionController::class, 'getReturnableDetails'])->name('distributions.returnableDetails');
+Route::get('/distributions/{distribution}', [DistributionController::class, 'show'])->name('distributions.show');
+
 
 
 Route::prefix('disease')->group(function () {

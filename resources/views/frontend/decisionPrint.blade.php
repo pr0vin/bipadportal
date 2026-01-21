@@ -150,6 +150,7 @@
                                 <td style="width: 20%;">नाम थर</td>
                                 <td style="width: 15%;">ना.प्र.प.नं./ज.द.प्र.प.नं.</td>
                                 <td style="width: 5%;">वडा न.</td>
+                                {{-- <td style="width: 10%;">घटना</td> --}}
                                 <td style="width: 25%;">क्षती भएको कारण</td>
                                 <td style="width: 15%;">आनुमानित क्षति रकम</td>
                                 <td style="width: 15%;">प्रदानरकम</td>
@@ -171,6 +172,10 @@
                                         <td style="width: 15%;" class="kalimati-font">
                                             {{ $patient->citizenship_number ?? '' }}
                                         </td>
+
+                                         {{-- <td style="width: 10%;" class="kalimati-font">
+                                            {{ $patient->patientApplication->first()->application_type->name?? '' }}
+                                        </td> --}}
 
                                         <td style="width: 5%;" class="kalimati-font">{{ $patient->ward_number }}</td>
 

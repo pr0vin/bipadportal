@@ -18,6 +18,9 @@ return new class extends Migration
             $table->foreignId('distribution_id')->constrained()->onDelete('cascade');
             $table->foreignId('resource_id')->constrained()->onDelete('cascade');
             $table->integer('quantity')->default(0);
+            $table->text('remark')->nullable();
+            $table->boolean('returnable')->default(false);
+            $table->boolean('is_returned')->default(false);
             $table->timestamps();
         });
     }
