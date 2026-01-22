@@ -166,8 +166,8 @@
                                             दर्ता नम्बर</label>
                                         <div class="d-flex">
                                             <input type="text" name="registration_number"
-                                                class="form-control rounded-0 kalimati-font" style="width: 100px"
-                                                value="{{ $registrationNumber }}" readonly>
+                                                class="form-control rounded-0 kalimati-font " style="width: 100px"
+                                                value="{{ $registrationNumber }}" readonly hidden>
                                             <input type="text" name="reg_number"
                                                 class="form-control rounded-0 kalimati-font"
                                                value="{{ $currentRegNumber ?? $nextRegNumber }}">

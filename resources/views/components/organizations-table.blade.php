@@ -116,10 +116,10 @@
                         </button>
                     </form>
 
-                    <a href="{{ request()->fullUrlWithQuery(['export' => true]) }}" target="_blank"
+                    {{-- <a href="{{ request()->fullUrlWithQuery(['export' => true]) }}" target="_blank"
                         class="btn btn-link text-success" style="min-width: 70px;">
                         <i class="far fa-file-excel me-1"></i>Export
-                    </a>
+                    </a> --}}
 
                     <button class="btn btn-link text-primary d-flex align-items-center" style="min-width: 60px;"
                         id="btnPrint">
