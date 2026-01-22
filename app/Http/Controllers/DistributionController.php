@@ -34,8 +34,7 @@ class DistributionController extends Controller
     {
         $distribution->load(['details.resource.unit', 'patient']);
 
-        // return $distribution;
-
+        
         return view('distributions.show', compact('distribution'));
     }
 

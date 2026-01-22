@@ -4,18 +4,18 @@
             <a href="{{ route('settings.system') }}" class="my-menu {{ setActive('settings.system') }} mb-2 mr-1">प्रणाली
                 सेटिङ</a>
         @endrole
-        @can('application.setting')
+        {{-- @can('application.setting')
             <a href="{{ route('settings.application') }}"
                 class="my-menu mb-2 {{ setActive('settings.application') }} mr-1">आवेदन सेटिङ</a>
-        @endcan
-        @can('downloadDocument.setting')
+        @endcan --}}
+        {{-- @can('downloadDocument.setting')
             <a href="{{ route('settings.document') }}" class="my-menu mb-2 {{ setActive('settings.document') }} mr-1">डाउनलोड
                 योग्य कागजातहरू</a>
-        @endcan
-        @can('colsedReason.setting')
+        @endcan --}}
+        {{-- @can('colsedReason.setting')
             <a href="{{ route('settings.reason') }}" class="my-menu mb-2 {{ setActive('settings.reason') }} mr-1">लागतकट्टाका
                 कारणहरु</a>
-        @endcan
+        @endcan --}}
         @can('position.setting')
             <a href="{{ route('settings.position') }}" class="my-menu mb-2 {{ setActive('settings.position') }} mr-1">पद</a>
         @endcan

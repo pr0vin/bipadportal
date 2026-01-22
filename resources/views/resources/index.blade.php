@@ -43,6 +43,13 @@
                                     <td>
                                         <div class="d-flex justify-content-center gap-1 align-items-center">
                                             <div>
+                                                <a href="{{ route('resources.show', $resource->id) }}" class="btn btn-info btn-sm"
+                                                    title="View">
+                                                    <i class="fas fa-eye"></i>
+                                                </a>
+
+                                            </div>
+                                            <div>
                                                 <a class="btn btn-warning btn-sm"
                                                     href="{{ route('resources.edit', $resource->id) }}"
                                                     title="सम्पादन गर्नुहोस्">

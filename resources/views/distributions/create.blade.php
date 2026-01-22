@@ -35,7 +35,8 @@
                             </select>
                         </div>
 
-                        <div class="col-md-3 mb-3 type-distribute-receive">
+
+                        <div class="col-md-3 mb-3 type-distribute-receive" id="distribute-patient-field">
                             <label>आवेदक (नाम / टोकन)</label>
                             <input list="patients-list" name="patient_display" id="patient-display"
                                 class="form-control kalimati-font" autocomplete="off"
@@ -62,32 +63,7 @@
                                 value="{{ old('organization', $distribution->organization_name ?? '') }}">
                         </div>
 
-
-                        {{-- <div class="col-md-3 mb-3 type-return">
-                            <label>पिडित</label>
-                            <select name="return_patient_id" class="form-control">
-                                <option value="">-- छान्नुहोस् --</option>
-                                @foreach ($returnablePatients as $patient)
-                                    <option value="{{ $patient->id }}">
-                                        {{ $patient->name }}
-                                    </option>
-                                @endforeach
-                            </select>
-                        </div>
-
-
-                        <div class="col-md-3 mb-3 type-return">
-                            <label>संस्था</label>
-                            <select name="return_organization" class="form-control">
-                                <option value="">-- छान्नुहोस् --</option>
-                                @foreach ($returnableOrganizations as $org)
-                                    <option value="{{ $org }}">{{ $org }}</option>
-                                @endforeach
-                            </select>
-                        </div> --}}
-
-
-                        <div class="col-md-3 mb-3 type-return">
+                        <div class="col-md-3 mb-3 type-return" id="return-patient-field">
                             <label>आवेदक (नाम / टोकन)</label>
 
                             <input type="text" id="return-patient-display" class="form-control" autocomplete="off"
@@ -122,10 +98,6 @@
                                 @endforeach
                             </div>
                         </div>
-
-
-
-
 
                     </div>
 
@@ -480,86 +452,6 @@
         });
     </script>
 
-    {{-- <script>
-        document.addEventListener('DOMContentLoaded', function() {
-
-            const patientSelect = document.querySelector('.type-return select[name="return_patient_id"]');
-            const orgSelect = document.querySelector('.type-return select[name="return_organization"]');
-            const returnContainer = document.getElementById('return-resource-container');
-
-            function fetchReturnableDetails() {
-                const patientId = patientSelect.value;
-                const organization = orgSelect.value;
-
-                if (!patientId && !organization) {
-                    returnContainer.innerHTML = '';
-                    return;
-                }
-
-                const params = new URLSearchParams({
-                    patient_id: patientId,
-                    organization: organization
-                });
-
-                fetch(`/distributions/returnable-details?${params.toString()}`)
-                    .then(res => res.json())
-                    .then(data => {
-                        returnContainer.innerHTML = '';
-
-                        if (data.length === 0) {
-                            returnContainer.innerHTML =
-                                `<p class="text-danger">फिर्ता योग्य सामग्री भेटिएन।</p>`;
-                            return;
-                        }
-
-                        data.forEach((detail, index) => {
-                            const row = `
-                        <div class="resource-row row mb-2">
-                            <div class="col-md-3">
-                                <label>सामाग्रीको नाम</label>
-                                <input type="hidden" name="resources[${index}][resource_id]" value="${detail.resource.id}">
-                                <input type="text" class="form-control" value="${detail.resource.name}" readonly>
-                            </div>
-
-                            <div class="col-md-2">
-                                <label>ईकाई</label>
-                                <input type="text" class="form-control" value="${detail.resource.unit?.name ?? ''}" readonly>
-                            </div>
-
-                            <div class="col-md-2">
-                                <label>परिमाण</label>
-                                <input type="number" name="resources[${index}][quantity]" class="form-control"
-                                    value="${detail.quantity}" min="1" max="${detail.quantity}" required>
-                            </div>
-
-                            <div class="col-md-3">
-                                <label>कैफियत</label>
-                                <input type="text" name="resources[${index}][remark]" class="form-control">
-                            </div>
-
-                            <div class="col-md-2 d-flex align-items-end">
-                                <button type="button" class="btn btn-danger btn-sm cancel-row">
-                                    ✕ 
-                                </button>
-                            </div>
-                        </div>
-                    `;
-                            returnContainer.insertAdjacentHTML('beforeend', row);
-                        });
-                    });
-            }
-
-            // Event delegation for cancel button
-            returnContainer.addEventListener('click', function(e) {
-                if (e.target.classList.contains('cancel-row')) {
-                    e.target.closest('.resource-row').remove();
-                }
-            });
-
-            patientSelect.addEventListener('change', fetchReturnableDetails);
-            orgSelect.addEventListener('change', fetchReturnableDetails);
-        });
-    </script> --}}
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -666,7 +558,7 @@
                     e.target.closest('.resource-row').remove();
                 }
             });
-            d
+
 
         });
 
@@ -679,7 +571,7 @@
                 document.getElementById('return-patient-display').value = name;
                 document.getElementById('return-patient-id').value = id;
 
-                // 🔥 clear organization
+                //  clear organization
                 document.getElementById('return-org-display').value = '';
                 document.getElementById('return-org-name').value = '';
 
@@ -696,7 +588,7 @@
                 document.getElementById('return-org-display').value = orgName;
                 document.getElementById('return-org-name').value = orgName;
 
-                // 🔥 clear patient
+                //  clear patient
                 document.getElementById('return-patient-display').value = '';
                 document.getElementById('return-patient-id').value = '';
 
@@ -768,6 +660,49 @@
 
         });
     </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const typeSelect = document.getElementById('type-select');
+            const distributePatientField = document.getElementById('distribute-patient-field');
+            const returnPatientField = document.getElementById('return-patient-field');
+
+            function togglePatientFields() {
+                const type = typeSelect.value;
+
+                if (type === 'receive') {
+                    // Hide distribute patient field
+                    distributePatientField.style.display = 'none';
+                    distributePatientField.querySelectorAll('input, select').forEach(el => el.disabled = true);
+
+                    // Keep return patient field hidden (only show for return type)
+                    returnPatientField.style.display = 'none';
+                } else if (type === 'return') {
+                    // Show return patient field
+                    returnPatientField.style.display = 'block';
+                    returnPatientField.querySelectorAll('input, select').forEach(el => el.disabled = false);
+
+                    // Hide distribute patient field
+                    distributePatientField.style.display = 'none';
+                    distributePatientField.querySelectorAll('input, select').forEach(el => el.disabled = true);
+                } else {
+                    // distribute type
+                    distributePatientField.style.display = 'block';
+                    distributePatientField.querySelectorAll('input, select').forEach(el => el.disabled = false);
+
+                    // hide return patient field
+                    returnPatientField.style.display = 'none';
+                    returnPatientField.querySelectorAll('input, select').forEach(el => el.disabled = true);
+                }
+            }
+
+            togglePatientFields();
+            typeSelect.addEventListener('change', togglePatientFields);
+        });
+    </script>
+
+
+
 
     <style>
         /* Common dropdown styling for return forms */

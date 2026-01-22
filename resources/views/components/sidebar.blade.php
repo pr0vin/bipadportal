@@ -104,9 +104,7 @@
             </a>
         </li>
 
-
-
-        <li id="sidebarCollapse " class="{{ setActive('distributions.index') }} mb-1">
+        {{-- <li id="sidebarCollapse " class="{{ setActive('distributions.index') }} mb-1">
             <a class="nav-link text-dark" href="{{ route('distributions.index') }}">
                 <span class=" pr-3">
                     <i>
@@ -120,7 +118,41 @@
                     </i>
                 </span>राहत सामाग्री वितरण
             </a>
+        </li> --}}
+
+        <li class="mt-1">
+            <a href="#resourceSubmenu" data-toggle="collapse" aria-expanded="false"
+                class="dropdown-toggle text-dark">
+                <span class="pr-3">
+                    <i>
+                        <svg class="w-5 h-5 text-gray-800 dark:text-white" aria-hidden="true"
+                            xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none"
+                            viewBox="0 0 24 24">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M12 6v13m0-13V4a1 1 0 0 1 1-1h3.9a1 1 0 0 1 .7.3l2.6 2.6a1 1 0 0 1 .3.7V10a1 1 0 0 1-1 1H12m0-5H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-3" />
+                        </svg>
+                    </i>
+                </span>
+                राहत सामाग्री वितरण
+            </a>
+
+            <ul class="collapse list-unstyled" id="resourceSubmenu">
+                <li>
+                    <a class="nav-link text-dark" href="{{ route('distributions.index') }}">
+                        सामाग्री वितरण
+                    </a>
+                </li>
+
+                <li>
+                    <a class="nav-link text-dark" href="{{ route('organization.resource-distribution-report') }}">
+                        सामग्री
+                    </a>
+                </li>
+            </ul>
         </li>
+
+
 
 
         <li class=" mt-1" id="sidebarCollapse">

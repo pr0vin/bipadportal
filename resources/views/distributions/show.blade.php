@@ -18,19 +18,16 @@
             <!-- Printable Content -->
             <div id="printReport" class="m-0 p-0 kalimati-font">
                 <h1 class="text-center" style="font-size:20px;">
-                    वितरण विवरण
-                </h1>
-
-                <div class="py-4">
-                    <p><strong>मिति:</strong> {{ $distribution->distributed_date->format('Y-m-d') }}</p>
-                    <p>
-                        <strong>प्रकार:</strong>
-                        @if ($distribution->type === 'distribute') वितरण
+                     @if ($distribution->type === 'distribute') वितरण
                         @elseif ($distribution->type === 'receive') प्राप्त
                         @elseif ($distribution->type === 'return') फिर्ता
                         @else अज्ञात
                         @endif
-                    </p>
+                    विवरण
+                </h1>
+
+                <div class="py-4">
+                    <p class="text-end kalimati-font"><strong>मिति:</strong> {{ $distribution->distributed_date->format('Y-m-d') }}</p> 
                     <p>
                         <strong>आवेदक / संस्था:</strong>
                         {{ $distribution->patient->name ?? $distribution->organization_name ?? '—' }}
@@ -52,7 +49,7 @@
                             @foreach($distribution->details as $detail)
                                 <tr>
                                     <td>{{ $detail->resource->name ?? '—' }}</td>
-                                    <td>{{ $detail->quantity }}</td>
+                                    <td class="kalimati-font">{{ $detail->quantity }}</td>
                                     <td>{{ $detail->resource->unit->name ?? '—' }}</td>
                                     @if(in_array($distribution->type, ['distribute', 'return']))
                                         <td>

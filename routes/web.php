@@ -197,6 +197,7 @@ Route::prefix('resources')->group(function () {
     Route::get('/{resource}/edit', [ResourcesController::class, 'edit'])->name('resources.edit');
     Route::put('/{resource}', [ResourcesController::class, 'update'])->name('resources.update');
     Route::delete('/{resource}', [ResourcesController::class, 'destroy'])->name('resources.destroy');
+    Route::get('/{resource}/show', [ResourcesController::class, 'showtimeline'])->name('resources.show');
 });
 
 
