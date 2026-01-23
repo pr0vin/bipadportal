@@ -145,7 +145,7 @@
                 </li>
 
                 <li>
-                    <a class="nav-link text-dark" href="{{ route('organization.resource-distribution-report') }}">
+                    <a class="nav-link text-dark" href="{{ route('resources.index') }}">
                         सामग्री
                     </a>
                 </li>

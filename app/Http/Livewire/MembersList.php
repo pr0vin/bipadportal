@@ -4,14 +4,16 @@ namespace App\Http\Livewire;
 
 use App\Member;
 use App\Address;
+use App\Sifarish;
 use App\Committee;
+use App\Patient;
 use Livewire\Component;
 use PhpOffice\PhpWord\PhpWord;
 use PhpOffice\PhpWord\IOFactory;
 
 class MembersList extends Component
 {
-  
+
     public $members;
     public $patientId;
 
@@ -21,12 +23,30 @@ class MembersList extends Component
     public $filteredMembers = [];
     public $firstMember;
 
+
     public $toggle = true;
+
+
     public function mount($members = null, $patients = null, $patientId = null)
     {
         $this->members = $members;
         $this->patients = $patients;
         $this->patientId = $patientId;
+        //    $this->patients = Patient::with(['sifarish', 'sifarish.decision'])->get();
+        // $this->patients = Patient::with(['sifarish', 'sifarish.decision'])
+        //     ->whereHas('sifarish', function ($q) {
+        //         $q->where('decision_id', $this->patientId);   // or decision id variable
+        //     })
+        //     ->get();
+
+        $latestDecisionId = Sifarish::latest('id')->value('decision_id');
+
+        // 🔥 Load only patients of latest decision
+        $this->patients = Patient::with(['sifarish', 'sifarish.decision'])
+            ->whereHas('sifarish', function ($q) use ($latestDecisionId) {
+                $q->where('decision_id', $latestDecisionId);
+            })
+            ->get();
     }
 
     public function toggleModal()
@@ -56,8 +76,22 @@ class MembersList extends Component
             ->toArray();
     }
 
+
+
+
+
+
     public function exportData()
     {
+
+        $latestDecisionId = Sifarish::latest('id')->value('decision_id');
+
+        $this->patients = Patient::with(['sifarish', 'sifarish.decision'])
+            ->whereHas('sifarish', function ($q) use ($latestDecisionId) {
+                $q->where('decision_id', $latestDecisionId);
+            })
+            ->get();
+            
         $phpWord = new PhpWord();
         $section = $phpWord->addSection();
 
@@ -163,17 +197,18 @@ class MembersList extends Component
             if (is_array($patient)) {
                 $patient = json_decode(json_encode($patient));
             }
+            $sifarish = $patient->sifarish;
             $table->addRow();
             $table->addCell(500)->addText(englishToNepaliLetters($index + 1), $fontStyle);
             $cell = $table->addCell(2000);
             $cell->addText(englishToNepaliLetters($patient->name ?? ''), $fontStyle);
-            $cell->addText(englishToNepaliLetters($patient->mobile_number ?? ''), $fontStyle); 
+            $cell->addText(englishToNepaliLetters($patient->mobile_number ?? ''), $fontStyle);
             $table->addCell(2000)->addText(englishToNepaliLetters($patient->citizenship_number ?? ''), $fontStyle);
             $table->addCell(800)->addText(englishToNepaliLetters($patient->ward_number  ?? ''), $fontStyle);
             $table->addCell(3200)->addText(englishToNepaliLetters($patient->description ?? ''), $fontStyle);
             $table->addCell(1500)->addText(englishToNepaliLetters($patient->kshati_date  ?? ''), $fontStyle);
             $table->addCell(1200)->addText(englishToNepaliLetters($patient->estimated_amount), $fontStyle);
-            $table->addCell(1200)->addText('');
+            $table->addCell(1200)->addText(englishToNepaliLetters($sifarish->paying_amount ?? '0'), $fontStyle);
         }
 
 

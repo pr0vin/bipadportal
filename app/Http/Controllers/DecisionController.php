@@ -29,7 +29,7 @@ class DecisionController extends Controller
         }
 
         $committees = Committee::where('address_id', municipalityId())->get();
-        
+
         return view('frontend.decisionPrint', compact('patients', 'members', 'committees'));
     }
 
