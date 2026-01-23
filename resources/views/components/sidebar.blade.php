@@ -134,7 +134,7 @@
                         </svg>
                     </i>
                 </span>
-                राहत सामाग्री वितरण
+                राहत सामाग्री 
             </a>
 
             <ul class="collapse list-unstyled" id="resourceSubmenu">
@@ -242,9 +242,9 @@
                         <a class="nav-link text-dark" href="{{ route('application-types.index') }}">घटना सूची</a>
                     </li>
 
-                    <li>
+                    {{-- <li>
                         <a class="nav-link text-dark" href="{{ route('resources.index') }}">सामाग्री</a>
-                    </li>
+                    </li> --}}
 
                     <li>
                         <a class="nav-link text-dark" href="{{ route('units.index') }}">ईकाई</a>
