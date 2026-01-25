@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('patients', function (Blueprint $table) {
-            $table->string('estimated_amount')->nullable()->after('email');
+            $table->string('estimated_amount')->nullable()->default(0)->after('email');
             $table->text('kshati_document')->nullable()->after('description');
             $table->string('kshati_date')->nullable()->after('registered_date');
         });

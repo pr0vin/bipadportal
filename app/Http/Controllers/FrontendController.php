@@ -44,7 +44,8 @@ class FrontendController extends Controller
     {
         $wards = Ward::all();
         $provinces = Address::select('province')->distinct()->get();
-        $diseases = Disease::latest()->get();
+        
+         $diseases = Disease::latest()->get();
 
         $relations = Relation::latest()->get();
         $applicationTypes = ApplicationType::latest()->get();

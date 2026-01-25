@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -230,9 +229,11 @@
         <div class="row">
             <div class="col-12 d-flex justify-content-end align-items-center">
                 <a href="{{ route('frontent.faqs') }}" style="color: #8e8b8b" class="mr-3 info">FAQ</a>
-                <a href="{{settings()->get('user_manual') ? asset('storage').'/'.settings()->get('user_manual') : ''}}" target="__blank" title="Help" style="color: #aca9a9"><svg class="w-6 h-6 text-gray-800 dark:text-white info"
-                        aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                        fill="none" viewBox="0 0 24 24">
+                <a href="{{ settings()->get('user_manual') ? asset('storage') . '/' . settings()->get('user_manual') : '' }}"
+                    target="__blank" title="Help" style="color: #aca9a9"><svg
+                        class="w-6 h-6 text-gray-800 dark:text-white info" aria-hidden="true"
+                        xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
+                        viewBox="0 0 24 24">
                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M10 11h2v5m-2 0h4m-2.592-8.5h.01M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                     </svg>
@@ -242,15 +243,17 @@
         <div class="row mt-3" style="min-height: 65vh">
             <div class="col-lg-6 mb-5 ">
                 {{-- <h1 class="mb-3 font-weight-bold blue text-center">{{ __('app.name') }}</h1> --}}
-                <label class="mb-3  font-dev" style="text-align: justify; ">यस प्रणालीमा
-                    मृगाैला
-                    प्रत्यारोपण
-                    गरेका, डायलाइसिस
-                    गरिरहेका, क्यान्सर रोगी र
-                    मेरूदण्ड पक्षाघात भई दिर्घरोगी भएका व्यक्तिहरूको मासिक औषधि उपचार खर्च व्यवस्थापनका साथसाथै
-                    विपन्न नागरिक हरूलाइ मन्त्रालयले ताेकेका विभिन्न अस्पतालबाट पाउने औषधी उपचार खर्चको सिफारिस,
-                    सामाजिक विकास मन्त्रालयबाट गरिने स्वास्थ्य उपचार आर्थिक सुविधाका सिफारिस लगायत पालिकाबाट पाउने
-                    उपचार खर्च व्यवस्थापन गर्न सकिन्छ ।</label>
+                <label class="mb-3 font-dev" style="text-align: justify;">
+                    यस विपद् व्यवस्थापन प्रणालीमार्फत आगलागी, बाढी, पहिरो, भूकम्प, चट्याङ लगायतका
+                    प्राकृतिक तथा मानवीय कारणबाट उत्पन्न विपद्बाट प्रभावित नागरिकहरूको विवरण
+                    अभिलेख राख्न, क्षतिको मूल्याङ्कन गर्न तथा राहत, सहयोग र पुनःस्थापनासम्बन्धी
+                    कार्यलाई व्यवस्थापन गर्न सकिन्छ ।
+                    साथै विपद् प्रभावित विपन्न तथा असहाय नागरिकहरूलाई पालिका, प्रदेश तथा संघीय
+                    सरकारबाट उपलब्ध हुने राहत सामग्री, आर्थिक सहयोग, उपचार खर्च, आवास पुनर्निर्माण
+                    तथा अन्य सहायता सुविधाका लागि आवश्यक सिफारिस तथा समन्वय गर्न यस प्रणाली उपयोगी
+                    हुन्छ ।
+                </label>
+
                 <div class="w-full mb-5">
 
                     <div class="col-10 mx-auto">

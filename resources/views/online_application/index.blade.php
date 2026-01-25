@@ -292,18 +292,20 @@
                                 <section class="mt-3">
                                     <div class="row">
                                         <div class="col-md-6 mb-2">
-                                            <label>क्षतिको फोटो (Optional)</label>
+                                            
 
                                             <div id="kshati_container">
+                                               <label>क्षतिको फोटो (Optional)</label>
                                                 <div class="file-input-group mb-2 d-flex align-items-center">
+                                                     
                                                     <input type="file" name="kshati_document[]" class="form-control">
-                                                    <button type="button" class="btn btn-danger btn-sm ms-2"
+                                                    <button type="button" class="btn btn-danger btn-sm ms-2 py-1"
                                                         onclick="removeFile(this)">X</button>
                                                 </div>
                                             </div>
 
                                             <button type="button" class="btn btn-sm btn-primary" onclick="addFile()">+
-                                                Add More</button>
+                                                अझै थप्नुहोस्</button>
                                             <script>
                                                 function addFile() {
                                                     let container = document.getElementById('kshati_container');

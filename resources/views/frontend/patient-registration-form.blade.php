@@ -27,22 +27,78 @@
                         <section class="mt-3">
                             <div class="row">
                                 <div class="col-md-4 mb-2">
-                                    <label for="" class="required"> आवेदनको प्रकार <span
-                                            class="text-danger">*</span></label>
+                                    <label for="" class="required"> घटना <span class="text-danger">*</span></label>
                                     <select name="application_type_id" id="application_types" class="form-control" required>
-                                        <option value="">आवेदनको प्रकार छान्नुहोस्</option>
+                                        <option value="">घटना छान्नुहोस्</option>
                                         @foreach ($applicationTypes as $applicationType)
                                             <option value="{{ $applicationType->id }}">{{ $applicationType->name }}</option>
                                         @endforeach
 
                                     </select>
                                 </div>
-                                <div class="col-md-4 mb-2">
+                                {{-- <div class="col-md-4 mb-2">
                                     <label for="" class="required"> रोगको प्रकार <span
                                             class="text-danger">*</span></label>
                                     <select name="disease_id" id="disease_id" class="form-control" required>
                                         <option value="">रोगको प्रकार छान्नुहोस्</option>
                                     </select>
+                                </div> --}}
+
+                                <div class="col-md-4 col-sm-6 mb-2" style="position: relative;">
+                                    <label class="required">प्रभाव <span class="text-danger">*</span></label>
+                                    <input type="text" id="disease_selector" class="form-control"
+                                        placeholder="प्रभाव छनौट गर्नुहोस्" readonly style="cursor: pointer;">
+
+                                    <div id="disease_dropdown" class="border p-2 rounded mt-1 bg-white shadow"
+                                        style=" display: none; max-height: 200px; overflow-y: auto; position: absolute; width: 100%; z-index: 9999;">
+                                        @foreach ($diseases as $disease)
+                                            <div class="form-check">
+                                                <input class="form-check-input disease-checkbox" type="checkbox"
+                                                    name="disease_id[]" value="{{ $disease->id }}"
+                                                    id="disease_{{ $disease->id }}" {{ $loop->first ? 'required' : '' }}>
+
+                                                <label class="form-check-label" for="disease_{{ $disease->id }}">
+                                                    {{ $disease->name }}
+                                                </label>
+                                            </div>
+                                        @endforeach
+                                    </div>
+
+                                    <script>
+                                        const selector = document.getElementById('disease_selector');
+                                        const dropdown = document.getElementById('disease_dropdown');
+                                        const checkboxes = document.querySelectorAll('.disease-checkbox');
+
+                                        // Toggle dropdown
+                                        selector.addEventListener('click', function() {
+                                            dropdown.style.display = dropdown.style.display === 'none' ? 'block' : 'none';
+                                        });
+
+                                        // Update input text + handle required
+                                        checkboxes.forEach(cb => {
+                                            cb.addEventListener('change', function() {
+
+                                                let selected = Array.from(document.querySelectorAll('.disease-checkbox:checked'))
+                                                    .map(c => c.nextElementSibling.innerText)
+                                                    .join(', ');
+
+                                                selector.value = selected;
+
+                                                if (document.querySelectorAll('.disease-checkbox:checked').length > 0) {
+                                                    checkboxes.forEach(c => c.required = false);
+                                                } else {
+                                                    checkboxes[0].required = true;
+                                                }
+                                            });
+                                        });
+
+                                        // Close dropdown when clicking outside
+                                        document.addEventListener('click', function(e) {
+                                            if (!selector.contains(e.target) && !dropdown.contains(e.target)) {
+                                                dropdown.style.display = 'none';
+                                            }
+                                        });
+                                    </script>
                                 </div>
 
                                 <div class="col-md-4 mb-2">
@@ -66,7 +122,7 @@
                                         </span>
                                     </label>
                                     <input type="text" name="dob" class="form-control kalimati-font date-picker"
-                                    data-single="true" required readonly>
+                                        data-single="true" required readonly>
                                 </div>
                                 <div class="col-md-2 mb-2">
                                     <label for="" class="required"> लिङ्ग <span class="text-danger">*</span></label>
@@ -159,27 +215,87 @@
                                 </div>
                             </div>
                         </section>
-                        <h5 class="font-weight-bold kalimati-font mt-3">२. आवेदन दर्ता हुनको लागि निम्न बमोजिमको प्रमाणपत्र
+                        {{-- <h5 class="font-weight-bold kalimati-font mt-3">२. आवेदन दर्ता हुनको लागि निम्न बमोजिमको प्रमाणपत्र
                             संलग्न गर्नु होला । :</h5>
                         <section class="mt-3">
                             <div class="row">
-                                {{-- <div class="col-md-6 mb-2">
+                                <div class="col-md-6 mb-2">
                                     <label>अस्पतालको पुर्जाको फोटोकपी (Optional)</label>
                                     <input type="file" name="hospital_document" class="form-control" id="">
-                                </div> --}}
+                                </div> 
 
-                                {{-- <div class="col-md-6 mb-2">
+                               <div class="col-md-6 mb-2">
                                     <label>रोग प्रमाणित कागजात (Optional)</label>
                                     <input type="file" name="disease_proved_document" class="form-control"
                                         id="">
-                                </div> --}}
+                                </div>
 
-                                <div class="col-md-4 mb-2">
+                                <div class="col-md-6 mb-2">
                                     <label>नागरिकता/ जन्मदर्ता / बसाइसराई कागजात / राष्ट्रिय परिचय पत्र (Optional)</label>
-                                    <input type="file" name="citizenship_card" class="form-control" id="">
+                                    <div class="col-md-">
+                                         <input type="file" name="citizenship_card" class="form-control" id="">
+                                    </div>
+                                   
                                 </div>
                             </div>
-                        </section>
+                        </section> --}}
+
+                        <div class="m-0 p-0" id="documents_section">
+                            <h5 class="font-weight-bold kalimati-font mt-3">३. आवेदन दर्ता हुनको लागि निम्न बमोजिमको
+                                प्रमाण
+                                संलग्न गर्नु होला । :</h5>
+                            <section class="mt-3">
+                                <div class="row">
+                                    <div class="col-md-6 mb-2">
+                                        <div id="kshati_container">
+                                            <label>क्षतिको फोटो (Optional)</label>
+                                            <div class="file-input-group mb-2 d-flex align-items-center">
+                                                <input type="file" name="kshati_document[]" class="form-control">
+                                                <button type="button" class="btn btn-danger btn-sm ms-2 py-1"
+                                                    onclick="removeFile(this)">X</button>
+                                            </div>
+                                        </div>
+
+                                        <button type="button" class="btn btn-sm btn-primary" onclick="addFile()">+
+                                            अझै थप्नुहोस्</button>
+                                        <script>
+                                            function addFile() {
+                                                let container = document.getElementById('kshati_container');
+
+                                                let div = document.createElement('div');
+                                                div.className = "file-input-group mb-2 d-flex align-items-center";
+
+                                                div.innerHTML = `
+                                                    <input type="file" name="kshati_document[]" class="form-control">
+                                                    <button type="button" class="btn btn-danger btn-sm ms-2" onclick="removeFile(this)">X</button>
+                                                `;
+
+                                                container.appendChild(div);
+                                            }
+
+                                            function removeFile(btn) {
+                                                btn.parentElement.remove();
+                                            }
+                                        </script>
+                                    </div>
+
+                                    <div class="col-md-6 mb-2">
+                                        <label>नागरिकता/ जन्मदर्ता / बसाइसराई कागजात / राष्ट्रिय परिचय पत्र
+                                            (Optional)</label>
+                                        <div>
+                                            <input type="file" name="citizenship_card" class="form-control"
+                                                id="">
+
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </section>
+                        </div>
+                        <div class="d-flex justify-content-end mt-3">
+                            <button type="submit" class="btn btn-info">पेश गर्नुहाेस्</button>
+                        </div>
+
                         <h5 class="font-weight-bold kalimati-font mt-3">३. विवरण :</h5>
                         <section class="mt-3">
                             <label>कैफियत </label>

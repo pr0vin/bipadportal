@@ -145,7 +145,7 @@ class PatientController extends Controller
             'mobile_number' => 'required',
             'email' => 'nullable',
             'kshati_date' => 'nullable',
-            'estimated_amount' => 'required',
+            // 'estimated_amount' => 'required',
             'description' => 'nullable',
             'relation_with_patients' => 'nullable',
             'applied_date' => 'nullable',
