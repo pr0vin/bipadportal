@@ -5,6 +5,11 @@
 
         @include('alerts.all')
 
+
+        <h5 class="fw-bold text-secondary mb-4 pt-1 dashboard-title kalimati-font">
+            भुक्तानी तालिका
+        </h5>
+
         <div class="card">
             <div class="table-responsive">
                 <table class="table table-hover table-borderless">
@@ -14,6 +19,7 @@
                             <th>भुक्तानी मिति</th>
                             <th>कुल रकम</th>
                             <th>शीर्षक</th>
+                            <th>कार्यहरू</th>
                         </tr>
                     </thead>
 
@@ -25,6 +31,13 @@
 
                                 <td class="kalimati-font">{{ number_format($payment->total, 2) }}</td>
                                 <td>{{ $payment->title ?? '-' }}</td>
+
+                                <td>
+                                    <a href="{{ route('payments.show', $payment->id) }}" class="btn btn-info btn-sm"
+                                        title="View">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                </td>
                             </tr>
                         @empty
                             <tr>

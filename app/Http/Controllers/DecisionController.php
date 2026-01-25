@@ -33,6 +33,31 @@ class DecisionController extends Controller
         return view('frontend.decisionPrint', compact('patients', 'members', 'committees'));
     }
 
+    // public function uploadFile(Request $request, $id)
+    // {
+    //     $request->validate([
+    //         'file' => 'required|file|mimes:pdf,jpg,jpeg,png|max:5120',
+    //     ]);
+
+    //     $decision = Decision::findOrFail($id);
+
+    //     // delete old file if exists
+    //     if ($decision->decision_file && Storage::disk('public')->exists($decision->decision_file)) {
+    //         Storage::disk('public')->delete($decision->decision_file);
+    //     }
+
+    //     $path = $request->file('file')->store('decisions', 'public');
+
+    //     $decision->update([
+    //         'decision_file' => $path,
+    //     ]);
+
+    //     return response()->json([
+    //         'status' => true,
+    //         'file_url' => asset('storage/' . $path),
+    //     ]);
+    // }
+
     public function uploadFile(Request $request, $id)
     {
         $request->validate([
@@ -41,13 +66,20 @@ class DecisionController extends Controller
 
         $decision = Decision::findOrFail($id);
 
-        // delete old file if exists
-        if ($decision->decision_file && Storage::disk('public')->exists($decision->decision_file)) {
+        $isReupload = !empty($decision->decision_file);
+
+        //  Delete old file if exists (for re-upload)
+        if (
+            $decision->decision_file &&
+            Storage::disk('public')->exists($decision->decision_file)
+        ) {
             Storage::disk('public')->delete($decision->decision_file);
         }
 
+        //  Store new file
         $path = $request->file('file')->store('decisions', 'public');
 
+        //  Update record
         $decision->update([
             'decision_file' => $path,
         ]);
@@ -55,6 +87,9 @@ class DecisionController extends Controller
         return response()->json([
             'status' => true,
             'file_url' => asset('storage/' . $path),
+            'message' => $isReupload
+                ? 'फाइल सफलतापूर्वक पुनः अपलोड भयो'
+                : 'फाइल सफलतापूर्वक अपलोड भयो',
         ]);
     }
 }

@@ -109,14 +109,25 @@ class PaymentsController extends Controller
 
     public function index()
     {
-          $municipality_id = municipalityId();
+        $municipality_id = municipalityId();
         if (!$municipality_id) {
             return redirect()->back()->with('error', 'कृपया पालिका छान्नुहोस्');
         }
 
-        
+
         $payments = Payment::with('decision')->latest()->paginate(10);
 
         return view('payments.index', compact('payments'));
+    }
+
+    public function show($id)
+    {
+        $payment = Payment::with('paymentDetails.patient')
+            ->where('id', $id)
+            ->firstOrFail();
+
+          
+
+        return view('payments.show', compact('payment'));
     }
 }

@@ -505,5 +505,6 @@ Route::post('/decisions/{decision}/upload-file', [DecisionController::class, 'up
 Route::get('/distributions/form/{decision}', [SifarishController::class, 'showDistributionForm'])->name('distributions.distribution.form');
 Route::post('/distributions/save', [PaymentsController::class, 'store'])->name('distributions.save');
 Route::get('/payments/index', [PaymentsController::class, 'index'])->name('payments.index');
+Route::get('/payments/{id}', [PaymentsController::class, 'show'])->name('payments.show');
 
 

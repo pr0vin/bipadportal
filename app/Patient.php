@@ -136,8 +136,13 @@ class Patient extends Model
         return $this->hasMany(PaymentDetail::class);
     }
 
-      public function sifarish()
+    public function sifarish()
     {
         return $this->hasOne(Sifarish::class, 'patient_id');
+    }
+
+    public function payment()
+    {
+        return $this->hasOne(PaymentDetail::class, 'patient_id');
     }
 }

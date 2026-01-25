@@ -5,6 +5,10 @@
 
         @include('alerts.all')
 
+        <h5 class="fw-bold text-secondary mb-4 pt-1 dashboard-title kalimati-font">
+            निर्णय तालिका
+        </h5>
+
         <div class="card">
             <div class="table-responsive">
                 <table class="table table-hover table-borderless">
@@ -53,7 +57,7 @@
 
 
 
-                                <td class="py-1 text-center ">
+                                {{-- <td class="py-1 text-center ">
                                     @if ($decision->decision_file)
                                         <a href="{{ asset('storage/' . $decision->decision_file) }}" target="_blank"
                                             class="btn btn-success btn-sm">
@@ -67,7 +71,33 @@
                                         <input type="file" data-id="{{ $decision->id }}"
                                             id="upload_file_{{ $decision->id }}" class="d-none upload-file-input">
                                     @endif
+                                </td> --}}
+
+                                <td class="py-1 text-center">
+                                    @if ($decision->decision_file)
+                                        <a href="{{ asset('storage/' . $decision->decision_file) }}" target="_blank"
+                                            class="btn btn-success btn-sm mb-1">
+                                            <i class="fas fa-eye"></i> View
+                                        </a>
+
+                                        <label for="upload_file_{{ $decision->id }}"
+                                            class="btn btn-outline-warning btn-sm ms-1 px-3">
+                                            <i class="fas fa-edit"></i>
+                                        </label>
+
+                                        <input type="file" id="upload_file_{{ $decision->id }}"
+                                            data-id="{{ $decision->id }}" class="d-none upload-file-input">
+                                    @else
+                                        <label for="upload_file_{{ $decision->id }}" class="btn btn-outline-primary btn-sm">
+                                            <i class="fas fa-upload"></i> Upload
+                                        </label>
+
+                                        <input type="file" id="upload_file_{{ $decision->id }}"
+                                            data-id="{{ $decision->id }}" class="d-none upload-file-input">
+                                    @endif
                                 </td>
+
+
 
                                 <td class="py-1">
                                     @if ($decision->status !== 'paid')
@@ -101,7 +131,7 @@
     </div>
 @endsection
 
-@push('scripts')
+{{-- @push('scripts')
     <script>
         document.querySelectorAll('.upload-file-input').forEach(input => {
             input.addEventListener('change', function() {
@@ -134,5 +164,54 @@
                     .catch(() => alert('Something went wrong'));
             });
         });
+    </script>
+@endpush --}}
+
+@push('scripts')
+    <script>
+        function bindUploadInputs() {
+            document.querySelectorAll('.upload-file-input').forEach(input => {
+                input.onchange = function() {
+                    let decisionId = this.dataset.id;
+                    let file = this.files[0];
+                    if (!file) return;
+
+                    let formData = new FormData();
+                    formData.append('file', file);
+                    formData.append('_token', '{{ csrf_token() }}');
+
+                    fetch(`/decisions/${decisionId}/upload-file`, {
+                            method: 'POST',
+                            body: formData
+                        })
+                        .then(res => res.json())
+                        .then(data => {
+                            if (data.status) {
+                                alert(data.message);
+                                this.closest('td').innerHTML = `
+                            <a href="${data.file_url}"
+                               target="_blank"
+                               class="btn btn-success btn-sm mb-1">
+                                <i class="fas fa-eye"></i> View
+                            </a>
+
+                            <label class="btn btn-outline-warning btn-sm ms-1 px-3">
+                                <i class="fas fa-edit"></i>
+                                <input type="file"
+                                       data-id="${decisionId}"
+                                       class="d-none upload-file-input">
+                            </label>
+                        `;
+                                bindUploadInputs(); // rebind for new input
+                            } else {
+                                alert('Upload failed');
+                            }
+                        })
+                        .catch(() => alert('Something went wrong'));
+                };
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', bindUploadInputs);
     </script>
 @endpush
