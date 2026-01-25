@@ -283,8 +283,6 @@
                                 </div>
                             </div>
 
-                           
-
                             <div class="m-0 p-0" id="documents_section">
                                 <h5 class="font-weight-bold kalimati-font mt-3">३. आवेदन दर्ता हुनको लागि निम्न बमोजिमको
                                     प्रमाण
