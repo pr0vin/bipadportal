@@ -213,8 +213,26 @@
                                     <label for="" class="required">इमेल </label>
                                     <input type="text" name="email" class="form-control">
                                 </div>
+
+                                <div class="col-md-4 mb-2">
+                                    <label class="kalimati-font">आवेदन मिति</label>
+                                    <input type="text" class="form-control date-picker kalimati-font" readonly
+                                        name="applied_date" id="applied_date"
+                                        value="{{ formatDate(ad_to_bs(now()->format('Y-m-d'))) }}" data-single="true">
+                                </div>
+
+                                <div class="col-md-4 mb-2">
+                                    <label class="kalimati-font">क्षति मिति</label>
+                                    <input type="text" class="form-control date-picker kalimati-font" readonly
+                                        name="kshati_date" id="kshati_date"
+                                        value="{{ formatDate(ad_to_bs(now()->format('Y-m-d'))) }}" data-single="true">
+                                </div>
                             </div>
+
                         </section>
+
+                         
+
                         {{-- <h5 class="font-weight-bold kalimati-font mt-3">२. आवेदन दर्ता हुनको लागि निम्न बमोजिमको प्रमाणपत्र
                             संलग्न गर्नु होला । :</h5>
                         <section class="mt-3">
