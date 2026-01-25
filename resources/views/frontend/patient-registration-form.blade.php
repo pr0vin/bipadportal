@@ -163,18 +163,18 @@
                             संलग्न गर्नु होला । :</h5>
                         <section class="mt-3">
                             <div class="row">
-                                <div class="col-md-6 mb-2">
+                                {{-- <div class="col-md-6 mb-2">
                                     <label>अस्पतालको पुर्जाको फोटोकपी (Optional)</label>
                                     <input type="file" name="hospital_document" class="form-control" id="">
-                                </div>
+                                </div> --}}
 
-                                <div class="col-md-6 mb-2">
+                                {{-- <div class="col-md-6 mb-2">
                                     <label>रोग प्रमाणित कागजात (Optional)</label>
                                     <input type="file" name="disease_proved_document" class="form-control"
                                         id="">
-                                </div>
+                                </div> --}}
 
-                                <div class="col-md-12 mb-2">
+                                <div class="col-md-4 mb-2">
                                     <label>नागरिकता/ जन्मदर्ता / बसाइसराई कागजात / राष्ट्रिय परिचय पत्र (Optional)</label>
                                     <input type="file" name="citizenship_card" class="form-control" id="">
                                 </div>
