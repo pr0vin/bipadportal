@@ -107,7 +107,7 @@
                                     <input type="text" name="name" class="form-control" required>
                                 </div>
                                 <div class="col-md-4 mb-2">
-                                    <label for="" class="required"> बिरामीको नाम (in English) <span
+                                    <label for="" class="required"> पिडितको नाम (in English) <span
                                             class="text-danger">*</span></label>
                                     <input type="text" name="name_en" class="form-control" required>
                                 </div>
@@ -118,8 +118,7 @@
                                         class="form-control kalimati-font" required>
                                 </div>
                                 <div class="col-md-2 mb-2">
-                                    <label for="" class="required"> जन्म मिति :<span class="text-danger">*
-                                        </span>
+                                    <label for="" class="required"> जन्म मिति :
                                     </label>
                                     <input type="text" name="dob" class="form-control kalimati-font date-picker"
                                         data-single="true" required readonly>
@@ -310,9 +309,9 @@
                                 </div>
                             </section>
                         </div>
-                        <div class="d-flex justify-content-end mt-3">
+                        {{-- <div class="d-flex justify-content-end mt-3">
                             <button type="submit" class="btn btn-info">पेश गर्नुहाेस्</button>
-                        </div>
+                        </div> --}}
 
                         <h5 class="font-weight-bold kalimati-font mt-3">३. विवरण :</h5>
                         <section class="mt-3">
