@@ -43,7 +43,7 @@
                 </h5>
             </div>
 
-            <div class="row mb-4">
+            {{-- <div class="row mb-4">
                 <div class="col-md-4">
                     <div class="card info-style-card-total h-100">
                         <div class="card-body p-4">
@@ -85,7 +85,72 @@
                         </div>
                     </div>
                 </div>
+            </div> --}}
+
+             <div class="row mb-4">
+                <div class="col-md-4">
+                    <div class="card info-style-card-total h-100">
+                        <div class="card-body p-4">
+                            <div class="d-flex align-items-center mb-4">
+                                <i class="bi bi-clipboard-data fs-3 text-danger me-3"></i>
+                                <div class="fw-bold fs-4 text-danger kalimati-font">
+                                    जम्मा आवेदनहरू
+                                </div>
+                            </div>
+                            <div class="normal">
+                                <div class="d-flex align-items-center mb-3">
+                                    <i class="bi bi-people-fill fs-5 text-primary me-3"></i>
+                                    <div class="text-primary fw-semibold fs-5 kalimati-font">
+                                        कुल आवेदनहरू: {{ number_format($allPatientsCount) }}
+                                    </div>
+                                </div>
+                                <div class="d-flex align-items-center mb-3">
+                                    <i class="bi bi-person-plus fs-5 text-danger me-3"></i>
+                                    <div class="text-danger fw-semibold fs-5 kalimati-font">
+                                        नयाँ आवेदनहरू: {{ number_format($allunverifiedPatientsCount) }}
+                                    </div>
+                                </div>
+                                <div class="d-flex align-items-center">
+                                    <i class="bi bi-journal-check fs-5 text-success me-3"></i>
+                                    <div class="text-success fw-semibold fs-5 kalimati-font">
+                                        दर्ता भएका: {{ number_format($allverifiedPatientsCount) }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="card info-style-card-total h-100">
+                        <div class="card-body p-4">
+                            <div class="d-flex align-items-center mb-4">
+                                <i class="bi bi-box-seam fs-3 text-primary me-3"></i>
+                                <div class="fw-bold fs-4 text-primary kalimati-font">
+                                    सामाग्री विवरण
+                                </div>
+                            </div>
+
+                            <div class="normal">
+                                <div class="d-flex align-items-center mb-3">
+                                    <i class="bi bi-boxes fs-5 text-dark me-3"></i>
+                                    <div class="text-dark fw-semibold fs-5 kalimati-font">
+                                        जम्मा सामाग्री: {{ number_format($totalResources) }}
+                                    </div>
+                                </div>
+
+                                <div class="d-flex align-items-center">
+                                    <i class="bi bi-arrow-return-right fs-5 text-warning me-3"></i>
+                                    <div class="text-warning fw-semibold fs-5 kalimati-font">
+                                        फिर्ता पाउने सामाग्री: {{ number_format($returnableResources) }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
+
 
 
 
@@ -173,6 +238,55 @@
                             return;
                         }
 
+                        // Calculate the maximum value from all datasets
+                        const maxDataValue = Math.max(
+                            ...filteredTotalPatients,
+                            ...filteredVerifiedPatients,
+                            ...filteredUnverifiedPatients
+                        );
+
+                        // Function to determine optimal step size for Y-axis
+                        function getOptimalStepSize(maxValue) {
+                            const steps = [1, 2, 5, 10, 20, 50, 100, 200, 500, 1000, 2000, 5000];
+                            const targetNumberOfTicks = 6;
+                            const roughStep = maxValue / targetNumberOfTicks;
+
+                            for (let step of steps) {
+                                if (step >= roughStep) return step;
+                            }
+                            return Math.ceil(roughStep / 1000) * 1000;
+                        }
+
+                        // Function to format Y-axis labels in Nepali readable format
+                        function formatYAxisLabel(value) {
+                            // Convert to Nepali numerals if needed
+                            const toNepaliNumeral = (num) => {
+                                const nepaliDigits = ['०', '१', '२', '३', '४', '५', '६', '७', '८', '९'];
+                                return num.toString().replace(/\d/g, (digit) => nepaliDigits[digit]);
+                            };
+
+                            // Format based on the maximum value in dataset
+                            if (maxDataValue >= 1000000) {
+                                const valueInMillions = (value / 1000000).toFixed(1);
+                                return toNepaliNumeral(valueInMillions) + 'M';
+                            }
+                            if (maxDataValue >= 10000) {
+                                const valueInThousands = (value / 1000).toFixed(0);
+                                return toNepaliNumeral(valueInThousands) + 'K';
+                            }
+                            if (maxDataValue >= 1000) {
+                                const valueInThousands = (value / 1000).toFixed(1);
+                                return toNepaliNumeral(valueInThousands) + 'K';
+                            }
+                            return toNepaliNumeral(value.toLocaleString());
+                        }
+
+                        // Function to format tooltip values (always show actual numbers)
+                        function formatTooltipValue(value) {
+                            const nepaliDigits = ['०', '१', '२', '३', '४', '५', '६', '७', '८', '९'];
+                            return value.toString().replace(/\d/g, (digit) => nepaliDigits[digit]);
+                        }
+
                         const applicationChart = new Chart(ctx, {
                             type: 'bar',
                             data: {
@@ -208,14 +322,33 @@
                                         position: 'top',
                                         labels: {
                                             font: {
-                                                family: 'Kalimati, sans-serif'
-                                            }
+                                                family: 'Kalimati, sans-serif',
+                                                size: 12
+                                            },
+                                            color: '#333'
                                         }
                                     },
                                     tooltip: {
+                                        backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                                        titleColor: '#000',
+                                        bodyColor: '#000',
+                                        borderColor: '#ddd',
+                                        borderWidth: 1,
+                                        titleFont: {
+                                            family: 'Kalimati, sans-serif',
+                                            size: 12,
+                                            weight: 'bold'
+                                        },
+                                        bodyFont: {
+                                            family: 'Kalimati, sans-serif',
+                                            size: 12
+                                        },
+                                        padding: 10,
                                         callbacks: {
                                             label: function(context) {
-                                                return `${context.dataset.label}: ${context.parsed.y.toLocaleString()}`;
+                                                const label = context.dataset.label || '';
+                                                const value = context.parsed.y;
+                                                return `${label}: ${formatTooltipValue(value)}`;
                                             }
                                         }
                                     }
@@ -224,28 +357,51 @@
                                     y: {
                                         beginAtZero: true,
                                         ticks: {
-                                            callback: function(value) {
-                                                return value.toLocaleString();
-                                            },
+                                            callback: formatYAxisLabel,
                                             font: {
-                                                family: 'Kalimati, sans-serif'
-                                            }
+                                                family: 'Kalimati, sans-serif',
+                                                size: 11
+                                            },
+                                            color: '#555',
+                                            stepSize: getOptimalStepSize(maxDataValue),
+                                            maxTicksLimit: 6
                                         },
                                         title: {
                                             display: true,
-                                            text: 'आवेदन संख्या',
+                                            text: maxDataValue >= 1000 ? 'आवेदन संख्या (हजारमा)' : 'आवेदन संख्या',
                                             font: {
                                                 family: 'Kalimati, sans-serif',
                                                 size: 12,
                                                 weight: 'bold'
+                                            },
+                                            color: '#333',
+                                            padding: {
+                                                top: 10,
+                                                bottom: 10
                                             }
+                                        },
+                                        grid: {
+                                            color: 'rgba(0, 0, 0, 0.05)',
+                                            drawBorder: true,
+                                            borderColor: '#ddd'
+                                        },
+                                        // Add grace to prevent bar from touching top
+                                        grace: '10%',
+                                        // Set max value with some padding
+                                        suggestedMax: function() {
+                                            const max = Math.ceil(maxDataValue * 1.1);
+                                            return max;
                                         }
                                     },
                                     x: {
                                         ticks: {
                                             font: {
-                                                family: 'Kalimati, sans-serif'
-                                            }
+                                                family: 'Kalimati, sans-serif',
+                                                size: 11
+                                            },
+                                            color: '#555',
+                                            maxRotation: 45,
+                                            minRotation: 0
                                         },
                                         title: {
                                             display: true,
@@ -254,12 +410,24 @@
                                                 family: 'Kalimati, sans-serif',
                                                 size: 12,
                                                 weight: 'bold'
+                                            },
+                                            color: '#333',
+                                            padding: {
+                                                top: 10,
+                                                bottom: 10
                                             }
+                                        },
+                                        grid: {
+                                            display: false
                                         }
                                     }
+                                },
+                                animation: {
+                                    duration: 1000,
+                                    easing: 'easeOutQuart'
                                 }
                             },
-                            // Custom plugin to show data labels only for non-zero values
+                            // Custom plugin to show data labels on bars with Nepali numerals
                             plugins: [{
                                 id: 'datalabels',
                                 afterDatasetsDraw: function(chart) {
@@ -275,36 +443,70 @@
                                                     return;
                                                 }
 
+                                                // Convert to Nepali numerals
+                                                const toNepaliNumeral = (num) => {
+                                                    const nepaliDigits = ['०', '१', '२',
+                                                        '३', '४', '५', '६', '७',
+                                                        '८', '९'
+                                                    ];
+                                                    return num.toString().replace(/\d/g,
+                                                        (digit) => nepaliDigits[
+                                                            digit]);
+                                                };
+
                                                 ctx.fillStyle = '#000';
                                                 const fontSize = 10;
                                                 const fontStyle = 'bold';
                                                 const fontFamily = 'Kalimati, sans-serif';
                                                 ctx.font = Chart.helpers.fontString(
-                                                    fontSize, fontStyle, fontFamily);
+                                                    fontSize, fontStyle, fontFamily
+                                                );
                                                 ctx.textAlign = 'center';
                                                 ctx.textBaseline = 'bottom';
 
                                                 const padding = 5;
                                                 const position = element.tooltipPosition();
-                                                const text = value.toLocaleString();
+
+                                                // Format number based on size
+                                                let displayText;
+                                                if (value >= 1000000) {
+                                                    displayText = toNepaliNumeral((value /
+                                                        1000000).toFixed(1)) + 'M';
+                                                } else if (value >= 1000) {
+                                                    displayText = toNepaliNumeral((value /
+                                                        1000).toFixed(1)) + 'K';
+                                                } else {
+                                                    displayText = toNepaliNumeral(value);
+                                                }
 
                                                 // Draw text background for better readability
-                                                ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
-                                                const textWidth = ctx.measureText(text)
-                                                    .width;
+                                                const textWidth = ctx.measureText(
+                                                    displayText).width;
                                                 const textHeight = fontSize;
+                                                ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
                                                 ctx.fillRect(
-                                                    position.x - textWidth / 2 - 2,
+                                                    position.x - textWidth / 2 - 3,
                                                     position.y - textHeight - padding -
-                                                    2,
-                                                    textWidth + 4,
-                                                    textHeight + 4
+                                                    3,
+                                                    textWidth + 6,
+                                                    textHeight + 6
+                                                );
+
+                                                // Draw border for background
+                                                ctx.strokeStyle = 'rgba(0, 0, 0, 0.1)';
+                                                ctx.lineWidth = 1;
+                                                ctx.strokeRect(
+                                                    position.x - textWidth / 2 - 3,
+                                                    position.y - textHeight - padding -
+                                                    3,
+                                                    textWidth + 6,
+                                                    textHeight + 6
                                                 );
 
                                                 // Draw text
                                                 ctx.fillStyle = '#000';
-                                                ctx.fillText(text, position.x, position.y -
-                                                    padding);
+                                                ctx.fillText(displayText, position.x,
+                                                    position.y - padding);
                                             });
                                         }
                                     });
@@ -314,6 +516,30 @@
                     });
                 </script>
             @endpush
+
+            <style>
+                /* Optional: Add some custom styles for better appearance */
+                .kalimati-font {
+                    font-family: 'Kalimati', sans-serif;
+                }
+
+                .card {
+                    border: 1px solid #e0e0e0;
+                    border-radius: 8px;
+                    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+                }
+
+                .card-title {
+                    color: #2c3e50;
+                    font-weight: 600;
+                }
+
+                .chart-container {
+                    background-color: #fff;
+                    border-radius: 4px;
+                    padding: 10px;
+                }
+            </style>
 
 
 
