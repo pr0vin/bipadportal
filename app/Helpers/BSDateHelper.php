@@ -522,11 +522,20 @@ class BSDateHelper
 
     public static function BsToAd($delimiter, $date)
     {
-
         $date_np = "";
         if (!empty($date)) {
+            if (is_array($date)) {
+                if (count($date) === 3 && !is_string($date[0])) {
+                    $date = implode($delimiter, $date);
+                } else {
+                    $date = reset($date);
+                }
+            }
             // dd($date, $delimiter, explode($delimiter, $date));
             $np_date = explode($delimiter, $date);
+            if (count($np_date) !== 3) {
+                return $date_np;
+            }
             $date_np = self::nep_to_eng($np_date[0], $np_date[1], $np_date[2]);
             //return $date_np['year'].'-'.$date_np['month'].'-'.$date_np['date'];
             return $date_np['year'] . '-' . str_pad($date_np['month'], 2, "0", STR_PAD_LEFT) .

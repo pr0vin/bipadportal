@@ -25,8 +25,8 @@ class FiscalYearRequest extends FormRequest
     {
         return [
             'name' => 'required',
-            'start' => 'required',
-            'end' => 'required',
+            'start' => 'required|string',
+            'end' => 'required|string',
             'is_running' => 'nullable'
         ];
     }

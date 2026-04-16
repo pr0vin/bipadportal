@@ -48,10 +48,13 @@ class FiscalYearController extends Controller
     {
         // AD dates are saved using observer\
         Gate::authorize('fiscalYear.store');
+        $start = is_array($request->start) ? reset($request->start) : $request->start;
+        $end = is_array($request->end) ? reset($request->end) : $request->end;
+
         FiscalYear::create([
             'name'=>$request->name,
-            'start'=>$request->start,
-            'end'=>$request->end,
+            'start'=>$start,
+            'end'=>$end,
             'is_running'=>$request->is_running,
         ]);
         $this->fiscalYearService->flushCache();
@@ -69,10 +72,13 @@ class FiscalYearController extends Controller
     public function update(FiscalYearRequest $request, FiscalYear $fiscalYear)
     {
         Gate::authorize('fiscalYear.edit');
+        $start = is_array($request->start) ? reset($request->start) : $request->start;
+        $end = is_array($request->end) ? reset($request->end) : $request->end;
+
         $fiscalYear->update([
             'name'=>$request->name,
-            'start'=>$request->start,
-            'end'=>$request->end,
+            'start'=>$start,
+            'end'=>$end,
             'is_running'=>$request->is_running,
         ]);
         $this->fiscalYearService->flushCache();

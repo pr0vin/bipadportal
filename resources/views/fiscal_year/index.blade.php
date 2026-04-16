@@ -27,13 +27,13 @@
                                 <div class="form-group">
                                     <label for="input-fiscal-year-start">सुरु मिति</label>
                                     <input type="text" name="start" id="input-fiscal-year-start"
-                                        class="form-control kalimati-font fiscal-year-date" value="{{ old('start', $fiscalYear->start) }}"
+                                        class="form-control kalimati-font fiscal-year-date" data-single="true" value="{{ old('start') ? (is_array(old('start')) ? old('start')[0] : old('start')) : $fiscalYear->start }}"
                                         placeholder="Nepali YYYY-MM-DD">
                                 </div>
                                 <div class="form-group">
                                     <label for="input-fiscal-year-end">समाप्त मिति</label>
                                     <input type="text" name="end" id="input-fiscal-year-end"
-                                        class="form-control kalimati-font fiscal-year-date" value="{{ old('end', $fiscalYear->end) }}"
+                                        class="form-control kalimati-font fiscal-year-date" data-single="true" value="{{ old('end') ? (is_array(old('end')) ? old('end')[0] : old('end')) : $fiscalYear->end }}"
                                         placeholder="Nepali YYYY-MM-DD">
                                 </div>
                                 <div class="form-group">
