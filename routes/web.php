@@ -41,11 +41,14 @@ use App\Http\Controllers\CommitteePositionController;
 use App\Http\Controllers\DiseasesController;
 use App\Http\Controllers\SifarishController;
 use App\Http\Controllers\PaymentsController;
+use App\Http\Controllers\SSOloginController;
 
 Auth::routes(['register' => false]);
 // Route::get('/', function () {
 //     return view('auth.login');
 // });
+
+Route::get('/sso-login', [SSOloginController::class, 'login'])->name('sso-login');
 
 Route::get('/registration', 'FrontendController@index')->name('organization.new');
 Route::post('/check-organization-name', 'FrontendController@checkOrganizationName')->name('check-organization-name');
@@ -506,5 +509,3 @@ Route::get('/distributions/form/{decision}', [SifarishController::class, 'showDi
 Route::post('/distributions/save', [PaymentsController::class, 'store'])->name('distributions.save');
 Route::get('/payments/index', [PaymentsController::class, 'index'])->name('payments.index');
 Route::get('/payments/{id}', [PaymentsController::class, 'show'])->name('payments.show');
-
-
